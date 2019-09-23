@@ -1,4 +1,4 @@
-package com.biyi.hypnosis.view;
+package com.biyi.hypnosis.activity;
 
 import android.content.Context;
 import android.content.Intent;

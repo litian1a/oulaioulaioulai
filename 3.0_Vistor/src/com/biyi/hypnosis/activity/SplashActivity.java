@@ -1,4 +1,4 @@
-package com.biyi.hypnosis.view;
+package com.biyi.hypnosis.activity;
 
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;

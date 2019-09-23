@@ -1,0 +1,134 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+     >
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:id="@+id/t_rl_top"
+    android:background="@color/page_top">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/t_back"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="6dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="定时关闭"
+        android:layout_centerInParent="true"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+
+</RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_rotate"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/t_rl_top"
+        android:layout_marginTop="30dp"
+        android:layout_centerInParent="true"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/iv_rotate"
+            android:src="@drawable/rotate"/>
+        <com.biyi.hypnosis.loopview.LoopView
+            android:id="@+id/loopView"
+            android:layout_width="70dp"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true"
+            app:awv_textsize="18"
+            />
+
+    </RelativeLayout>
+<LinearLayout
+    android:id="@+id/ll_clock"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/rl_rotate"
+    android:layout_marginTop="20dp"
+    android:layout_centerInParent="true"
+    android:orientation="vertical">
+    <Button
+    android:layout_width="80dp"
+    android:layout_height="30dp"
+    android:background="@drawable/clock_finishbtn_shape"
+    android:gravity="center"
+    android:text="倒计时"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="20dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/iv_rise"
+            android:src="@drawable/rise"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="起床时间"
+            android:textSize="12sp"/>
+    </LinearLayout>
+
+</LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_hour"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/ll_clock"
+        >
+        <com.biyi.hypnosis.loopview.LoopView
+            android:id="@+id/loopView_year"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:awv_textsize="18"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text=":"
+            android:textSize="20sp"
+            android:padding="20dp"
+            android:gravity="center"
+            android:textColor="#ffec6f1a"
+            />
+
+        <com.biyi.hypnosis.loopview.LoopView
+            android:id="@+id/loopView_mooth"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:awv_textsize="18"
+            />
+
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/ll_hour"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/clock_openbtn_shape"
+        android:layout_centerInParent="true"
+        android:text="倒计时"/>
+</RelativeLayout>

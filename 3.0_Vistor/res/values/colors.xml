@@ -20,4 +20,6 @@
     <color name="list_oncbackground">#FFf7e8d4</color>
     <color name="bg_gray">#EBEBEB</color>
     <color name="con_item">#b3b2b2</color>
+    <color name="musiclist">#999ba0</color>
+    <color name="page_top">#10081F</color>
 </resources>
