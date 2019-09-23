@@ -1,43 +1,24 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/page_top"
      >
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="40dp"
-    android:id="@+id/t_rl_top"
-    android:background="#10081F">
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/t_back"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="6dp"
-        />
-
+    <!-- 顶部tab -->
+    <include layout="@layout/base_toolbar_layout" />
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="全部分类"
-        android:layout_centerInParent="true"
-        android:textColor="@color/white"
-        android:textSize="12sp" />
-
-</RelativeLayout>
-    <TextView
+        android:layout_marginTop="32dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/t_musictype"
-        android:layout_below="@+id/t_rl_top"
         android:gravity="center"
         android:text="当前选择的是：夏日"/>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/vp_contains"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rycycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/t_musictype"
-        android:background="@color/white"
-        android:visibility="visible" />
-</RelativeLayout>
+        android:layout_marginTop="32dp"
+        />
+
+</LinearLayout>
