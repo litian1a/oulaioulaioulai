@@ -21,7 +21,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="10dp"
                 android:background="@null"
-                android:drawableStart="@drawable/xn_back" />
+               />
 
             <TextView
                 android:layout_width="match_parent"
