@@ -5,7 +5,41 @@
     android:installLocation="preferExternal"
     android:versionCode="2"
     android:versionName="1.0">
-    
+
+    <application
+        android:name=".MyApplication"
+        android:allowBackup="false"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_laucnher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:windowSoftInputMode="adjustUnspecified|stateHidden"
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:replace="android:allowBackup">
+        <activity android:name=".view.SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+        <!-- =====================小能sdkDemo使用的Activity========================= -->
+        <!-- 原生 -->
+        <activity
+            android:name=".view.HomeActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
+
+        </activity>
+    </application>
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -14,53 +48,20 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <uses-permission
         android:name="android.permission.READ_LOGS"
-        tools:ignore="ProtectedPermissions" />
-    
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
-    
+        tools:ignore="ProtectedPermissions" /> <!-- 组件权限 -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="cn.ntalker.newchatwindow.permission.ChatActivity" />
+    <uses-permission android:name="cn.ntalker.newchatwindow.permission.NtPushActivity" />
+    <uses-permission android:name="cn.ntalker.leavemsg.permission.LeaveMsgActivity" />
+    <uses-permission android:name="cn.ntalker.popHyper.permission.PopHyperActivity" />
 
-    <!--组件权限-->
-    <uses-permission android:name="cn.ntalker.newchatwindow.permission.ChatActivity"/>
-    <uses-permission android:name="cn.ntalker.newchatwindow.permission.NtPushActivity"/>
-    <uses-permission android:name="cn.ntalker.leavemsg.permission.LeaveMsgActivity"/>
-    <uses-permission android:name="cn.ntalker.popHyper.permission.PopHyperActivity"/>
-    <uses-permission android:name="cn.ntalker.utils.common.permission.XNExplorerActivity"/>
-    <application
-        android:name="MyApplication"
-        android:allowBackup="false"
-        android:hardwareAccelerated="true"
-        android:icon="@mipmap/ic_laucnher"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:windowSoftInputMode="adjustUnspecified|stateHidden"
-        tools:replace="android:allowBackup"
-        tools:ignore="GoogleAppIndexingWarning">
-        
-        <!-- =====================小能sdkDemo使用的Activity========================= -->
-        <!--原生-->
-        <activity
-            android:name="com.biyi.hypnosis.view.HomeActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        
-
-    
-    </application>
+    <uses-permission android:name="cn.ntalker.utils.common.permission.XNExplorerActivity" />
 
 </manifest>
