@@ -76,6 +76,9 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
             Toast.makeText(mContext,defaultprompt, Toast.LENGTH_SHORT).show();
         }
     }
+    public List<T> getDatas() {
+        return mData;
+    }
     
     public void setOnItemClickListener(OnItemClickListener listener) {
         mClickListener = listener;

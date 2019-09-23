@@ -27,59 +27,8 @@ public class SplashActivity extends BaseActivity {
                 finish();
             }
         },3000);
-                RetrofitManager.getAppApi(this).getAppStoreService().requestCheckVer().compose(TransformUtils.<CheckVerModel>defaultSchedulers()).subscribe(new Observer<CheckVerModel>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(CheckVerModel checkVerModel) {
-
-                    }
-                });
-//
-        RetrofitManager.getAppApi(this).getAppStoreService().requestFeedback("444444").compose(TransformUtils.<FeedbackModel>defaultSchedulers()).subscribe(new Observer<FeedbackModel>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(FeedbackModel feedbackModel) {
-
-            }
-        });
         
-        RetrofitManager.getAppApi(this).getAppStoreService()
-                .requestMusiclist(2)
-                .compose(TransformUtils.<TagListModel>defaultSchedulers())
-        .subscribe(new Observer<TagListModel>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(TagListModel tagListModel) {
-
-            }
-        });
+      
     }
     
     @Override

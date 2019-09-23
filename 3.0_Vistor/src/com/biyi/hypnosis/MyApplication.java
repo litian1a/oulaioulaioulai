@@ -2,6 +2,8 @@ package com.biyi.hypnosis;
 
 import android.support.multidex.MultiDexApplication;
 
+import com.biyi.hypnosis.utils.SpUtils;
+
 
 /**
  * Created by boyko on 2018/3/5.
@@ -18,6 +20,7 @@ public class MyApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        SpUtils.init(this);
 //        LeakCanary.install(this);
         initBugly();  // release环境关闭
         

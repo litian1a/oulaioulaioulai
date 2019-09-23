@@ -2,6 +2,7 @@ package com.biyi.hypnosis.http.apiservice;
 
 import com.biyi.hypnosis.http.model.CheckVerModel;
 import com.biyi.hypnosis.http.model.FeedbackModel;
+import com.biyi.hypnosis.http.model.MusicListModel;
 import com.biyi.hypnosis.http.model.RequestBean;
 import com.biyi.hypnosis.http.model.Result;
 import com.biyi.hypnosis.http.model.TagListModel;
@@ -33,7 +34,7 @@ public  interface AppService {
     Observable<Result<FeedbackModel>> requestFeedback(@Field("info") String info);
     @FormUrlEncoded
     @POST("api/musiclist")
-    Observable<Result<TagListModel>> requestMusiclist(@Field("tagId") int tagId);
+    Observable<Result<MusicListModel>> requestMusiclist(@Field("tagId") int tagId);
     
     
 }

@@ -2,12 +2,14 @@ package com.biyi.hypnosis.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.biyi.hypnosis.R;
 import com.biyi.hypnosis.http.model.MusicListModel;
 import com.biyi.hypnosis.http.model.TagListModel;
+import com.biyi.hypnosis.utils.SpUtils;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -35,6 +37,9 @@ public class MusicTypeAdapter extends  BaseRecyclerAdapter<TagListModel.TagListB
         TextView textView = holder.getTextView(R.id.tv_t_type);
         Glide.with(mContext).load(item.getIconUrl()).into(imageView);
         textView.setText(item.getTagName());
+        if (SpUtils.getInt(SpUtils.KEY_TAG_ID)== item.getTagId()){
+            holder.getImageView(R.id.iv_t_play).setVisibility(View.GONE);
+        }
     }
     
   

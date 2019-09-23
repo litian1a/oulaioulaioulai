@@ -10,14 +10,14 @@ import java.util.List;
  */
 public class MusicListModel {
     
-    private List<TagListBean> tagList;
+    private List<TagListBean> musicList;
     
     public List<TagListBean> getTagList() {
-        return tagList;
+        return musicList;
     }
     
     public void setTagList(List<TagListBean> tagList) {
-        this.tagList = tagList;
+        this.musicList = tagList;
     }
     
     public static class TagListBean {

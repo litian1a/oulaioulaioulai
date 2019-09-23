@@ -91,9 +91,9 @@
                 android:src="@drawable/h_clock" />
         </RelativeLayout>
 
-        <ListView
+        <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/music_list"
             android:divider="@color/bg_gray"
             android:dividerHeight="1dp"
