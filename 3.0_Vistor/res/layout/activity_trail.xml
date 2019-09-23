@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical" >
+    <LinearLayout
+        android:background="#fff"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+            <Button
+                android:layout_centerVertical="true"
+                android:id="@+id/btn_back"
+                android:background="@null"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:drawableStart="@drawable/xn_back"
+                android:layout_marginStart="10dp"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:text="上传轨迹"
+                android:textSize="14sp"
+                android:textColor="#000"
+                />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_first"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:background="#48b3f7"
+            android:gravity="center"
+            android:text="首页"
+            android:textColor="#fff" />
+
+        <TextView
+            android:id="@+id/tv_goods_list"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="#48b3f7"
+            android:gravity="center"
+            android:text="商品列表页"
+            android:textColor="#fff" />
+
+        <TextView
+            android:id="@+id/tv_goods_detail"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="#48b3f7"
+            android:gravity="center"
+            android:text="商品详情页"
+            android:textColor="#fff" />
+
+        <TextView
+            android:id="@+id/tv_cart"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="#48b3f7"
+            android:gravity="center"
+            android:text="购物车页"
+            android:textColor="#fff" />
+
+        <TextView
+            android:id="@+id/tv_order"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="#48b3f7"
+            android:gravity="center"
+            android:text="订单页"
+            android:textColor="#fff" />
+
+        <TextView
+            android:id="@+id/tv_pay"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="#48b3f7"
+            android:gravity="center"
+            android:text="支付页"
+            android:textColor="#fff" />
+
+        <TextView
+            android:id="@+id/tv_pay_success"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="#48b3f7"
+            android:gravity="center"
+            android:text="支付成功页"
+            android:textColor="#fff" />
+    </LinearLayout>
+</LinearLayout>

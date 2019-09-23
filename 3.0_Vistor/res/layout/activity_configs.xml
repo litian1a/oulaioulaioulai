@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:orientation="vertical">
+        
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            
+            <ImageView
+                android:id="@+id/back_config"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="10dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/back_config" />
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:text="设置页面"
+                android:textColor="#000"
+                android:textSize="14sp" />
+        </RelativeLayout>
+        
+        
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/xn_gray" />
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="15dp"
+            android:orientation="horizontal">
+            
+            <TextView
+                android:id="@+id/nt_tv_siteid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="siteid:  "
+                android:textColor="#242424"
+                android:textSize="15sp" />
+            
+            <EditText
+                android:id="@+id/edit_siteid"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:labelFor="@id/nt_tv_siteid"
+                android:maxLines="1"
+                android:textSize="15sp"
+                tools:ignore="Deprecated" />
+            
+            <TextView
+                android:id="@+id/tv_siteid_selector"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:drawableEnd="@drawable/xn_selector" />
+        </LinearLayout>
+        
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/xn_gray" />
+        
+        <LinearLayout
+            android:id="@+id/ll_template_1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="15dp"
+            android:orientation="horizontal">
+            
+            <TextView
+                android:id="@+id/nt_tv_template_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="接待组一: "
+                android:textColor="#242424"
+                android:textSize="15sp" />
+            
+            <EditText
+                android:id="@+id/edit_settingid1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:background="@null"
+                android:labelFor="@id/nt_tv_template_1"
+                android:maxLines="1"
+                android:textSize="15sp" />
+            
+            <TextView
+                android:id="@+id/tv_settingid1_selector"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:drawableEnd="@drawable/xn_selector" />
+        </LinearLayout>
+        
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/xn_gray" />
+        
+        <LinearLayout
+            android:id="@+id/ll_template_2"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="15dp"
+            android:orientation="horizontal">
+            
+            <TextView
+                android:id="@+id/nt_tv_template_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="接待组二: "
+                android:textColor="#242424"
+                android:textSize="15sp" />
+            
+            <EditText
+                android:id="@+id/edit_settingid2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:background="@null"
+                android:labelFor="@id/nt_tv_template_2"
+                android:maxLines="1"
+                android:textSize="15sp" />
+            
+            <TextView
+                android:id="@+id/tv_settingid2_selector"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:drawableEnd="@drawable/xn_selector" />
+        </LinearLayout>
+        
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/xn_gray" />
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="15dp"
+            android:orientation="horizontal">
+            
+            <TextView
+                android:id="@+id/nt_tv_server"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="flashserver地址: "
+                android:textColor="#242424"
+                android:textSize="15sp" />
+            
+            <EditText
+                android:id="@+id/edit_flashserver"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:background="@null"
+                android:labelFor="@id/nt_tv_server"
+                android:textSize="15sp" />
+            
+            <TextView
+                android:id="@+id/tv_flashserver_selector"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:drawableEnd="@drawable/xn_selector" />
+        </LinearLayout>
+        
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/xn_gray" />
+        
+        
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="144dp"
+            android:background="@drawable/x_btn_style"
+            android:text="确定"
+            android:textColor="#fff"
+            android:textSize="15sp" />
+    
+    </LinearLayout>
+
+</LinearLayout>

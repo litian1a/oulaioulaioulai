@@ -1,0 +1,17 @@
+<resources>
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <!--<style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
+        <!--&lt;!&ndash;<item name="android:colorPrimary">@color/colorPrimary</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item name="android:colorAccent">@color/colorAccent</item>&ndash;&gt;-->
+    <!--</style>-->
+
+    <!--&lt;!&ndash; Application theme. &ndash;&gt;-->
+    <!--<style name="XTAppTheme" parent="AppBaseTheme">-->
+        <!--&lt;!&ndash; All customizations that are NOT specific to a particular API-level can go here. &ndash;&gt;-->
+    <!--</style>-->
+
+</resources>
