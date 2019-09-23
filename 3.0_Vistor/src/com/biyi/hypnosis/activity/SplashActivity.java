@@ -15,12 +15,11 @@ import com.biyi.hypnosis.http.rxjava.TransformUtils;
 
 import rx.Observer;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -81,5 +80,10 @@ public class SplashActivity extends AppCompatActivity {
 
             }
         });
+    }
+    
+    @Override
+    int getLayoutId() {
+        return R.layout.activity_splash;
     }
 }

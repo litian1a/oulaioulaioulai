@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.biyi.hypnosis.R;
 
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends BaseActivity {
     public static void startActivity(Context context){
            Intent intent= new Intent(context,HomeActivity.class);
            context.startActivity(intent);
@@ -17,10 +17,14 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
         initView();
     }
-
+    
+    @Override
+    int getLayoutId() {
+        return R.layout.activity_home;
+    }
+    
     /**
      * 初始化控件
      */

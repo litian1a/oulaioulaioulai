@@ -16,7 +16,7 @@ import java.util.ArrayList;
 /**
  * 时间选择页面,第二种
  */
-public class ClockViewActivity extends Activity {
+public class ClockViewActivity extends BaseActivity {
 
     LoopView loopView_year;
     LoopView loopView_mooth;
@@ -39,8 +39,14 @@ public class ClockViewActivity extends Activity {
         initEvent();
 
 
+        
     }
-
+    
+    @Override
+    int getLayoutId() {
+        return R.layout.activity_clock;
+    }
+    
     private void initView() {
         loopView_mooth = (LoopView) findViewById(R.id.loopView_mooth);
         loopView_day = (LoopView) findViewById(R.id.loopView_year);
