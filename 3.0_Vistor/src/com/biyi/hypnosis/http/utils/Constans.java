@@ -8,9 +8,10 @@ package com.biyi.hypnosis.http.utils;
  */
 public class Constans {
     public static String KAOLA = "https://app111.upapp.cc";
-    public static int SYS = 1;
+    public static int SYS = 0;
     public static String SIGN = "8A164f54BcF50B57478cd07FC8d3";
+    public static String SIGN2 = "e6f47e91396a133f35ebee2fbe4d409a";
     public static final String TIME = "time";
-    public static String VER = "0.01";
+    public static String VER = "1.0.1";
     
 }

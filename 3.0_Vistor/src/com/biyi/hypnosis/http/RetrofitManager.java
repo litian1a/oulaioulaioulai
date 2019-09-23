@@ -24,18 +24,27 @@ import android.util.SparseArray;
 import com.biyi.hypnosis.http.apiservice.AppService;
 import com.biyi.hypnosis.http.ssl.SSLSocketFactoryUtils;
 import com.biyi.hypnosis.http.utils.Constans;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -56,7 +65,7 @@ public class RetrofitManager {
     private final Retrofit mRetrofit;
     private static ArrayList<Integer> cert = new ArrayList();
     
-    private static String deviceKey ;
+    private static String deviceKey;
     
     
     private String getHost(int hostType) {
@@ -91,7 +100,7 @@ public class RetrofitManager {
             synchronized (RetrofitManager.class) {
                 
                 if (sOkHttpClient == null) {
-                    
+    
     
                     HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
                         @Override
@@ -111,8 +120,55 @@ public class RetrofitManager {
                             .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
                             .sslSocketFactory(SSLSocketFactoryUtils.createSSLSocketFactory())
                             .hostnameVerifier(new SSLSocketFactoryUtils.TrustAllHostnameVerifier())
-                            .addInterceptor(paramsInterceptor)
                             .addInterceptor(interceptor.setLevel(HttpLoggingInterceptor.Level.BODY))
+                            .addInterceptor(new Interceptor() {
+                                @Override
+                                public Response intercept(Chain chain) throws IOException {
+                                    Request request = chain.request();
+                                    if ("POST".equals(request.method())) {
+                                        JSONObject jsonObject = new JSONObject();
+                                        try {
+                                            long time = System.currentTimeMillis() / 1000;
+                                            jsonObject.put("sys", Constans.SYS);
+                                            jsonObject.put("time", time);
+                                            jsonObject.put("ver", Constans.VER);
+    
+    
+                                            String string = "8A164f54BcF" + "sys=" + Constans.SYS +"&tagId="+ 1+ "&time=" + time + "&ver=" + Constans.VER + "50B57478cd07FC8d3";
+                                            Log.i("OKHttp", "intercept: " + string);
+                                            String sign = md5Hex(string);
+                                            Log.i("OKHttp", "sign: " + sign);
+    
+                                            jsonObject.put("ch", "baidu");
+    
+                                            jsonObject.put("sign", sign);
+                                            jsonObject.put("info", "ssss");
+    
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        Log.i("aaaaa", "intercept: " + jsonObject.toString());
+
+//                                        String json = "{\n" +
+//                                                " \"sign\":\"e6f47e91396a133f35ebee2fbe4d409a\",\n" +
+//                                                " \"ver\":\"1.0.1\",\n" +
+//                                                " \"sys\":0,\n" +
+//                                                " \"time\":123,\n" +
+//                                                " \"ch\":\"baidu\"\n" +
+//                                                "}";
+                                        try {
+    
+                                            RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonObject.toString());
+    
+                                            request = request.newBuilder().post(body).build();
+                                        } catch (Exception e) {
+    
+                                        }
+    
+                                    }
+                                    return chain.proceed(request);
+                                }
+                            })
                             .build();
                 }
             }
@@ -128,10 +184,11 @@ public class RetrofitManager {
     
             HttpUrl url;
             url = request.url().newBuilder() //请求尾部链接
-                    .addQueryParameter("sign",encode(Constans.SIGN ))
                     .addQueryParameter("sys", String.valueOf(Constans.SYS))
+                    .addQueryParameter("sign", Constans.SIGN2)
                     .addQueryParameter(Constans.TIME, String.valueOf(System.currentTimeMillis()))
-                    .addQueryParameter("ver",Constans.VER )
+                    .addQueryParameter("ver", Constans.VER)
+                    .addQueryParameter("ch", "baidu")
                     .build();
             request = request.newBuilder()
                     .url(url)
@@ -154,31 +211,57 @@ public class RetrofitManager {
         }
         return retrofitManager;
     }
-    public static String encode(String string) {
+    
+    /**
+     * HexUtil类实现Hex(16进制字符串和)和字节数组的互转
+     */
+    @SuppressWarnings("unused")
+    private static String md5Hex(String str) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(string.getBytes());
-            byte b[] = md.digest();
-            int i;
-            StringBuffer buf = new StringBuffer("");
-            for (int offset = 0; offset < b.length; offset++) {
-                i = b[offset];
-                if (i < 0)
-                    i += 256;
-                if (i < 16)
-                    buf.append("0");
-                buf.append(Integer.toHexString(i));
-            }
-            return buf.toString();
-            // if (type) {
-            // return buf.toString(); // 32
-            // } else {
-            // return buf.toString().substring(8, 24);// 16
-            // }
+            byte[] digest = md.digest(str.getBytes());
+            return new String(new HexUtil().encode(digest));
         } catch (Exception e) {
-            return null;
+            e.printStackTrace();
+            System.out.println(e.toString());
+            return "";
         }
     }
     
+   
     
-}
+    public static class HexUtil {
+        /**
+         * 字节流转成十六进制表示
+         */
+        public static String encode(byte[] src) {
+            String strHex = "";
+            StringBuilder sb = new StringBuilder("");
+            for (int n = 0; n < src.length; n++) {
+                strHex = Integer.toHexString(src[n] & 0xFF);
+                // 每个字节由两个字符表示，位数不够，高位补0
+                sb.append((strHex.length() == 1) ? "0" + strHex : strHex);
+            }
+            return sb.toString().trim();
+        }
+    
+        /**
+         * 字符串转成字节流
+         */
+        public static byte[] decode(String src) {
+            int m = 0, n = 0;
+            int byteLen = src.length() / 2; // 每两个字符描述一个字节
+            byte[] ret = new byte[byteLen];
+            for (int i = 0; i < byteLen; i++) {
+                m = i * 2 + 1;
+                n = m + 1;
+                int intVal = Integer.decode("0x" + src.substring(i * 2, m) +
+                        src.substring(m, n));
+                ret[i] = Byte.valueOf((byte) intVal);
+            }
+            return ret;
+        }
+    
+    
+    }
+    }
