@@ -3,6 +3,10 @@ package com.biyi.hypnosis.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 
@@ -18,9 +22,11 @@ import java.util.ArrayList;
  */
 public class ClockViewActivity extends BaseActivity {
 
+    private ImageView iv_rotate;
     LoopView loopView_year;
     LoopView loopView_mooth;
     LoopView loopView_day;
+
     ArrayList<String> list_year = new ArrayList<String>();
     ArrayList<String> list_mooth = new ArrayList<String>();
     ArrayList<String> list_day = new ArrayList<String>();
@@ -48,12 +54,22 @@ public class ClockViewActivity extends BaseActivity {
     }
     
     private void initView() {
+
+        iv_rotate = findViewById(R.id.iv_rotate);
         loopView_mooth = (LoopView) findViewById(R.id.loopView_mooth);
         loopView_day = (LoopView) findViewById(R.id.loopView_year);
+        setTittle("定时关闭");
 
     }
 
     private void initData() {
+        Animation rotateAnimation  = new RotateAnimation(0f,360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 1);
+        rotateAnimation.setFillAfter(true);
+        rotateAnimation.setDuration(50);
+        rotateAnimation.setRepeatCount(0);
+        rotateAnimation.setInterpolator(new LinearInterpolator());
+        iv_rotate.startAnimation(rotateAnimation);
+
         //设置是否不循环播放
 //        loopView_year.setNotLoop();
         year = getYear();

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -14,14 +16,13 @@ import com.biyi.hypnosis.R;
 /**
  * 设置Activity
  */
-public class SettingsActivity extends BaseActivity {
+public class FeedbackActivity extends BaseActivity {
 
     private ImageView iv_back;
-    private TextView tv_title;
-    private LinearLayout ll_evaluate,ll_update;
-    private RelativeLayout rl_riseup;
+    private Button feedback_btn;
+    private EditText et_feedback;
     public static void startActivity(Context context){
-           Intent intent= new Intent(context,SettingsActivity.class);
+           Intent intent= new Intent(context,FeedbackActivity.class);
            context.startActivity(intent);
            
     }
@@ -33,24 +34,30 @@ public class SettingsActivity extends BaseActivity {
     
     @Override
     int getLayoutId() {
-        return R.layout.activity_settings;
+        return R.layout.activity_feedback;
     }
     
     /**
      * 初始化控件
      */
     private void initView() {
-        ll_evaluate = findViewById(R.id.ll_evaluate);
-        ll_update = findViewById(R.id.ll_update);
-        ll_evaluate.setOnClickListener(new View.OnClickListener() {
+        iv_back = (ImageView) findViewById(R.id.iv_back);
+        feedback_btn = findViewById(R.id.feedback_btn);
+        et_feedback = findViewById(R.id.et_feedback);
+        setTittle("意见反馈");
+        feedback_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SettingsActivity.this,FeedbackActivity.class);
-                startActivity(intent);
 
             }
         });
-        setTittle("设置");
+
+        iv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
     }
 
