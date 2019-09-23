@@ -15,5 +15,24 @@
         android:layout_height="match_parent"
         android:src="@drawable/splash_default"
         />
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#fff"
+        android:text="考拉催眠神器"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        />
+    <ImageView
+        android:layout_marginRight="5dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@mipmap/ic_laucnher"
+        android:layout_toLeftOf="@id/tv_name"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="25dp"
+        />
 
 </RelativeLayout>

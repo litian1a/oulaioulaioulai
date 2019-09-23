@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:skin="http://schemas.android.com/android/skin"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+ <RelativeLayout
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:background="@color/page_top"
+     >
+     <ImageView
+         android:id="@+id/iv_back"
+         android:layout_width="40dp"
+         android:layout_height="40dp"
+         android:padding="5dp"
+         android:src="@drawable/t_back"
+         android:layout_marginLeft="10dp"
+         android:layout_centerVertical="true"
+         />
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:textColor="#fff"
+         android:id="@+id/tv_title"
+         android:layout_margin="7dp"
+         android:layout_centerHorizontal="true"
+         android:textSize="22sp"
+         android:text="33333"
+         />
+
+
+ </RelativeLayout>
+</merge>
