@@ -1,4 +1,4 @@
-package com.ntalker.ntalkerchatdemo3;
+package com.biyi.hypnosis;
 
 import android.support.multidex.MultiDexApplication;
 
