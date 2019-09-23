@@ -79,10 +79,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
 //                startActivityForResult( intent, 1);
                 break;
             case R.id.iv_clock:
-//                Intent intent = new Intent();
-//                intent.setType("image/*");
-//                intent.setAction(Intent.ACTION_GET_CONTENT);
-//                startActivityForResult( intent, 1);
+                Intent intent = new Intent(HomeActivity.this,ClockViewActivity.class);
+                startActivity(intent);
                 break;
             }
 //        }

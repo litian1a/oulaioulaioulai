@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
@@ -42,7 +43,7 @@ public class ClockViewActivity extends BaseActivity {
 //        setContentView(R.layout.activity_data2);
         initView();
         initData();
-        initEvent();
+//        initEvent();
 
 
         
@@ -63,13 +64,13 @@ public class ClockViewActivity extends BaseActivity {
     }
 
     private void initData() {
-        Animation rotateAnimation  = new RotateAnimation(0f,360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 1);
-        rotateAnimation.setFillAfter(true);
-        rotateAnimation.setDuration(50);
-        rotateAnimation.setRepeatCount(0);
-        rotateAnimation.setInterpolator(new LinearInterpolator());
-        iv_rotate.startAnimation(rotateAnimation);
-
+        Animation  operatingAnim = AnimationUtils.loadAnimation(this, R.anim.clock_bg);
+        LinearInterpolator lin = new LinearInterpolator();
+        if (operatingAnim != null) {
+            iv_rotate.startAnimation(operatingAnim);
+        }
+        operatingAnim.setInterpolator(lin);
+        operatingAnim.startNow();
         //设置是否不循环播放
 //        loopView_year.setNotLoop();
         year = getYear();
@@ -77,33 +78,33 @@ public class ClockViewActivity extends BaseActivity {
         day = getDay();
 
         //年的时间
-        for (int i = 2000; i < 2031; i++) {
-            list_year.add("" + i);
-        }
-        //设置原始数据
-        loopView_year.setItems(list_year);
-        for (int i = 0; i < list_year.size(); i++) {
-            if (Integer.parseInt(list_year.get(i)) == getYear()) {
-                loopView_year.setCurrentPosition(i);
-            }
-        }
-
-
-        //月的时间
-        for (int i = 1; i < 13; i++) {
-            list_mooth.add("" + i);
-        }
-        //设置原始数据
-        loopView_mooth.setItems(list_mooth);
-        loopView_mooth.setCurrentPosition(getMooth() - 1);
-
-        //日的时间
-        for (int i = 1; i < 32; i++) {
-            list_day.add("" + i);
-        }
-        //设置原始数据
-        loopView_day.setItems(list_day);
-        loopView_day.setCurrentPosition(getDay() - 1);
+//        for (int i = 2000; i < 2031; i++) {
+//            list_year.add("" + i);
+//        }
+//        //设置原始数据
+//        loopView_year.setItems(list_year);
+//        for (int i = 0; i < list_year.size(); i++) {
+//            if (Integer.parseInt(list_year.get(i)) == getYear()) {
+//                loopView_year.setCurrentPosition(i);
+//            }
+//        }
+//
+//
+//        //月的时间
+//        for (int i = 1; i < 13; i++) {
+//            list_mooth.add("" + i);
+//        }
+//        //设置原始数据
+//        loopView_mooth.setItems(list_mooth);
+//        loopView_mooth.setCurrentPosition(getMooth() - 1);
+//
+//        //日的时间
+//        for (int i = 1; i < 32; i++) {
+//            list_day.add("" + i);
+//        }
+//        //设置原始数据
+//        loopView_day.setItems(list_day);
+//        loopView_day.setCurrentPosition(getDay() - 1);
 
 
     }

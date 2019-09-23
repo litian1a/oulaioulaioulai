@@ -15,13 +15,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/t_rl_top"
-        android:layout_marginTop="20dp"
         android:layout_gravity="center_horizontal"
         >
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginBottom="26dp"
             android:id="@+id/iv_rotate"
             android:src="@drawable/rotate"/>
         <com.biyi.hypnosis.loopview.LoopView

@@ -210,7 +210,7 @@ public class LoopView extends View {
     }
 
     private void remeasure() {
-        if (items == null && items.size() > 0) {
+        if (items == null || items.size() > 0) {
             return;
         }
 
