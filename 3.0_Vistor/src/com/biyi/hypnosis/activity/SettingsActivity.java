@@ -37,13 +37,6 @@ public class SettingsActivity extends BaseActivity {
      */
     private void initView() {
 
-        musictype_back = (ImageView) findViewById(R.id.musictype_back);
-        musictype_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
 
     }
 

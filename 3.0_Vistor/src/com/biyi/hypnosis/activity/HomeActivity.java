@@ -58,6 +58,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_music_list:
+                MusicTypeActivity.startActivity(this);
                 break;
             case R.id.iv_settings:
 //                Intent intent = new Intent();
