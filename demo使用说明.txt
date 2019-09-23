@@ -1,0 +1,7 @@
+使用demo测试小能访客sdk步骤如下：
+
+1.需要在3.0_Vistor\src\com\ntalker\ntalkerchatdemo3\newIntegrate\demo\NativeDemo.java类中，填入siteid和settingid1的值；
+
+其中siteid为企业id，settingid1为接待组id即templateid。
+
+2.如果不使用友盟推送，请删除UI的libs中的ntalkerchatui.jar包，同时删除build.gradle中的友盟依赖。

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-
-    <string name="app_name">小能访客v3.0</string>
-    <string name="hello_world" tools:keep="@string/hello_world">Hello world!</string>
-    <string name="action_settings" tools:keep="@string/action_settings">Settings</string>
-    <string name="sdk_version">小能SDK版本：3.0</string>
-    <string name="sdk_version_format">小能SDK版本：%s</string>
-</resources>
