@@ -1,41 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:layout_height="wrap_content"
+    android:background="@color/black"
     android:orientation="vertical">
+
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="#ffffff"
-        >
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
-
-            <Button
-                android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/home_top"
+            android:background="@drawable/h_background"
+            android:orientation="horizontal">
+            <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="10dp"
-                android:background="@null"
-                android:drawableStart="@drawable/xn_back" />
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:src="@drawable/h_music_list"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:text="全部接待组"
-                android:textColor="#000"
-                android:textSize="14sp" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/h_pic"
+                android:layout_marginTop="60dp"
+                android:layout_centerHorizontal="true"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:paddingRight="10dp"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/h_settings"/>
+
         </RelativeLayout>
 
-        <ListView
-            android:id="@+id/templateid_list"
+        <SeekBar
+            android:id="@+id/sb_progress"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:maxHeight="2dp"
+            android:minHeight="2dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/home_top"
+            android:progressDrawable="@drawable/seek_bar_progress_style"
+            android:thumb="@drawable/ic_seek_bar_progress_btn" />
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp">
+
+
+            <ImageView
+                android:id="@+id/iv_prev"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="50dp"
+                android:layout_toLeftOf="@+id/iv_play"
+                android:src="@drawable/h_single" />
+
+            <ImageView
+                android:id="@+id/iv_play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/h_playmusic" />
+
+            <ImageView
+                android:id="@+id/iv_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="50dp"
+                android:layout_toRightOf="@id/iv_play"
+                android:src="@drawable/h_clock" />
+        </RelativeLayout>
+
     </LinearLayout>
+
 </LinearLayout>
