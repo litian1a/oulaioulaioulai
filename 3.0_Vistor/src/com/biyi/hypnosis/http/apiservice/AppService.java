@@ -28,12 +28,12 @@ public  interface AppService {
     @Headers({"Content-Type:application/json"})
     @POST("api/checkver")
     Observable<Result<CheckVerModel>> requestCheckVer();
-    @Headers({"Content-Type:application/json"})
+    @FormUrlEncoded
     @POST("api/feedback")
-    Observable<Result<FeedbackModel>> requestFeedback();
-    @Headers({"Content-Type:application/json"})
+    Observable<Result<FeedbackModel>> requestFeedback(@Field("info") String info);
+    @FormUrlEncoded
     @POST("api/musiclist")
-    Observable<Result<TagListModel>> requestMusiclistr();
+    Observable<Result<TagListModel>> requestMusiclist(@Field("tagId") int tagId);
     
     
 }

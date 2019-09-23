@@ -17,6 +17,7 @@
 package com.biyi.hypnosis.http;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 
@@ -127,14 +128,34 @@ public class RetrofitManager {
                                     Request request = chain.request();
                                     if ("POST".equals(request.method())) {
                                         JSONObject jsonObject = new JSONObject();
+                                        int tagId = -1 ;
+                                        String feekInfo = null;
+                                        if (request.body() instanceof FormBody ){
+                                            FormBody formBody = (FormBody) request.body();
+                                            for (int i = 0; i < formBody.size(); i++) {
+                                                if (formBody.encodedName(i).equals("tagId")){
+                                                    tagId = Integer.parseInt(formBody.encodedValue(i));
+                                                }
+                                                if (formBody.encodedName(i).equals("info")){
+                                                    feekInfo = formBody.encodedValue(i);
+                                                }
+                                            }
+                                        }
                                         try {
                                             long time = System.currentTimeMillis() / 1000;
                                             jsonObject.put("sys", Constans.SYS);
+                                            if (tagId != -1){
+                                                jsonObject.put("tagId",tagId);
+                                            }
                                             jsonObject.put("time", time);
                                             jsonObject.put("ver", Constans.VER);
+                                            String string;
+                                            if (tagId != -1) {
+                                                 string = "8A164f54BcF" + "sys=" + Constans.SYS + "&tagId=" + tagId + "&time=" + time + "&ver=" + Constans.VER + "50B57478cd07FC8d3";
+                                            }else {
+                                                string = "8A164f54BcF" + "sys=" + Constans.SYS + "&time=" + time + "&ver=" + Constans.VER + "50B57478cd07FC8d3";
     
-    
-                                            String string = "8A164f54BcF" + "sys=" + Constans.SYS +"&tagId="+ 1+ "&time=" + time + "&ver=" + Constans.VER + "50B57478cd07FC8d3";
+                                            }
                                             Log.i("OKHttp", "intercept: " + string);
                                             String sign = md5Hex(string);
                                             Log.i("OKHttp", "sign: " + sign);
@@ -142,7 +163,9 @@ public class RetrofitManager {
                                             jsonObject.put("ch", "baidu");
     
                                             jsonObject.put("sign", sign);
-                                            jsonObject.put("info", "ssss");
+                                            if (!TextUtils.isEmpty(feekInfo)){
+                                                jsonObject.put("info", feekInfo);
+                                            }
     
                                         } catch (JSONException e) {
                                             e.printStackTrace();
