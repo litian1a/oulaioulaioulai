@@ -3,8 +3,14 @@ package com.biyi.hypnosis.view;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.biyi.hypnosis.R;
+import com.biyi.hypnosis.http.RetrofitManager;
+import com.biyi.hypnosis.http.model.TagListModel;
+import com.biyi.hypnosis.http.rxjava.TransformUtils;
+
+import rx.Observer;
 
 public class SplashActivity extends AppCompatActivity {
     
@@ -19,5 +25,25 @@ public class SplashActivity extends AppCompatActivity {
                 finish();
             }
         },3000);
+        RetrofitManager.getAppApi(this)
+                .getAppStoreService()
+                .requestTagList()
+                .compose(TransformUtils.<TagListModel>defaultSchedulers())
+                .subscribe(new Observer<TagListModel>() {
+                    @Override
+                    public void onCompleted() {
+        
+                    }
+    
+                    @Override
+                    public void onError(Throwable e) {
+        
+                    }
+    
+                    @Override
+                    public void onNext(TagListModel tagListModel) {
+                        Log.i("SplashActivity", "onNext: " +tagListModel);
+                    }
+                });
     }
 }
