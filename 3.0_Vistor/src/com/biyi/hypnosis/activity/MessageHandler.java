@@ -4,6 +4,8 @@ package com.biyi.hypnosis.activity;
 import android.os.Handler;
 import android.os.Message;
 
+import com.biyi.hypnosis.loopview.LoopView;
+
 
 final class MessageHandler extends Handler {
     public static final int WHAT_INVALIDATE_LOOP_VIEW = 1000;

@@ -247,7 +247,7 @@ public class LoopView extends View {
         preCurrentIndex = initPosition;
     }
 
-    void smoothScroll(ACTION action) {
+    public  void smoothScroll(ACTION action) {
         cancelFuture();
         if (action == ACTION.FLING || action == ACTION.DAGGLE) {
             float itemHeight = lineSpacingMultiplier * maxTextHeight;
@@ -327,7 +327,7 @@ public class LoopView extends View {
     // timer.schedule(new InertiaTimerTask(this, velocityY, timer), 0L, 20L);
     // }
 
-    protected final void onItemSelected() {
+    public final void onItemSelected() {
         if (onItemSelectedListener != null) {
             postDelayed(new OnItemSelectedRunnable(this), 200L);
         }
