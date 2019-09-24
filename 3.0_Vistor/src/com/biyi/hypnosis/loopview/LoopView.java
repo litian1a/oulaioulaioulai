@@ -13,6 +13,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+
 import com.biyi.hypnosis.R;
 
 import java.util.List;
@@ -21,6 +22,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Created by Weidongjian on 2015/8/18.
+ */
 public class LoopView extends View {
 
     private float scaleX = 1.05F;
@@ -155,9 +159,9 @@ public class LoopView extends View {
         textSize = typedArray.getInteger(R.styleable.androidWheelView_awv_textsize, DEFAULT_TEXT_SIZE);
         textSize = (int) (Resources.getSystem().getDisplayMetrics().density * textSize);
         lineSpacingMultiplier = typedArray.getFloat(R.styleable.androidWheelView_awv_lineSpace, DEFAULT_LINE_SPACE);
-        centerTextColor = typedArray.getInteger(R.styleable.androidWheelView_awv_centerTextColor, 0xffec6f1a); //中间选中的颜色：ff313131
-        outerTextColor = typedArray.getInteger(R.styleable.androidWheelView_awv_outerTextColor, 0xffafafaf);
-        dividerColor = typedArray.getInteger(R.styleable.androidWheelView_awv_dividerTextColor, 0xffc5c5c5);
+        centerTextColor = typedArray.getInteger(R.styleable.androidWheelView_awv_centerTextColor, 0xffb43383); //中间选中的颜色：ff313131
+        outerTextColor = typedArray.getInteger(R.styleable.androidWheelView_awv_outerTextColor, 0xffb43383);
+//        dividerColor = typedArray.getInteger(R.styleable.androidWheelView_awv_dividerTextColor, 0xffc5c5c5);
         itemsVisibleCount =
                 typedArray.getInteger(R.styleable.androidWheelView_awv_itemsVisibleCount, DEFAULT_VISIBIE_ITEMS);
         if (itemsVisibleCount % 2 == 0) {
@@ -210,7 +214,7 @@ public class LoopView extends View {
     }
 
     private void remeasure() {
-        if (items == null || items.size() > 0) {
+        if (items == null) {
             return;
         }
 
@@ -231,7 +235,7 @@ public class LoopView extends View {
         maxTextHeight = tempRect.height();
         halfCircumference = (int) (measuredHeight * Math.PI / 2);
 
-        maxTextHeight = (int) (halfCircumference / (lineSpacingMultiplier * (itemsVisibleCount - 1)));
+        maxTextHeight = (int) (halfCircumference / (lineSpacingMultiplier * (itemsVisibleCount - 1)))*3;
 
         radius = measuredHeight / 2;
         firstLineY = (int) ((measuredHeight - lineSpacingMultiplier * maxTextHeight) / 2.0F);
@@ -247,7 +251,7 @@ public class LoopView extends View {
         preCurrentIndex = initPosition;
     }
 
-    public  void smoothScroll(ACTION action) {
+    public void smoothScroll(ACTION action) {
         cancelFuture();
         if (action == ACTION.FLING || action == ACTION.DAGGLE) {
             float itemHeight = lineSpacingMultiplier * maxTextHeight;

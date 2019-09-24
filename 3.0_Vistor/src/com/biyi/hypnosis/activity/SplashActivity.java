@@ -26,7 +26,7 @@ public class SplashActivity extends BaseActivity {
                 HomeActivity.startActivity(SplashActivity.this);
                 finish();
             }
-        },3000);
+        },10);
         
       
     }
