@@ -20,6 +20,7 @@ public class SpUtils {
     
     public static final String KEY_TAG_NAME = "KEY_TAG_NAME";
     public static final String KEY_TAG_ID = "KEY_TAG_ID";
+    public static final String KEY_COUNT_DOWN_TIME = "KEY_COUNT_DOWN_TIME";
     
     public SpUtils() {
     

@@ -42,7 +42,7 @@ public class SettingsActivity extends BaseActivity {
      * 初始化控件
      */
     private void initView() {
-        ll_evaluate = findViewById(R.id.ll_evaluate);
+        ll_evaluate = findViewById(R.id.ll_feeckback);
         ll_update = findViewById(R.id.ll_update);
         iv_switchon = findViewById(R.id.iv_switchon);
         ll_update.setOnClickListener(new View.OnClickListener() {

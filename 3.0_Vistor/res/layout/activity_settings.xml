@@ -19,10 +19,14 @@
         android:orientation="vertical">
 
         <RelativeLayout
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="15dp"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/rl_riseup"
-            android:layout_marginTop="12dp"
+
             android:orientation="horizontal">
             <ImageView
                 android:layout_width="wrap_content"
@@ -53,10 +57,12 @@
                 android:background="@drawable/switchoff" />
         </RelativeLayout>
         <LinearLayout
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/ll_evaluate"
-            android:layout_marginTop="16dp"
             android:orientation="horizontal">
             <ImageView
                 android:layout_width="wrap_content"
@@ -67,9 +73,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
+                android:text="给个好评"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ll_feeckback"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/feedback"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
                 android:text="意见反馈"/>
         </LinearLayout>
         <LinearLayout
+            android:layout_marginLeft="24dp"
+            android:layout_marginBottom="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/ll_update"

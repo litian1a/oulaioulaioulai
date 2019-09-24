@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#191e2b"
+    android:background="@color/page_top"
      >
 
     <!-- 顶部tab -->
@@ -54,7 +54,20 @@
                 android:text="min"
                 android:textColor="#b43383"
                 android:textSize="20sp" />
+
+
         </RelativeLayout>
+        <TextView
+            android:id="@+id/tv_time"
+            tools:visibility="visible"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#b43383"
+            android:text="333::33:00"
+            android:textSize="30sp"
+            android:layout_centerInParent="true"
+            />
     </RelativeLayout>
 <LinearLayout
     android:id="@+id/ll_clock"
@@ -135,8 +148,14 @@
             app:awv_textsize="28"
             />
 
-
     </LinearLayout>
+    <TextView
+        android:layout_gravity="center_horizontal"
+        android:layout_width="211dp"
+        android:layout_height="20dp"
+        android:text="闹钟将在11小时20分钟后开始唤醒"
+        android:textColor="#ffffffff"
+        android:textSize="14sp"/>
 
     <Button
         android:layout_width="80dp"
@@ -146,5 +165,8 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/startclock"
         android:layout_gravity="center_horizontal"
+        android:text="开启"
+        android:textColor="#fff"
+        android:gravity="center"
         />
 </LinearLayout>

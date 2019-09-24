@@ -2,6 +2,7 @@ package com.biyi.hypnosis.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -11,15 +12,22 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.biyi.hypnosis.R;
 import com.biyi.hypnosis.loopview.LoopView;
 import com.biyi.hypnosis.loopview.OnItemSelectedListener;
+import com.biyi.hypnosis.utils.SpUtils;
 import com.biyi.hypnosis.utils.TimeUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * 时间选择页面,第二种
@@ -41,8 +49,11 @@ public class ClockViewActivity extends BaseActivity {
     int minu1;
     int hour;
     int minu;
-
-
+    private String TAG = "ClockViewActivity";
+    private TextView tvTime;
+    private Timer mTimer;
+    
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,9 +61,10 @@ public class ClockViewActivity extends BaseActivity {
         initView();
         initData();
         initEvent();
-
-
         
+        
+    
+    
     }
     
     @Override
@@ -66,10 +78,10 @@ public class ClockViewActivity extends BaseActivity {
         btn_clock2 = findViewById(R.id.btn_clock2);
         btn_clock = findViewById(R.id.btn_clock);
         iv_rotate = findViewById(R.id.iv_rotate);
+        tvTime = findViewById(R.id.tv_time);
         loopViewtime = (LoopView) findViewById(R.id.loopViewtime);
         loopView_minu = (LoopView) findViewById(R.id.loopView_minu);
         loopView_hour = (LoopView) findViewById(R.id.loopView_hour);
-        loopViewtime.bringToFront();
         setTittle("定时关闭");
 
     }
@@ -79,28 +91,82 @@ public class ClockViewActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 //TODO 闹钟显示时间
-                btn_clock2.setBackgroundResource(R.drawable.cancle_clock);
+                btn_clock2.setText("取消");
             }
         });
         btn_clock.setOnClickListener(new View.OnClickListener() {
+    
+            private Animation mOperatingAnim;
+    
             @Override
             public void onClick(View view) {
-                Animation  operatingAnim = AnimationUtils.loadAnimation(ClockViewActivity.this, R.anim.clock_bg);
                 if (btn_clock.getText().equals("倒计时")){
+                    mOperatingAnim = AnimationUtils.loadAnimation(ClockViewActivity.this, R.anim.clock_bg);
+    
                     LinearInterpolator lin = new LinearInterpolator();
-                    if (operatingAnim != null) {
-                        iv_rotate.startAnimation(operatingAnim);
+                    if (mOperatingAnim != null) {
+                        iv_rotate.startAnimation(mOperatingAnim);
                     }
-                    operatingAnim.setInterpolator(lin);
+                    mOperatingAnim.setInterpolator(lin);
 //        开始动画
-                    operatingAnim.startNow();
+                    mOperatingAnim.startNow();
                     rl_rotatetime.setVisibility(View.GONE);
+                    int selectedItem = loopViewtime.getSelectedItem();
+                    Log.i(TAG, "onClick: " +list_minu1.get(selectedItem));
                     //TODO  倒计时功能
+                    tvTime.setVisibility(View.VISIBLE);
+    
+                    long countTime = System.currentTimeMillis() + Long.valueOf(list_minu1.get(selectedItem))*60*1000;
+                    SpUtils.putLong(SpUtils.KEY_COUNT_DOWN_TIME, countTime);
+                    try {
+                        mTimer = new Timer();
+                        mTimer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        long countTime = SpUtils.getLong(SpUtils.KEY_COUNT_DOWN_TIME);
+                                        long time = countTime - System.currentTimeMillis() ;
+                                        Log.i(TAG, "run: "+countTime  +" time = "+time);
+                    
+                                        if (time >0){
+                                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                                            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+    
+    
+                                            String format = sdf.format(new Date(time));
+                                            Log.i(TAG, "run: "+format);
+    
+                                            tvTime.setVisibility(View.VISIBLE);
+    
+                                            tvTime.setText(format);
+                        
+                        
+                                        }else {
+                                            mTimer.cancel();
+                                            iv_rotate.clearAnimation();
+                                            rl_rotatetime.setVisibility(View.VISIBLE);
+                                            tvTime.setVisibility(View.GONE);
+                                        }
+                                    }
+                                });
+            
+            
+                            }
+                        },0,1000);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                  
                     btn_clock.setText("结束");
                 }else{
-                    operatingAnim.cancel();
+                    mTimer.cancel();
+                    iv_rotate.clearAnimation();
                     rl_rotatetime.setVisibility(View.VISIBLE);
+                    tvTime.setVisibility(View.GONE);
                     btn_clock.setText("倒计时");
+            
                 }
 
 
@@ -119,8 +185,8 @@ public class ClockViewActivity extends BaseActivity {
             list_minu1.add(i+"");
         }
         //设置原始数据
+        
         loopViewtime.setItems(list_minu1);
-        loopViewtime.setCurrentPosition(0);
 //        for (int i = 0; i < list_minu1.size(); i++) {
 //            if (Integer.parseInt(list_minu1.get(i)) == getMinu()) {
 //                loopViewtime.setCurrentPosition(i);
@@ -146,7 +212,13 @@ public class ClockViewActivity extends BaseActivity {
 
 
     }
-
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mTimer.cancel();
+    }
+    
     private void initEvent() {
         //滚动监听
         loopViewtime.setListener(new OnItemSelectedListener() {
@@ -178,7 +250,7 @@ public class ClockViewActivity extends BaseActivity {
     public void selectData(View view) {
 //        Toast.makeText(this, "你选中的时间是：" + year + "年" + mooth + "月" + day + "日", Toast.LENGTH_SHORT).show();
     }
-
+    
 
     /**
      * 获取得当前时间的分

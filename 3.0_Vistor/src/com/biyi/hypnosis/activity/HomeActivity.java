@@ -156,26 +156,26 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
     
                                     @Override
                                     public void onSuccess() {
-                                        mediaPlayer = new MediaPlayer();
-                                        // 设置指定的流媒体地址
-                                        try {
-                                            mediaPlayer.setDataSource(path + tagListBean.getMusicId() + ".mp3");
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                        // 设置音频流的类型
-                                        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                                        // 通过异步的方式装载媒体资源
-                                        mediaPlayer.prepareAsync();
-                                        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                                            @Override
-                                            public void onPrepared(MediaPlayer mp) {
-                                                // 装载完毕 开始播放流媒体
-                                                mediaPlayer.start();
-                                                Toast.makeText(HomeActivity.this, "开始播放", Toast.LENGTH_SHORT).show();
-                                                // 避免重复播放，把播放按钮设置为不可用
-                                            }
-                                        });
+//                                        mediaPlayer = new MediaPlayer();
+//                                        // 设置指定的流媒体地址
+//                                        try {
+//                                            mediaPlayer.setDataSource(path + tagListBean.getMusicId() + ".mp3");
+//                                        } catch (IOException e) {
+//                                            e.printStackTrace();
+//                                        }
+//                                        // 设置音频流的类型
+//                                        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//                                        // 通过异步的方式装载媒体资源
+//                                        mediaPlayer.prepareAsync();
+//                                        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//                                            @Override
+//                                            public void onPrepared(MediaPlayer mp) {
+//                                                // 装载完毕 开始播放流媒体
+//                                                mediaPlayer.start();
+//                                                Toast.makeText(HomeActivity.this, "开始播放", Toast.LENGTH_SHORT).show();
+//                                                // 避免重复播放，把播放按钮设置为不可用
+//                                            }
+//                                        });
                                         //
                                     }
     

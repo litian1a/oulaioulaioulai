@@ -173,7 +173,7 @@ public class LoopView extends View {
         drawingStrings = new String[itemsVisibleCount];
 
         totalScrollY = 0;
-        initPosition = -1;
+        initPosition = 3;
 
         initPaints();
     }

@@ -34,7 +34,10 @@ android:id="@+id/feedback_btn"
             android:layout_below="@+id/et_feedback"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
-            android:background="@drawable/submitapprise"
+            android:background="@drawable/startclock"
+            android:text="提交"
+            android:textColor="#fff"
+            android:gravity="center"
             />
     </RelativeLayout>
 
