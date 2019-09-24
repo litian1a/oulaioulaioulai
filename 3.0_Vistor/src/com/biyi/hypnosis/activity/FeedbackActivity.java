@@ -49,6 +49,7 @@ public class FeedbackActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
 
+                finish();
             }
         });
 

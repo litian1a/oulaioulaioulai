@@ -8,15 +8,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.biyi.hypnosis.R;
+import com.biyi.hypnosis.utils.ToastUtils;
 
 /**
  * 设置Activity
  */
 public class SettingsActivity extends BaseActivity {
 
-    private ImageView iv_back;
+    private ImageView iv_back,iv_switchon;
     private TextView tv_title;
     private LinearLayout ll_evaluate,ll_update;
     private RelativeLayout rl_riseup;
@@ -42,6 +44,19 @@ public class SettingsActivity extends BaseActivity {
     private void initView() {
         ll_evaluate = findViewById(R.id.ll_evaluate);
         ll_update = findViewById(R.id.ll_update);
+        iv_switchon = findViewById(R.id.iv_switchon);
+        ll_update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ToastUtils.getInstance().showToast(getApplicationContext(), "暂无最新版本");
+            }
+        });
+        iv_switchon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
         ll_evaluate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

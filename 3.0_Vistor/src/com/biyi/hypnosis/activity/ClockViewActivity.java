@@ -7,7 +7,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
@@ -26,7 +29,11 @@ public class ClockViewActivity extends BaseActivity {
     private ImageView iv_rotate;
     LoopView loopView_minu,loopViewtime;
     LoopView loopView_hour;
+    private Button btn_clock;
+    private RelativeLayout rl_rotatetime;
+    private LinearLayout ll_getupsetting;
 
+    private Button btn_clock2;
     ArrayList<String> list_minu1 = new ArrayList<String>();
     ArrayList<String> list_hour = new ArrayList<String>();
     ArrayList<String> list_minu = new ArrayList<String>();
@@ -54,7 +61,10 @@ public class ClockViewActivity extends BaseActivity {
     }
     
     private void initView() {
-
+//        ll_getupsetting = findViewById(R.id.ll_getupsetting);
+        rl_rotatetime = findViewById(R.id.rl_rotatetime);
+        btn_clock2 = findViewById(R.id.btn_clock2);
+        btn_clock = findViewById(R.id.btn_clock);
         iv_rotate = findViewById(R.id.iv_rotate);
         loopViewtime = (LoopView) findViewById(R.id.loopViewtime);
         loopView_minu = (LoopView) findViewById(R.id.loopView_minu);
@@ -65,15 +75,38 @@ public class ClockViewActivity extends BaseActivity {
     }
 
     private void initData() {
-        Animation  operatingAnim = AnimationUtils.loadAnimation(this, R.anim.clock_bg);
-        LinearInterpolator lin = new LinearInterpolator();
-        if (operatingAnim != null) {
-            iv_rotate.startAnimation(operatingAnim);
-        }
-        operatingAnim.setInterpolator(lin);
-
+        btn_clock2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO 闹钟显示时间
+                btn_clock2.setBackgroundResource(R.drawable.cancle_clock);
+            }
+        });
+        btn_clock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Animation  operatingAnim = AnimationUtils.loadAnimation(ClockViewActivity.this, R.anim.clock_bg);
+                if (btn_clock.getText().equals("倒计时")){
+                    LinearInterpolator lin = new LinearInterpolator();
+                    if (operatingAnim != null) {
+                        iv_rotate.startAnimation(operatingAnim);
+                    }
+                    operatingAnim.setInterpolator(lin);
 //        开始动画
-//        operatingAnim.startNow();
+                    operatingAnim.startNow();
+                    rl_rotatetime.setVisibility(View.GONE);
+                    //TODO  倒计时功能
+                    btn_clock.setText("结束");
+                }else{
+                    operatingAnim.cancel();
+                    rl_rotatetime.setVisibility(View.VISIBLE);
+                    btn_clock.setText("倒计时");
+                }
+
+
+            }
+        });
+
         //设置是否不循环播放
 //        loopView_year.setNotLoop();
 //        year = getYear();
@@ -96,20 +129,20 @@ public class ClockViewActivity extends BaseActivity {
 //
 //
 //        //月的时间
-//        for (int i = 1; i < 13; i++) {
-//            list_mooth.add("" + i);
-//        }
+        for (int i = 1; i <= 24; i++) {
+            list_hour.add("" + i);
+        }
+        //设置原始数据
+        loopView_hour.setItems(list_hour);
+        loopView_hour.setCurrentPosition(getMooth() - 1);
+
+        //日的时间
+        for (int i = 1; i <= 60; i++) {
+            list_minu.add("" + i);
+        }
 //        //设置原始数据
-//        loopView_mooth.setItems(list_mooth);
-//        loopView_mooth.setCurrentPosition(getMooth() - 1);
-//
-//        //日的时间
-//        for (int i = 1; i < 32; i++) {
-//            list_day.add("" + i);
-//        }
-//        //设置原始数据
-//        loopView_day.setItems(list_day);
-//        loopView_day.setCurrentPosition(getDay() - 1);
+        loopView_minu.setItems(list_minu);
+        loopView_minu.setCurrentPosition(1);
 
 
     }

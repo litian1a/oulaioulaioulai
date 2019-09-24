@@ -160,7 +160,7 @@ public class LoopView extends View {
         textSize = (int) (Resources.getSystem().getDisplayMetrics().density * textSize);
         lineSpacingMultiplier = typedArray.getFloat(R.styleable.androidWheelView_awv_lineSpace, DEFAULT_LINE_SPACE);
         centerTextColor = typedArray.getInteger(R.styleable.androidWheelView_awv_centerTextColor, 0xffb43383); //中间选中的颜色：ff313131
-        outerTextColor = typedArray.getInteger(R.styleable.androidWheelView_awv_outerTextColor, 0xffb43383);
+        outerTextColor = typedArray.getInteger(R.styleable.androidWheelView_awv_outerTextColor, 0xff444751);
 //        dividerColor = typedArray.getInteger(R.styleable.androidWheelView_awv_dividerTextColor, 0xffc5c5c5);
         itemsVisibleCount =
                 typedArray.getInteger(R.styleable.androidWheelView_awv_itemsVisibleCount, DEFAULT_VISIBIE_ITEMS);
@@ -235,7 +235,7 @@ public class LoopView extends View {
         maxTextHeight = tempRect.height();
         halfCircumference = (int) (measuredHeight * Math.PI / 2);
 
-        maxTextHeight = (int) (halfCircumference / (lineSpacingMultiplier * (itemsVisibleCount - 1)))*3;
+        maxTextHeight = (int)( (halfCircumference / (lineSpacingMultiplier * (itemsVisibleCount - 1)))*3);
 
         radius = measuredHeight / 2;
         firstLineY = (int) ((measuredHeight - lineSpacingMultiplier * maxTextHeight) / 2.0F);

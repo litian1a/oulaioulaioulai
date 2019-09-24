@@ -1,7 +1,8 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
      >
     <!-- 顶部tab -->
     <include
@@ -10,28 +11,31 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
+        android:background="#181e2a"
+        android:padding="20dp"
         android:layout_centerVertical="true">
 
         <EditText
             android:id="@+id/et_feedback"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="180dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="52dp"
+            android:gravity="top|left"
+            android:hint="请简要描述您的问题和意见，以便我们提供更好的帮助"
             android:background="@drawable/feedback_shape"
+            android:textSize="16sp"
             android:padding="10dp" />
 
         <Button
-            android:layout_width="80dp"
-            android:layout_height="30dp"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
 android:id="@+id/feedback_btn"
             android:layout_below="@+id/et_feedback"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
-            android:background="@drawable/clock_openbtn_shape"
-            android:text="提交" />
+            android:background="@drawable/submitapprise"
+            />
     </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>
