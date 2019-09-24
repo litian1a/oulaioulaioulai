@@ -3,22 +3,34 @@ package com.biyi.hypnosis.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.biyi.hypnosis.R;
+import com.biyi.hypnosis.adapter.BaseRecyclerAdapter;
 import com.biyi.hypnosis.adapter.MusicListAdapter;
+import com.biyi.hypnosis.download.DownLoadCallback;
+import com.biyi.hypnosis.download.DownloadManager;
 import com.biyi.hypnosis.http.RetrofitManager;
 import com.biyi.hypnosis.http.model.MusicListModel;
 import com.biyi.hypnosis.http.model.TagListModel;
 import com.biyi.hypnosis.http.rxjava.TransformUtils;
 import com.biyi.hypnosis.utils.ListUtils;
 import com.biyi.hypnosis.utils.SpUtils;
+import com.liulishuo.okdownload.DownloadListener;
+import com.liulishuo.okdownload.DownloadTask;
+
+import java.io.File;
+import java.io.IOException;
 
 import rx.Observer;
 
@@ -29,6 +41,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
     private ImageView iv_play,iv_prev,iv_clock;
     private RecyclerView mRecyclerView;
     private SeekBar sb_progress;
+    private String path = getSDCardPathByEnvironment()+"/kaola_music/";
+    private MediaPlayer mediaPlayer;
+    
     public static void startActivity(Context context){
            Intent intent= new Intent(context,HomeActivity.class);
            context.startActivity(intent);
@@ -125,7 +140,52 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
                     @Override
                     public void onNext(MusicListModel tagListModel) {
                         if (tagListModel == null || ListUtils.isEmpty(tagListModel.getTagList()))return;
-                        mRecyclerView.setAdapter(new MusicListAdapter(HomeActivity.this,tagListModel.getTagList()));
+                        final MusicListAdapter adapter = new MusicListAdapter(HomeActivity.this, tagListModel.getTagList());
+                        mRecyclerView.setAdapter(adapter);
+                        adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View itemView, int pos) {
+                                final MusicListModel.TagListBean tagListBean = adapter.getDatas().get(pos);
+                                String url = tagListBean.getUrl();
+                             
+                                DownloadManager.getInstance().downloadUrl(url, path + tagListBean.getMusicId() + ".mp3", new DownLoadCallback() {
+                                    @Override
+                                    public void onProgress(long currentOffset, long mTotalLength) {
+                                    
+                                    }
+    
+                                    @Override
+                                    public void onSuccess() {
+                                        mediaPlayer = new MediaPlayer();
+                                        // 设置指定的流媒体地址
+                                        try {
+                                            mediaPlayer.setDataSource(path + tagListBean.getMusicId() + ".mp3");
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                        // 设置音频流的类型
+                                        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                                        // 通过异步的方式装载媒体资源
+                                        mediaPlayer.prepareAsync();
+                                        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                                            @Override
+                                            public void onPrepared(MediaPlayer mp) {
+                                                // 装载完毕 开始播放流媒体
+                                                mediaPlayer.start();
+                                                Toast.makeText(HomeActivity.this, "开始播放", Toast.LENGTH_SHORT).show();
+                                                // 避免重复播放，把播放按钮设置为不可用
+                                            }
+                                        });
+                                        //
+                                    }
+    
+                                    @Override
+                                    public void onFail() {
+        
+                                    }
+                                });
+                            }
+                        });
                     }
                 });
     }
@@ -139,6 +199,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
                 finish();
                 break;
             case R.id.iv_settings:
+                SettingsActivity.startActivity(this);
 //                Intent intent = new Intent();
 //                intent.setType("image/*");
 //                intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -164,5 +225,12 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
 //        }
 //        }
 
+    }
+    
+    public static String getSDCardPathByEnvironment() {
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            return Environment.getExternalStorageDirectory().getAbsolutePath();
+        }
+        return "";
     }
 }
