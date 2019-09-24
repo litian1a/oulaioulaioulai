@@ -28,14 +28,25 @@
             android:id="@+id/iv_rotate"
             android:src="@drawable/rotate"/>
         <com.biyi.hypnosis.loopview.LoopView
-            android:id="@+id/loopView"
+            android:id="@+id/loopViewtime"
             android:layout_width="70dp"
             android:layout_height="150dp"
             android:layout_centerInParent="true"
-            app:awv_centerTextColor = "@color/colorAccent"
-            app:awv_textsize="20"
+            app:awv_textsize="30"
+            android:textStyle="bold"
+
             />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/iv_rotate"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:layout_marginRight="10dp"
+            android:text="min"
+            android:textColor="#b43383"
+            android:textSize="20sp" />
     </RelativeLayout>
 <LinearLayout
     android:id="@+id/ll_clock"
@@ -83,7 +94,7 @@
         >
 
         <com.biyi.hypnosis.loopview.LoopView
-            android:id="@+id/loopView_year"
+            android:id="@+id/loopView_hour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -101,7 +112,7 @@
             />
 
         <com.biyi.hypnosis.loopview.LoopView
-            android:id="@+id/loopView_mooth"
+            android:id="@+id/loopView_minu"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
