@@ -196,7 +196,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
         switch (view.getId()) {
             case R.id.iv_music_list:
                 MusicTypeActivity.startActivity(this);
-                finish();
                 break;
             case R.id.iv_settings:
                 SettingsActivity.startActivity(this);
