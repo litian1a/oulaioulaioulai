@@ -38,7 +38,7 @@ import rx.Observer;
 public class HomeActivity extends BaseActivity implements View.OnClickListener{
 
     private ImageView iv_music_list,iv_settings;
-    private ImageView iv_play,iv_prev,iv_clock;
+    private ImageView iv_play,iv_playtype,iv_clock;
     private RecyclerView mRecyclerView;
     private SeekBar sb_progress;
     private String path = getSDCardPathByEnvironment()+"/kaola_music/";
@@ -74,8 +74,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
 
         iv_music_list = (ImageView) findViewById(R.id.iv_music_list);
         iv_settings = (ImageView) findViewById(R.id.iv_settings);
-        iv_play = (ImageView) findViewById(R.id.iv_play);
-        iv_prev = (ImageView) findViewById(R.id.iv_prev);
+        iv_play = (ImageView) findViewById(R.id.iv_playtype);
+        iv_playtype = (ImageView) findViewById(R.id.iv_prev);
         iv_clock = (ImageView) findViewById(R.id.iv_clock);
         sb_progress = (SeekBar) findViewById(R.id.sb_progress);
         mRecyclerView = findViewById(R.id.music_list);
@@ -83,7 +83,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
         iv_music_list.setOnClickListener(this);
         iv_settings.setOnClickListener(this);
         iv_play.setOnClickListener(this);
-        iv_prev.setOnClickListener(this);
+        iv_playtype.setOnClickListener(this);
         iv_clock.setOnClickListener(this);
 //        sb_progress.setOnClickListener(this);
     

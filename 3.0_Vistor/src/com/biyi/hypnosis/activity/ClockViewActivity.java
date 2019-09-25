@@ -50,7 +50,7 @@ public class ClockViewActivity extends BaseActivity {
     int hour;
     int minu;
     private String TAG = "ClockViewActivity";
-    private TextView tvTime;
+    private TextView tvTime,tv_timetoast;
     private Timer mTimer;
     
     
@@ -73,6 +73,7 @@ public class ClockViewActivity extends BaseActivity {
     }
     
     private void initView() {
+        tv_timetoast = findViewById(R.id.tv_timetoast);
         ll_clock = findViewById(R.id.ll_clock);//闹钟的UI
         rl_rotatetime = findViewById(R.id.rl_rotatetime);
         btn_clock2 = findViewById(R.id.btn_clock2);
@@ -96,7 +97,16 @@ public class ClockViewActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 //TODO 闹钟显示时间
-                btn_clock2.setText("取消");
+                if (btn_clock2.getText().equals("取消")){
+                    btn_clock2.setText("开启");
+                    tv_timetoast.setVisibility(View.INVISIBLE);
+                    tv_timetoast.setText("");
+                }else{
+                    btn_clock2.setText("取消");
+                    tv_timetoast.setVisibility(View.VISIBLE);
+                    tv_timetoast.setText("闹钟将在1小时1分钟后唤醒");
+                }
+
             }
         });
         btn_clock.setOnClickListener(new View.OnClickListener() {
