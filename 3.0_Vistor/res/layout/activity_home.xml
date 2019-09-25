@@ -1,44 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/black"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@color/page_top"
         android:orientation="vertical">
+
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/home_top"
+            android:layout_width="wrap_content"
+            android:layout_height="276dp"
             android:background="@drawable/h_background"
             android:orientation="horizontal">
+
             <ImageView
-                android:padding="15dp"
+                android:id="@+id/iv_music_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/iv_music_list"
                 android:layout_margin="10dp"
-                android:src="@drawable/h_music_list"/>
+                android:padding="15dp"
+                android:src="@drawable/h_music_list" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/h_pic"
+                android:layout_centerHorizontal="true"
                 android:layout_marginTop="60dp"
-                android:layout_centerHorizontal="true"/>
+                android:src="@drawable/h_pic" />
+
             <ImageView
-                android:padding="15dp"
+                android:id="@+id/iv_settings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/iv_settings"
-                android:layout_margin="10dp"
-                android:paddingRight="10dp"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/h_settings"/>
+                android:layout_margin="10dp"
+                android:padding="15dp"
+                android:paddingRight="10dp"
+                android:src="@drawable/h_settings" />
 
         </RelativeLayout>
 
@@ -46,23 +49,22 @@
             android:id="@+id/sb_progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:maxHeight="2dp"
-            android:minHeight="2dp"
+            android:layout_below="@+id/home_top"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
-            android:layout_below="@+id/home_top"
+            android:gravity="center_vertical"
+            android:maxHeight="2dp"
+            android:minHeight="2dp"
             android:progressDrawable="@drawable/seek_bar_progress_style"
             android:thumb="@drawable/ic_seek_bar_progress_btn" />
-
 
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp">
 
 
             <ImageView
@@ -90,17 +92,23 @@
                 android:layout_toRightOf="@id/iv_play"
                 android:src="@drawable/h_clock" />
         </RelativeLayout>
-
-        <android.support.v7.widget.RecyclerView
+    </LinearLayout>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/music_list"
-            android:divider="@color/bg_gray"
-            android:dividerHeight="1dp"
-            android:descendantFocusability="blocksDescendants"
-            android:scrollbars="none"
-            />
+            android:background="@drawable/homebg_shape">
 
-    </LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/music_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:descendantFocusability="blocksDescendants"
+                android:divider="@color/bg_gray"
+                android:dividerHeight="1dp"
+                android:scrollbars="none" />
+        </LinearLayout>
+
+
+
 
 </LinearLayout>

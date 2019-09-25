@@ -216,7 +216,8 @@ public class ClockViewActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mTimer.cancel();
+        if (mTimer != null)
+            mTimer.cancel();
     }
     
     private void initEvent() {
