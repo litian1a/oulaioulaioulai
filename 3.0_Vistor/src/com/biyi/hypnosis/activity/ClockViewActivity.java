@@ -39,7 +39,7 @@ public class ClockViewActivity extends BaseActivity {
     LoopView loopView_hour;
     private Button btn_clock;
     private RelativeLayout rl_rotatetime;
-    private LinearLayout ll_getupsetting;
+    private LinearLayout ll_clock;
 
     private Button btn_clock2;
     ArrayList<String> list_minu1 = new ArrayList<String>();
@@ -73,7 +73,7 @@ public class ClockViewActivity extends BaseActivity {
     }
     
     private void initView() {
-//        ll_getupsetting = findViewById(R.id.ll_getupsetting);
+        ll_clock = findViewById(R.id.ll_clock);//闹钟的UI
         rl_rotatetime = findViewById(R.id.rl_rotatetime);
         btn_clock2 = findViewById(R.id.btn_clock2);
         btn_clock = findViewById(R.id.btn_clock);
@@ -87,6 +87,11 @@ public class ClockViewActivity extends BaseActivity {
     }
 
     private void initData() {
+
+        if (SpUtils.getBoolean(SpUtils.KEY_TAG_CLOCKSWIFT,false)){
+            ll_clock.setVisibility(View.VISIBLE);
+        }else
+            ll_clock.setVisibility(View.GONE);
         btn_clock2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

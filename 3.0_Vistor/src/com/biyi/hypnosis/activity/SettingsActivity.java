@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.biyi.hypnosis.R;
+import com.biyi.hypnosis.utils.SpUtils;
 import com.biyi.hypnosis.utils.ToastUtils;
 
 /**
@@ -45,6 +46,8 @@ public class SettingsActivity extends BaseActivity {
         ll_evaluate = findViewById(R.id.ll_feeckback);
         ll_update = findViewById(R.id.ll_update);
         iv_switchon = findViewById(R.id.iv_switchon);
+        iv_switchon.setSelected(SpUtils.getBoolean(SpUtils.KEY_TAG_CLOCKSWIFT,false));
+
         ll_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,7 +57,9 @@ public class SettingsActivity extends BaseActivity {
         iv_switchon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                boolean switching = !iv_switchon.isSelected();
+                iv_switchon.setSelected(switching);
+                SpUtils.putBoolean(SpUtils.KEY_TAG_CLOCKSWIFT,switching);
             }
         });
         ll_evaluate.setOnClickListener(new View.OnClickListener() {
