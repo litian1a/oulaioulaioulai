@@ -50,7 +50,7 @@ android {
 
                 variant.outputs.all {
                     //这里修改apk文件名
-                    outputFileName = "ntalker-v${variant.versionName}_${releaseTime()}.apk"
+                    outputFileName = "kaolaMusice-v${variant.versionName}_${releaseTime()}.apk"
                 }
             }
 
