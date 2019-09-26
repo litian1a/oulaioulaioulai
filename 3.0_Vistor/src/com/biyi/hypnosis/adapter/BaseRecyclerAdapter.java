@@ -32,13 +32,24 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
     private int mHeaderCount=1;//头部View个数
     private int mBottomCount=1;//底部View个数
 
-    public BaseRecyclerAdapter(Context ctx, List<T> list) {
+    private int mHeadorFoot = 0;//显示头部还是尾部的view,1:头部，2：尾部，0：都不显示
+    public BaseRecyclerAdapter(Context ctx, List<T> list,int headorfoot) {
         mData = (list != null) ? list : new ArrayList<T>();
         mContext = ctx;
         mInflater = LayoutInflater.from(ctx);
+        if (headorfoot == 1)
+            mBottomCount = 0;
+        else
+            mHeaderCount = 0;
     }
+
     public int getContentItemCount(){
         return mData.size();
+    }
+
+    @Override
+    public int getItemCount() {
+        return mData.size() + mHeaderCount + mBottomCount;
     }
 //    public void setHeaderView() {
 //        viewType = ITEM_TYPE_HEADER;
@@ -51,7 +62,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
         if (viewType ==ITEM_TYPE_HEADER) {
             holder = new HeaderViewHolder(mInflater.inflate(R.layout.rv_header, parent, false));
         } else if (viewType == ITEM_TYPE_CONTENT) {
-            holder =  new RecyclerViewHolder(mContext,
+            holder =  new ContentViewHolder(
                     mInflater.inflate(getItemLayoutId(viewType), parent, false));
         } else if (viewType == ITEM_TYPE_BOTTOM) {
             holder =  new BottomViewHolder(mInflater.inflate(R.layout.rv_footer, parent, false));
@@ -98,39 +109,40 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
         if (mHeaderCount != 0 && position < mHeaderCount) {
             //头部View
             return ITEM_TYPE_HEADER;
-        } else if (mBottomCount != 0 && position >= (dataItemCount)) {
+        }
+        if (mBottomCount != 0 && position >= dataItemCount) {
             //底部View
             return ITEM_TYPE_BOTTOM;
-        } else {
+        }
             //内容View
             return ITEM_TYPE_CONTENT;
-        }
+
     }
 
-    //内容 ViewHolder
-//    public static class ContentViewHolder extends RecyclerViewHolder{
-//        public ContentViewHolder(View itemView) {
-//            super(null,itemView);
-////            textView=(TextView)itemView.findViewById(R.id.tv_item_text);
-//        }
-//    }
+//    内容 ViewHolder
+    public static class ContentViewHolder extends RecyclerViewHolder{
+        public ContentViewHolder(View itemView) {
+            super(null,itemView);
+//            textView=(TextView)itemView.findViewById(R.id.tv_item_text);
+        }
+    }
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder,final  int position) {
         if (holder instanceof HeaderViewHolder) {
 
-        } else if (holder instanceof RecyclerViewHolder) {
+        } else if (holder instanceof ContentViewHolder) {
 //            ((RecyclerViewHolder) holder).textView.setText(texts[position - mHeaderCount]);
-            bindData(holder, position, mData.get(position));
+            if (mHeaderCount == 1)
+                bindData(holder, position, mData.get(position-1));
+            else if (mBottomCount == 1)
+                bindData(holder, position, mData.get(position));
         } else if (holder instanceof BottomViewHolder) {
 
         }
 
     }
 
-    @Override
-    public int getItemCount() {
-        return mData.size();
-    }
+
     
     public void add(int pos, T item) {
         mData.add(pos, item);

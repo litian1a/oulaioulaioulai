@@ -25,7 +25,7 @@ public class MusicListAdapter extends  BaseRecyclerAdapter<MusicListModel.TagLis
     public static final int ITEM_TYPE_CONTENT = 1;
     private int selectedPosition = -1;
     public MusicListAdapter(Context ctx, List<MusicListModel.TagListBean> list) {
-        super(ctx, list);
+        super(ctx, list,1);
     }
 
     @Override

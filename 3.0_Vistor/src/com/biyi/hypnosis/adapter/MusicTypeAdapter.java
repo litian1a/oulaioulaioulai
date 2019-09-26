@@ -23,7 +23,7 @@ import java.util.List;
 public class MusicTypeAdapter extends  BaseRecyclerAdapter<TagListModel.TagListBean> {
     
     public MusicTypeAdapter(Context ctx, List<TagListModel.TagListBean> list) {
-        super(ctx, list);
+        super(ctx, list,2);
     }
     
     @Override
