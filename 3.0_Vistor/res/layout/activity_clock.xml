@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -15,18 +15,18 @@
         android:id="@+id/rl_rotate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/t_rl_top"
-        android:layout_gravity="center_horizontal">
+        android:layout_below="@+id/head"
+        android:layout_centerHorizontal="true">
 
 
         <ImageView
             android:id="@+id/iv_rotate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="26dp"
             android:layout_marginLeft="6dp"
-            android:layout_marginRight="6dp"
             android:layout_marginTop="30dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginBottom="26dp"
             android:src="@drawable/rotate" />
 
         <RelativeLayout
@@ -74,6 +74,8 @@
         android:id="@+id/btn_clock"
         android:layout_width="120dp"
         android:layout_height="44dp"
+        android:layout_below="@+id/rl_rotate"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center"
         android:layout_marginTop="14dp"
         android:background="@drawable/clock_finishbtn_shape"
@@ -81,60 +83,51 @@
         android:text="倒计时"
         android:textSize="15sp" />
 
-    <LinearLayout
-        android:id="@+id/ll_clock"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/rl_rotate"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="2dp"
-        android:orientation="vertical">
+
+    <RelativeLayout
+        android:paddingBottom="20dp"
+        android:id="@+id/ll_getupsetting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_clock"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center">
 
 
-        <LinearLayout
-            android:id="@+id/ll_getupsetting"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_above="@id/ll_hour"
+            android:layout_marginLeft="10dp"
+            android:layout_centerHorizontal="true"
+            android:drawableLeft="@drawable/rise"
+            android:drawablePadding="5dp"
+            android:text="起床时间"
+            android:textSize="12sp" />
 
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp">
-
-            <ImageView
-                android:id="@+id/iv_rise"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/rise" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="起床时间"
-                android:textSize="12sp" />
-        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ll_hour"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:layout_below="@+id/ll_clock"
-            android:layout_marginTop="20dp"
+            android:layout_above="@id/btn_clock2"
             android:orientation="horizontal">
+
 
             <com.biyi.hypnosis.loopview.LoopView
                 android:id="@+id/loopView_hour"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
                 android:layout_marginLeft="70dp"
+                android:layout_marginBottom="20dp"
                 android:layout_weight="1"
                 app:awv_textsize="28" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:padding="20dp"
@@ -147,28 +140,32 @@
                 android:id="@+id/loopView_minu"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
                 android:layout_marginRight="70dp"
+                android:layout_marginBottom="20dp"
                 android:layout_weight="1"
                 app:awv_textsize="28" />
 
         </LinearLayout>
 
+
         <TextView
+            android:id="@+id/tv_timetoast"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:id="@+id/tv_timetoast"
+            android:layout_above="@id/btn_clock2"
+            android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
+            android:gravity="center"
             android:text="闹钟将在11小时20分钟后开始唤醒"
             android:textColor="#ffffffff"
-            android:gravity="center"
             android:textSize="14sp" />
 
         <Button
             android:id="@+id/btn_clock2"
-            android:layout_width="132dp"
-            android:layout_height="52dp"
-            android:layout_below="@+id/ll_hour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
             android:background="@drawable/startclock"
@@ -176,6 +173,6 @@
             android:text="开启"
             android:textColor="#fff"
             android:textSize="15sp" />
-    </LinearLayout>
+    </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>
