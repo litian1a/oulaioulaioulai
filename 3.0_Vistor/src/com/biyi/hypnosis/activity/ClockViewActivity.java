@@ -85,6 +85,7 @@ public class ClockViewActivity extends BaseActivity {
         loopView_hour = (LoopView) findViewById(R.id.loopView_hour);
         setTittle("定时关闭");
 
+
     }
 
     private void initData() {
@@ -146,15 +147,11 @@ public class ClockViewActivity extends BaseActivity {
                                         Log.i(TAG, "run: "+countTime  +" time = "+time);
                     
                                         if (time >0){
-                                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-                                            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-    
-    
-                                            String format = sdf.format(new Date(time));
+                                            String format = TimeUtil.DateFormatToString(time);
                                             Log.i(TAG, "run: "+format);
     
                                             tvTime.setVisibility(View.VISIBLE);
-    
+
                                             tvTime.setText(format);
                         
                         
@@ -227,12 +224,12 @@ public class ClockViewActivity extends BaseActivity {
 
 
     }
-    
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mTimer != null)
-            mTimer.cancel();
+//        if (mTimer != null)
+//            mTimer.cancel();
     }
     
     private void initEvent() {

@@ -5,7 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.biyi.hypnosis.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,17 +25,37 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
     protected LayoutInflater mInflater;
     private OnItemClickListener mClickListener;
     private OnItemLongClickListener mLongClickListener;
-    
+    private RecyclerViewHolder holder = null;
+    public static final int ITEM_TYPE_HEADER = 0;
+    public static final int ITEM_TYPE_CONTENT = 1;
+    public static final int ITEM_TYPE_BOTTOM = 2;
+    private int mHeaderCount=1;//头部View个数
+    private int mBottomCount=1;//底部View个数
+
     public BaseRecyclerAdapter(Context ctx, List<T> list) {
         mData = (list != null) ? list : new ArrayList<T>();
         mContext = ctx;
         mInflater = LayoutInflater.from(ctx);
     }
-    
+    public int getContentItemCount(){
+        return mData.size();
+    }
+//    public void setHeaderView() {
+//        viewType = ITEM_TYPE_HEADER;
+//        notifyItemInserted(0);
+//    }
+
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final RecyclerViewHolder holder = new RecyclerViewHolder(mContext,
-                mInflater.inflate(getItemLayoutId(viewType), parent, false));
+
+        if (viewType ==ITEM_TYPE_HEADER) {
+            holder = new HeaderViewHolder(mInflater.inflate(R.layout.rv_header, parent, false));
+        } else if (viewType == ITEM_TYPE_CONTENT) {
+            holder =  new RecyclerViewHolder(mContext,
+                    mInflater.inflate(getItemLayoutId(viewType), parent, false));
+        } else if (viewType == ITEM_TYPE_BOTTOM) {
+            holder =  new BottomViewHolder(mInflater.inflate(R.layout.rv_footer, parent, false));
+        }
         if (mClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -50,14 +73,60 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
                 }
             });
         }
+
+
         return holder;
+
     }
-    
+    //头部 ViewHolder
+    public static class HeaderViewHolder extends RecyclerViewHolder {
+
+        public HeaderViewHolder(View itemView) {
+            super(null,itemView);
+        }
+    }
+    //底部 ViewHolder
+    public static class BottomViewHolder extends RecyclerViewHolder {
+
+        public BottomViewHolder(View itemView) {
+            super(null,itemView);
+        }
+    }
     @Override
-    public void onBindViewHolder(RecyclerViewHolder holder, int position) {
-        bindData(holder, position, mData.get(position));
+    public int getItemViewType(int position) {
+        int dataItemCount = getContentItemCount();
+        if (mHeaderCount != 0 && position < mHeaderCount) {
+            //头部View
+            return ITEM_TYPE_HEADER;
+        } else if (mBottomCount != 0 && position >= (dataItemCount)) {
+            //底部View
+            return ITEM_TYPE_BOTTOM;
+        } else {
+            //内容View
+            return ITEM_TYPE_CONTENT;
+        }
     }
-    
+
+    //内容 ViewHolder
+//    public static class ContentViewHolder extends RecyclerViewHolder{
+//        public ContentViewHolder(View itemView) {
+//            super(null,itemView);
+////            textView=(TextView)itemView.findViewById(R.id.tv_item_text);
+//        }
+//    }
+    @Override
+    public void onBindViewHolder(RecyclerViewHolder holder,final  int position) {
+        if (holder instanceof HeaderViewHolder) {
+
+        } else if (holder instanceof RecyclerViewHolder) {
+//            ((RecyclerViewHolder) holder).textView.setText(texts[position - mHeaderCount]);
+            bindData(holder, position, mData.get(position));
+        } else if (holder instanceof BottomViewHolder) {
+
+        }
+
+    }
+
     @Override
     public int getItemCount() {
         return mData.size();

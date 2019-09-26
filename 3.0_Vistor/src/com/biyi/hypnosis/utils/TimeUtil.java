@@ -3,6 +3,7 @@ package com.biyi.hypnosis.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * 这是一个时间转换的工具类
@@ -57,7 +58,14 @@ public class TimeUtil {
         String time = format.format(new Date());
         return Integer.parseInt(time);
     }
+    public static String DateFormatToString(Long time){
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 
+
+        String format = sdf.format(new Date(time));
+        return format;
+    }
     /**
      * 获取指定时间的年，月，日，时分秒
      * 这里获得的时int类型的数据，要输入完整时间的字符串和对应的格式

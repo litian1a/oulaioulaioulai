@@ -29,7 +29,7 @@ public class MusicNameTextView  extends TextView {
         String mTipText = getText().toString();
         mPaint.getTextBounds(mTipText, 0, mTipText.length(), mTextBound);
         mLinearGradient = new LinearGradient(0, 0, mViewWidth, 0,
-                new int[]{0xFFFFEABA, 0xFFBE8B49},
+                new int[]{0xff642ba6  , 0xffcb3679},
                 null, Shader.TileMode.REPEAT);
         mPaint.setShader(mLinearGradient);
         canvas.drawText(mTipText, getMeasuredWidth() / 2 - mTextBound.width() / 2, getMeasuredHeight() / 2 + mTextBound.height() / 2, mPaint);
