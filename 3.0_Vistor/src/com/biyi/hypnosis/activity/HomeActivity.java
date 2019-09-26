@@ -11,6 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Toast;
@@ -37,13 +40,13 @@ import rx.Observer;
 
 public class HomeActivity extends BaseActivity implements View.OnClickListener{
 
-    private ImageView iv_music_list,iv_settings;
+    private ImageView iv_music_list,iv_settings,iv_rotatepic;
     private ImageView iv_play,iv_playtype,iv_clock;
     private RecyclerView mRecyclerView;
     private SeekBar sb_progress;
     private String path = getSDCardPathByEnvironment()+"/kaola_music/";
     private MediaPlayer mediaPlayer;
-    
+    private Animation mOperatingAnim;
     public static void startActivity(Context context){
            Intent intent= new Intent(context,HomeActivity.class);
            context.startActivity(intent);
@@ -74,12 +77,12 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
 
         iv_music_list = (ImageView) findViewById(R.id.iv_music_list);
         iv_settings = (ImageView) findViewById(R.id.iv_settings);
-        iv_play = (ImageView) findViewById(R.id.iv_playtype);
-        iv_playtype = (ImageView) findViewById(R.id.iv_prev);
+        iv_play = (ImageView) findViewById(R.id.iv_play);
+        iv_playtype = (ImageView) findViewById(R.id.iv_playtype);
         iv_clock = (ImageView) findViewById(R.id.iv_clock);
         sb_progress = (SeekBar) findViewById(R.id.sb_progress);
         mRecyclerView = findViewById(R.id.music_list);
-
+        iv_rotatepic =(ImageView) findViewById(R.id.iv_rotatepic);
         iv_music_list.setOnClickListener(this);
         iv_settings.setOnClickListener(this);
         iv_play.setOnClickListener(this);
@@ -120,6 +123,54 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
         }
 
     }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_music_list:
+                MusicTypeActivity.startActivity(this);
+                break;
+            case R.id.iv_settings:
+                SettingsActivity.startActivity(this);
+//                Intent intent = new Intent();
+//                intent.setType("image/*");
+//                intent.setAction(Intent.ACTION_GET_CONTENT);
+//                startActivityForResult( intent, 1);
+                break;
+            case R.id.iv_play:
+                boolean switching = !iv_play.isSelected();
+                iv_play.setSelected(switching);
+                SpUtils.putBoolean(SpUtils.KEY_TAG_PLAYMUSIC,switching);
+                if (!switching){
+                    mOperatingAnim = AnimationUtils.loadAnimation(HomeActivity.this, R.anim.clock_bg);
+
+                    LinearInterpolator lin = new LinearInterpolator();
+                    if (mOperatingAnim != null) {
+                        iv_rotatepic.startAnimation(mOperatingAnim);
+                    }
+                    mOperatingAnim.setInterpolator(lin);
+                    //        开始动画
+                    mOperatingAnim.startNow();
+                }else{
+                    iv_rotatepic.clearAnimation();
+                }
+                break;
+            case R.id.iv_playtype:
+//                Intent intent = new Intent();
+//                intent.setType("image/*");
+//                intent.setAction(Intent.ACTION_GET_CONTENT);
+//                startActivityForResult( intent, 1);
+                break;
+            case R.id.iv_clock:
+                Intent intent = new Intent(HomeActivity.this,ClockViewActivity.class);
+                startActivity(intent);
+                break;
+        }
+//        }
+//        }
+
+    }
+
     private void requestMusicList(){
         int tagId = SpUtils.getInt(SpUtils.KEY_TAG_ID);
         RetrofitManager.getAppApi(this)
@@ -191,41 +242,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
     }
 
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.iv_music_list:
-                MusicTypeActivity.startActivity(this);
-                break;
-            case R.id.iv_settings:
-                SettingsActivity.startActivity(this);
-//                Intent intent = new Intent();
-//                intent.setType("image/*");
-//                intent.setAction(Intent.ACTION_GET_CONTENT);
-//                startActivityForResult( intent, 1);
-                break;
-            case R.id.iv_play:
-//                Intent intent = new Intent();
-//                intent.setType("image/*");
-//                intent.setAction(Intent.ACTION_GET_CONTENT);
-//                startActivityForResult( intent, 1);
-                break;
-            case R.id.iv_prev:
-//                Intent intent = new Intent();
-//                intent.setType("image/*");
-//                intent.setAction(Intent.ACTION_GET_CONTENT);
-//                startActivityForResult( intent, 1);
-                break;
-            case R.id.iv_clock:
-                Intent intent = new Intent(HomeActivity.this,ClockViewActivity.class);
-                startActivity(intent);
-                break;
-            }
-//        }
-//        }
 
-    }
-    
     public static String getSDCardPathByEnvironment() {
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             return Environment.getExternalStorageDirectory().getAbsolutePath();

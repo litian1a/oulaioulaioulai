@@ -22,7 +22,7 @@ public class SpUtils {
     public static final String KEY_TAG_ID = "KEY_TAG_ID";
     public static final String KEY_COUNT_DOWN_TIME = "KEY_COUNT_DOWN_TIME";
     public static final String KEY_TAG_CLOCKSWIFT = "KEY_TAG_CLOCKSWIFT";
-    
+    public static final String KEY_TAG_PLAYMUSIC = "KEY_TAG_PLAYMUSIC";
     public SpUtils() {
     
     }

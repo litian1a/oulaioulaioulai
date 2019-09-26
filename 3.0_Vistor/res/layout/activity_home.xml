@@ -28,6 +28,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/iv_rotatepic"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="60dp"
                 android:src="@drawable/h_pic" />
@@ -78,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:src="@drawable/h_playmusic" />
+                android:src="@drawable/playmusic_selector" />
 
             <ImageView
                 android:id="@+id/iv_clock"
