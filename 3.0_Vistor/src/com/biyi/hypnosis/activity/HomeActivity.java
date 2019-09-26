@@ -1,17 +1,27 @@
 package com.biyi.hypnosis.activity;
 
+import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -21,7 +31,6 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.biyi.hypnosis.R;
-import com.biyi.hypnosis.adapter.BaseRecyclerAdapter;
 import com.biyi.hypnosis.adapter.MusicListAdapter;
 import com.biyi.hypnosis.download.DownLoadCallback;
 import com.biyi.hypnosis.download.DownloadManager;
@@ -29,6 +38,8 @@ import com.biyi.hypnosis.http.RetrofitManager;
 import com.biyi.hypnosis.http.model.MusicListModel;
 import com.biyi.hypnosis.http.model.TagListModel;
 import com.biyi.hypnosis.http.rxjava.TransformUtils;
+import com.biyi.hypnosis.services.Constant;
+import com.biyi.hypnosis.services.MusicService;
 import com.biyi.hypnosis.utils.ListUtils;
 import com.biyi.hypnosis.utils.SpUtils;
 import com.liulishuo.okdownload.DownloadListener;
@@ -36,19 +47,140 @@ import com.liulishuo.okdownload.DownloadTask;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import rx.Observer;
 
 
 public class HomeActivity extends BaseActivity implements View.OnClickListener{
-
+    
+    public float mPercent;
     private ImageView iv_music_list,iv_settings,iv_rotatepic;
     private ImageView iv_play,iv_playtype,iv_clock;
     private RecyclerView mRecyclerView;
-    private SeekBar sb_progress;
+    public SeekBar sb_progress;
     private String path = getSDCardPathByEnvironment()+"/kaola_music/";
     private MediaPlayer mediaPlayer;
     private Animation mOperatingAnim;
+    Messenger mMessengerClient;
+    private Messenger mPlaygingClientMessenger;
+    private int currentTime;
+    private int duration;
+    private List<String> mList = new ArrayList<>();
+    private MyHandler myHandler;
+    
+    
+    
+    
+    ServiceConnection mServiceConnection = new ServiceConnection() {
+    
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            mServiceMessenger = new Messenger(iBinder);
+            Message msgToService = Message.obtain();
+            msgToService.replyTo = mPlaygingClientMessenger;
+            msgToService.what = Constant.PLAYING_ACTIVITY;
+            if (0 != currentTime) {//当前进度不是0，就更新MediaPlayerService的当前进度
+                msgToService.arg1 = currentTime;
+            }
+            try {
+                mServiceMessenger.send(msgToService);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            if (null != mServiceMessenger ) {
+                msgToService.arg1 = mPosition;
+                
+                if (!ListUtils.isEmpty(mList) ) {
+                  /*  for (int i = 0; i < list.size(); i++) {
+                        JLog.e(TAG, list.get(i).getSongname() + "--" + list.get(i).getUrl());
+                    }*/
+                    //更新专辑图片
+//                    mAlbumFragmentAdapater.addList(mList);
+//                    mAlbumFragmentAdapater.notifyDataSetChanged();
+                    //显示是否收藏了这首歌曲
+//                    showIsLike();
+                    //传递歌曲集合数据
+                    Bundle songsData = new Bundle();
+                    songsData.putSerializable(Constant.PLAYING_ACTIVITY_DATA_KEY, (Serializable) mList);
+                    msgToService.setData(songsData);
+                    msgToService.what = Constant.PLAYING_ACTIVITY_INIT;
+                    try {
+                        mServiceMessenger.send(msgToService);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                
+            }
+        }
+        
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+        }
+    };
+    private MusicListAdapter mAdapter;
+    
+    
+    static class MyHandler extends Handler{
+        private WeakReference<HomeActivity> weakActivity;
+        public MyHandler(HomeActivity activity) {
+            weakActivity = new WeakReference<HomeActivity>(activity);
+        }
+        
+        @Override
+        public void handleMessage(Message msgFromService) {
+            HomeActivity activity = weakActivity.get();
+            if (null == activity) return;
+            switch (msgFromService.what) {
+                case Constant.MEDIA_PLAYER_SERVICE_PROGRESS://更新进度条
+                    activity.currentTime = msgFromService.arg1;
+                    activity.duration = msgFromService.arg2;
+                    if (0 == activity.duration) break;
+                    activity.sb_progress.setProgress(activity.currentTime * 100 / activity.duration);
+                    break;
+                case Constant.MEDIA_PLAYER_SERVICE_SONG_PLAYING:
+                    Bundle bundle = msgFromService.getData();
+                    activity.mList.clear();
+                    activity.mList.addAll( bundle.getStringArrayList(Constant.MEDIA_PLAYER_SERVICE_MODEL_PLAYING));
+                    if (null != activity.mList && 0 < activity.mList.size()) {
+//                        activity.mTvSongName.setText(activity.mList.get(msgFromService.arg1).getSongname());
+//                        activity.mTvSinger.setText(activity.mList.get(msgFromService.arg1).getSingername());
+                        
+                        //更新专辑图片
+                    }
+                    break;
+                case Constant.MEDIA_PLAYER_SERVICE_IS_PLAYING:
+                    if (1 == msgFromService.arg1) {//正在播放
+//                        activity.mBtnPlay.setImageResource(R.mipmap.play);
+                    } else {
+//                        activity.mBtnPlay.setImageResource(R.mipmap.pause);
+                    }
+                    break;
+                case Constant.PLAYING_ACTIVITY_PLAY_MODE://显示播放器的播放模式
+                    activity.updatePlayMode();
+                    break;
+                case Constant.MEDIA_PLAYER_SERVICE_UPDATE_SONG://播放完成自动播放下一首时，更新正在播放UI
+                    int positionPlaying = msgFromService.arg1;
+                
+            }
+            super.handleMessage(msgFromService);
+        }
+    }
+    
+    private void updatePlayMode() {
+    
+    }
+    
+    public Messenger mServiceMessenger;
+    private int mPosition;
+    
     public static void startActivity(Context context){
            Intent intent= new Intent(context,HomeActivity.class);
            context.startActivity(intent);
@@ -58,6 +190,13 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
+        bindService();
+    }
+    
+    private void bindService() {
+        myHandler = new MyHandler(this);
+        mMessengerClient = new Messenger(myHandler);
+        bindService(new Intent(this, MusicService.class),mServiceConnection,BIND_AUTO_CREATE);
     }
     
     @Override
@@ -93,6 +232,26 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
 //        sb_progress.setOnClickListener(this);
     
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new MusicListAdapter(R.layout.item_music_list, new ArrayList<MusicListModel.TagListBean>());
+        LayoutInflater from = LayoutInflater.from(this);
+        View inflate = from.inflate(R.layout.rv_header, null);
+        View rv_footer = from.inflate(R.layout.rv_footer, null);
+        mAdapter.addHeaderView(inflate);
+        mAdapter.addFooterView(rv_footer);
+        mRecyclerView.setAdapter(mAdapter);
+    
+//        mAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View itemView, final int pos) {
+//                final MusicListModel.TagListBean tagListBean = mAdapter.getDatas().get(pos);
+//                String url = tagListBean.getUrl();
+//                mPosition = pos;
+//                bindService();
+//
+//            }
+//        });
+        //进度条的监听
+        sb_progress.setOnSeekBarChangeListener(new MyOnSeekBarChangeListeger(this));
         
         if (SpUtils.getInt(SpUtils.KEY_TAG_ID)  == -1){
             RetrofitManager.getAppApi(this).getAppStoreService()
@@ -193,56 +352,15 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
                     @Override
                     public void onNext(MusicListModel tagListModel) {
                         if (tagListModel == null || ListUtils.isEmpty(tagListModel.getTagList()))return;
-                        final MusicListAdapter adapter = new MusicListAdapter(HomeActivity.this, tagListModel.getTagList());
-                        mRecyclerView.setAdapter(adapter);
-//                        LinearLayoutManager layoutManager=new LinearLayoutManager(this);
-//                        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-//                        mRecyclerView.setLayoutManager(layoutManager);
-//                        mRecyclerView.setAdapter(adapter);
-                        adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(View itemView, int pos) {
-                                final MusicListModel.TagListBean tagListBean = adapter.getDatas().get(pos);
-                                String url = tagListBean.getUrl();
+                        List<MusicListModel.TagListBean> tagList = tagListModel.getTagList();
+                        mAdapter.setNewData(tagList);
+                        mList.clear();
+                        for (MusicListModel.TagListBean tagListBean : tagList) {
+                            mList.add(tagListBean.getUrl());
+                        }
+                        
 
-                                DownloadManager.getInstance().downloadUrl(url, path + tagListBean.getMusicId() + ".mp3", new DownLoadCallback() {
-                                    @Override
-                                    public void onProgress(long currentOffset, long mTotalLength) {
-
-                                    }
-
-                                    @Override
-                                    public void onSuccess() {
-//                                        mediaPlayer = new MediaPlayer();
-//                                        // 设置指定的流媒体地址
-//                                        try {
-//                                            mediaPlayer.setDataSource(path + tagListBean.getMusicId() + ".mp3");
-//                                        } catch (IOException e) {
-//                                            e.printStackTrace();
-//                                        }
-//                                        // 设置音频流的类型
-//                                        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-//                                        // 通过异步的方式装载媒体资源
-//                                        mediaPlayer.prepareAsync();
-//                                        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//                                            @Override
-//                                            public void onPrepared(MediaPlayer mp) {
-//                                                // 装载完毕 开始播放流媒体
-//                                                mediaPlayer.start();
-//                                                Toast.makeText(HomeActivity.this, "开始播放", Toast.LENGTH_SHORT).show();
-//                                                // 避免重复播放，把播放按钮设置为不可用
-//                                            }
-//                                        });
-                                        //
-                                    }
-
-                                    @Override
-                                    public void onFail() {
-
-                                    }
-                                });
-                            }
-                        });
+        
                     }
                 });
     }
@@ -257,4 +375,5 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
         }
         return "";
     }
+    
 }

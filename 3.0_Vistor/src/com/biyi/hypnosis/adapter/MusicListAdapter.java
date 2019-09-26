@@ -1,6 +1,8 @@
 package com.biyi.hypnosis.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,6 +13,8 @@ import com.biyi.hypnosis.http.model.MusicListModel;
 import com.biyi.hypnosis.http.model.TagListModel;
 import com.biyi.hypnosis.utils.SpUtils;
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 
 import java.util.List;
 
@@ -20,49 +24,23 @@ import java.util.List;
  *
  * @author：ltc
  */
-public class MusicListAdapter extends  BaseRecyclerAdapter<MusicListModel.TagListBean> {
+public class MusicListAdapter extends BaseQuickAdapter<MusicListModel.TagListBean , BaseViewHolder> {
     public static final int ITEM_TYPE_HEADER = 0;
     public static final int ITEM_TYPE_CONTENT = 1;
     private int selectedPosition = -1;
-    public MusicListAdapter(Context ctx, List<MusicListModel.TagListBean> list) {
-        super(ctx, list,1);
+    
+    public MusicListAdapter(int layoutResId, @Nullable List<MusicListModel.TagListBean> data) {
+        super(layoutResId, data);
     }
-
+    
+    
     @Override
-    public int getItemLayoutId(int viewType) {
-        return R.layout.item_music_list;
+    protected void convert(@NonNull BaseViewHolder helper, MusicListModel.TagListBean item) {
+        helper.setText(R.id.music_name,item.getMusicName());
+    
     }
-
-    @Override
-    public void bindData(RecyclerViewHolder holder, final int position, MusicListModel.TagListBean item) {
-        TextView textView = holder.getTextView(R.id.music_name);
-        textView.setText(item.getMusicName());
-                if (selectedPosition == position){
-            holder.getImageView(R.id.iv_palysmall).setVisibility(View.GONE);
-            holder.getTextView(R.id.tv_playing).setVisibility(View.VISIBLE);
-        }else {
-            holder.getTextView(R.id.tv_playing).setVisibility(View.GONE);
-            holder.getImageView(R.id.iv_palysmall).setVisibility(View.VISIBLE);
-        }
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                notifyItemChanged(selectedPosition);//刷新以前item 回置状态
-                selectedPosition = position;
-                notifyItemChanged(selectedPosition);//刷新当前点击item
-            }
-        });
-
-//        holder.
-    }
-    //头部 ViewHolder
-    public static class HeaderViewHolder extends RecyclerView.ViewHolder {
-
-        public HeaderViewHolder(View itemView) {
-            super(itemView);
-        }
-    }
-  
+    
+   
     
   
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
@@ -12,13 +13,14 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.biyi.hypnosis.R;
-import com.biyi.hypnosis.adapter.BaseRecyclerAdapter;
 import com.biyi.hypnosis.adapter.MusicTypeAdapter;
 import com.biyi.hypnosis.http.RetrofitManager;
 import com.biyi.hypnosis.http.model.TagListModel;
 import com.biyi.hypnosis.http.rxjava.TransformUtils;
 import com.biyi.hypnosis.utils.ListUtils;
 import com.biyi.hypnosis.utils.SpUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 import rx.Observer;
 
@@ -77,21 +79,26 @@ public class MusicTypeActivity extends BaseActivity {
                     public void onNext(TagListModel tagListModel) {
                         if (tagListModel == null || ListUtils.isEmpty(tagListModel.getTagList()))
                             return;
-                        ;
+                        
                         final MusicTypeAdapter musicTypeAdapter;
-                        musicTypeAdapter = new MusicTypeAdapter(MusicTypeActivity.this, tagListModel.getTagList());
+                        musicTypeAdapter = new MusicTypeAdapter(R.layout.item_music_type, tagListModel.getTagList());
+                        LayoutInflater from = LayoutInflater.from(MusicTypeActivity.this);
+                        View inflate = from.inflate(R.layout.rv_header, null);
+                        View rv_footer = from.inflate(R.layout.rv_footer, null);
+                        musicTypeAdapter.addHeaderView(inflate);
+                        musicTypeAdapter.addFooterView(rv_footer);
                         recyclerView.setAdapter(musicTypeAdapter);
-                        musicTypeAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                        musicTypeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                             @Override
-                            public void onItemClick(View itemView, int pos) {
-                                TagListModel.TagListBean tagListBean = musicTypeAdapter.getDatas().get(pos);
-                                SpUtils.putInt(SpUtils.KEY_TAG_ID,tagListBean.getTagId());
-                                SpUtils.putString(SpUtils.KEY_TAG_NAME,tagListBean.getTagName());
+                            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                                TagListModel.TagListBean tagListBean = musicTypeAdapter.getItem(position);
+                                SpUtils.putInt(SpUtils.KEY_TAG_ID, tagListBean.getTagId());
+                                SpUtils.putString(SpUtils.KEY_TAG_NAME, tagListBean.getTagName());
                                 HomeActivity.startActivity(MusicTypeActivity.this);
                                 finish();
-    
                             }
                         });
+    
                     }
                 });
     }
