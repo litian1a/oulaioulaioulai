@@ -163,7 +163,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             switch (msgFromClient.what) {
                 case Constant.PLAYING_ACTIVITY:
                     service.mMessengerPlayingActivity = msgFromClient.replyTo;
-                    Log.e(TAG, "mMessengerPlayingActivity初始化--positon:" + service.position + " currentTime:" + service.currentTime + " isPlaying:" + service.mediaPlayer.isPlaying() + " isLooping:" + service.mediaPlayer.isLooping());
+                    Log.e(TAG, "mMessengerPlayingActivity初始化--  "+msgFromClient.replyTo+   "positon:" + service.position + " currentTime:" + service.currentTime + " isPlaying:" + service.mediaPlayer.isPlaying() + " isLooping:" + service.mediaPlayer.isLooping());
                     if (0 != msgFromClient.arg1) {
                         service.currentTime = msgFromClient.arg1;
                     }
@@ -472,7 +472,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             msgToPlayingAcitvity.what = Constant.MEDIA_PLAYER_SERVICE_PROGRESS;
             msgToPlayingAcitvity.arg1 = mediaPlayer.getCurrentPosition();
             msgToPlayingAcitvity.arg2 = mediaPlayer.getDuration();
-//            Log.e(TAG, "发给客户端的时间--getCurrentPosition:" + mediaPlayer.getCurrentPosition() + " getDuration" + mediaPlayer.getDuration());
+            Log.e(TAG, "发给客户端的时间--getCurrentPosition:" + mediaPlayer.getCurrentPosition() + " getDuration" + mediaPlayer.getDuration());
             try {
                 if (null != mMessengerPlayingActivity) {
                     mMessengerPlayingActivity.send(msgToPlayingAcitvity);

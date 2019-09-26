@@ -42,6 +42,7 @@ import com.biyi.hypnosis.services.Constant;
 import com.biyi.hypnosis.services.MusicService;
 import com.biyi.hypnosis.utils.ListUtils;
 import com.biyi.hypnosis.utils.SpUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.liulishuo.okdownload.DownloadListener;
 import com.liulishuo.okdownload.DownloadTask;
 
@@ -58,14 +59,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import rx.Observer;
 
 
-public class HomeActivity extends BaseActivity implements View.OnClickListener{
+public class HomeActivity extends BaseActivity implements View.OnClickListener {
     
     public float mPercent;
-    private ImageView iv_music_list,iv_settings,iv_rotatepic;
-    private ImageView iv_play,iv_playtype,iv_clock;
+    private ImageView iv_music_list, iv_settings, iv_rotatepic;
+    private ImageView iv_play, iv_playtype, iv_clock;
     private RecyclerView mRecyclerView;
     public SeekBar sb_progress;
-    private String path = getSDCardPathByEnvironment()+"/kaola_music/";
+    private String path = getSDCardPathByEnvironment() + "/kaola_music/";
     private MediaPlayer mediaPlayer;
     private Animation mOperatingAnim;
     Messenger mMessengerClient;
@@ -76,10 +77,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
     private MyHandler myHandler;
     
     
-    
-    
     ServiceConnection mServiceConnection = new ServiceConnection() {
-    
+        
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             mServiceMessenger = new Messenger(iBinder);
@@ -94,10 +93,12 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
+            mPosition = getIntent().getIntExtra("position", 0);
             if (null != mServiceMessenger ) {
+                Message msgToService1 = Message.obtain();
                 msgToService.arg1 = mPosition;
                 
-                if (!ListUtils.isEmpty(mList) ) {
+                if (!ListUtils.isEmpty(mList)) {
                   /*  for (int i = 0; i < list.size(); i++) {
                         JLog.e(TAG, list.get(i).getSongname() + "--" + list.get(i).getUrl());
                     }*/
@@ -109,10 +110,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
                     //传递歌曲集合数据
                     Bundle songsData = new Bundle();
                     songsData.putSerializable(Constant.PLAYING_ACTIVITY_DATA_KEY, (Serializable) mList);
-                    msgToService.setData(songsData);
-                    msgToService.what = Constant.PLAYING_ACTIVITY_INIT;
+                    msgToService1.setData(songsData);
+                    msgToService1.what = Constant.PLAYING_ACTIVITY_INIT;
                     try {
-                        mServiceMessenger.send(msgToService);
+                        mServiceMessenger.send(msgToService1);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -128,8 +129,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
     private MusicListAdapter mAdapter;
     
     
-    static class MyHandler extends Handler{
+    static class MyHandler extends Handler {
         private WeakReference<HomeActivity> weakActivity;
+        
         public MyHandler(HomeActivity activity) {
             weakActivity = new WeakReference<HomeActivity>(activity);
         }
@@ -147,8 +149,18 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
                     break;
                 case Constant.MEDIA_PLAYER_SERVICE_SONG_PLAYING:
                     Bundle bundle = msgFromService.getData();
-                    activity.mList.clear();
-                    activity.mList.addAll( bundle.getStringArrayList(Constant.MEDIA_PLAYER_SERVICE_MODEL_PLAYING));
+//                    activity.mList.clear();
+//                    activity.mList.addAll(bundle.getStringArrayList(Constant.MEDIA_PLAYER_SERVICE_MODEL_PLAYING));
+//                    Message msgToService = Message.obtain();
+//                    msgToService.arg1 = 1;
+//                    msgToService.what = Constant.PLAYING_ACTIVITY_PLAYING_POSITION;
+//                    if (null != activity.mServiceMessenger) {
+//                        try {
+//                            activity.mServiceMessenger.send(msgToService);
+//                        } catch (RemoteException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
                     if (null != activity.mList && 0 < activity.mList.size()) {
 //                        activity.mTvSongName.setText(activity.mList.get(msgFromService.arg1).getSongname());
 //                        activity.mTvSinger.setText(activity.mList.get(msgFromService.arg1).getSingername());
@@ -181,29 +193,30 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
     public Messenger mServiceMessenger;
     private int mPosition;
     
-    public static void startActivity(Context context){
-           Intent intent= new Intent(context,HomeActivity.class);
-           context.startActivity(intent);
-           
+    public static void startActivity(Context context) {
+        Intent intent = new Intent(context, HomeActivity.class);
+        context.startActivity(intent);
+        
     }
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
-        bindService();
+        
     }
     
     private void bindService() {
         myHandler = new MyHandler(this);
-        mMessengerClient = new Messenger(myHandler);
-        bindService(new Intent(this, MusicService.class),mServiceConnection,BIND_AUTO_CREATE);
+        mPlaygingClientMessenger = new Messenger(myHandler);
+        bindService(new Intent(this, MusicService.class), mServiceConnection, BIND_AUTO_CREATE);
     }
     
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         initView();
-    
+        
     }
     
     @Override
@@ -215,7 +228,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
      * 初始化控件
      */
     private void initView() {
-
+        
         iv_music_list = (ImageView) findViewById(R.id.iv_music_list);
         iv_settings = (ImageView) findViewById(R.id.iv_settings);
         iv_play = (ImageView) findViewById(R.id.iv_play);
@@ -223,14 +236,14 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
         iv_clock = (ImageView) findViewById(R.id.iv_clock);
         sb_progress = (SeekBar) findViewById(R.id.sb_progress);
         mRecyclerView = findViewById(R.id.music_list);
-        iv_rotatepic =(ImageView) findViewById(R.id.iv_rotatepic);
+        iv_rotatepic = (ImageView) findViewById(R.id.iv_rotatepic);
         iv_music_list.setOnClickListener(this);
         iv_settings.setOnClickListener(this);
         iv_play.setOnClickListener(this);
         iv_playtype.setOnClickListener(this);
         iv_clock.setOnClickListener(this);
 //        sb_progress.setOnClickListener(this);
-    
+        
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new MusicListAdapter(R.layout.item_music_list, new ArrayList<MusicListModel.TagListBean>());
         LayoutInflater from = LayoutInflater.from(this);
@@ -239,7 +252,22 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
         mAdapter.addHeaderView(inflate);
         mAdapter.addFooterView(rv_footer);
         mRecyclerView.setAdapter(mAdapter);
-    
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                final MusicListModel.TagListBean tagListBean = mAdapter.getItem(position);
+                String url = tagListBean.getUrl();
+                mPosition = position;
+                Message msgToService = Message.obtain();
+                msgToService.arg1 = mPosition;
+                msgToService.what = Constant.PLAYING_ACTIVITY_PLAYING_POSITION;
+                try {
+                    mServiceMessenger.send(msgToService);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 //        mAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(View itemView, final int pos) {
@@ -253,38 +281,38 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
         //进度条的监听
         sb_progress.setOnSeekBarChangeListener(new MyOnSeekBarChangeListeger(this));
         
-        if (SpUtils.getInt(SpUtils.KEY_TAG_ID)  == -1){
+        if (SpUtils.getInt(SpUtils.KEY_TAG_ID) == -1) {
             RetrofitManager.getAppApi(this).getAppStoreService()
                     .requestTagList()
                     .compose(TransformUtils.<TagListModel>defaultSchedulers())
                     .subscribe(new Observer<TagListModel>() {
                         @Override
                         public void onCompleted() {
-        
+                        
                         }
-    
+                        
                         @Override
                         public void onError(Throwable e) {
-        
+                        
                         }
-    
+                        
                         @Override
                         public void onNext(TagListModel tagListModel) {
-                            if (tagListModel == null || ListUtils.isEmpty(tagListModel.getTagList()))return;
+                            if (tagListModel == null || ListUtils.isEmpty(tagListModel.getTagList()))
+                                return;
                             TagListModel.TagListBean tagListBean = tagListModel.getTagList().get(0);
                             int tagId = tagListBean.getTagId();
-                            SpUtils.putInt(SpUtils.KEY_TAG_ID,tagId);
-                            SpUtils.putString(SpUtils.KEY_TAG_NAME,tagListBean.getTagName());
+                            SpUtils.putInt(SpUtils.KEY_TAG_ID, tagId);
+                            SpUtils.putString(SpUtils.KEY_TAG_NAME, tagListBean.getTagName());
                             requestMusicList();
                         }
                     });
-        }
-        else {
+        } else {
             requestMusicList();
         }
-
+        
     }
-
+    
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -301,10 +329,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
             case R.id.iv_play:
                 boolean switching = !iv_play.isSelected();
                 iv_play.setSelected(switching);
-                SpUtils.putBoolean(SpUtils.KEY_TAG_PLAYMUSIC,switching);
-                if (!switching){
+                SpUtils.putBoolean(SpUtils.KEY_TAG_PLAYMUSIC, switching);
+                if (!switching) {
                     mOperatingAnim = AnimationUtils.loadAnimation(HomeActivity.this, R.anim.clock_bg);
-
+                    
                     LinearInterpolator lin = new LinearInterpolator();
                     if (mOperatingAnim != null) {
                         iv_rotatepic.startAnimation(mOperatingAnim);
@@ -312,7 +340,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
                     mOperatingAnim.setInterpolator(lin);
                     //        开始动画
                     mOperatingAnim.startNow();
-                }else{
+                } else {
                     iv_rotatepic.clearAnimation();
                 }
                 break;
@@ -323,16 +351,16 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
 //                startActivityForResult( intent, 1);
                 break;
             case R.id.iv_clock:
-                Intent intent = new Intent(HomeActivity.this,ClockViewActivity.class);
+                Intent intent = new Intent(HomeActivity.this, ClockViewActivity.class);
                 startActivity(intent);
                 break;
         }
 //        }
 //        }
-
+    
     }
-
-    private void requestMusicList(){
+    
+    private void requestMusicList() {
         int tagId = SpUtils.getInt(SpUtils.KEY_TAG_ID);
         RetrofitManager.getAppApi(this)
                 .getAppStoreService()
@@ -341,34 +369,37 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
                 .subscribe(new Observer<MusicListModel>() {
                     @Override
                     public void onCompleted() {
-        
+                    
                     }
-    
+                    
                     @Override
                     public void onError(Throwable e) {
-        
+                    
                     }
-    
+                    
                     @Override
                     public void onNext(MusicListModel tagListModel) {
-                        if (tagListModel == null || ListUtils.isEmpty(tagListModel.getTagList()))return;
+                        if (tagListModel == null || ListUtils.isEmpty(tagListModel.getTagList()))
+                            return;
                         List<MusicListModel.TagListBean> tagList = tagListModel.getTagList();
                         mAdapter.setNewData(tagList);
                         mList.clear();
                         for (MusicListModel.TagListBean tagListBean : tagList) {
                             mList.add(tagListBean.getUrl());
                         }
-                        
-
-        
+                        bindService();
+    
+    
+    
                     }
                 });
     }
-
-
+    
+    
     private void setHeader(RecyclerView view) {
-
+    
     }
+    
     public static String getSDCardPathByEnvironment() {
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             return Environment.getExternalStorageDirectory().getAbsolutePath();
