@@ -1,12 +1,8 @@
 package com.biyi.hypnosis.adapter;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.biyi.hypnosis.R;
 import com.biyi.hypnosis.http.model.MusicListModel;
@@ -35,7 +31,7 @@ public class MusicTypeAdapter extends BaseQuickAdapter<TagListModel.TagListBean,
     @Override
     protected void convert(@NonNull BaseViewHolder helper, TagListModel.TagListBean item) {
         helper.setText(R.id.tv_t_type, item.getTagName());
-        Glide.with(mContext).load(item.getIconUrl()).crossFade().into((ImageView) helper.getView(R.id.iv_t_type));
+        Glide.with(mContext).load(item.getIconUrl()).into((ImageView) helper.getView(R.id.iv_t_type));
     
     }
 }

@@ -327,22 +327,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 //                startActivityForResult( intent, 1);
                 break;
             case R.id.iv_play:
-                boolean switching = !iv_play.isSelected();
-                iv_play.setSelected(switching);
-                SpUtils.putBoolean(SpUtils.KEY_TAG_PLAYMUSIC, switching);
-                if (!switching) {
-                    mOperatingAnim = AnimationUtils.loadAnimation(HomeActivity.this, R.anim.clock_bg);
-                    
-                    LinearInterpolator lin = new LinearInterpolator();
-                    if (mOperatingAnim != null) {
-                        iv_rotatepic.startAnimation(mOperatingAnim);
-                    }
-                    mOperatingAnim.setInterpolator(lin);
-                    //        开始动画
-                    mOperatingAnim.startNow();
-                } else {
-                    iv_rotatepic.clearAnimation();
-                }
+                playSelect();
                 break;
             case R.id.iv_playtype:
 //                Intent intent = new Intent();
@@ -358,6 +343,25 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 //        }
 //        }
     
+    }
+    
+    private void playSelect() {
+        boolean switching = !iv_play.isSelected();
+        iv_play.setSelected(switching);
+        SpUtils.putBoolean(SpUtils.KEY_TAG_PLAYMUSIC, switching);
+        if (!switching) {
+            mOperatingAnim = AnimationUtils.loadAnimation(HomeActivity.this, R.anim.clock_bg);
+            
+            LinearInterpolator lin = new LinearInterpolator();
+            if (mOperatingAnim != null) {
+                iv_rotatepic.startAnimation(mOperatingAnim);
+            }
+            mOperatingAnim.setInterpolator(lin);
+            //        开始动画
+            mOperatingAnim.startNow();
+        } else {
+            iv_rotatepic.clearAnimation();
+        }
     }
     
     private void requestMusicList() {
