@@ -2,7 +2,10 @@ package com.biyi.hypnosis;
 
 import android.support.multidex.MultiDexApplication;
 
+import com.biyi.hypnosis.http.utils.Constans;
 import com.biyi.hypnosis.utils.SpUtils;
+
+import cn.com.ad4.quad.ad.QUAD;
 
 
 /**
@@ -23,6 +26,8 @@ public class MyApplication extends MultiDexApplication {
         SpUtils.init(this);
 //        LeakCanary.install(this);
         initBugly();  // release环境关闭
+        QUAD.initSdk(this, Constans.AD_KEY ,true, -1,-1);
+        
         
         /**
          * 设置传输数据加密类型 1：RSA  2：DES 3：AES

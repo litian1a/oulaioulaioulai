@@ -14,6 +14,10 @@ public class Constans {
     public static final String TIME = "time";
     public static String VER = "1.0.1";
     
+    public static final String SPLASH_AD = "19187001";
+    public static final String BANNER_AD = "19187002";
+    public static final String MESSAGE_AD = "19187003";
+    public static final String AD_KEY = "df526fee30ea4106";
     
     
     
