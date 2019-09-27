@@ -370,7 +370,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     public void playSelect(boolean switching) {
         iv_play.setSelected(switching);
         SpUtils.putBoolean(SpUtils.KEY_TAG_PLAYMUSIC, switching);
-        if (!switching) {
+        if (switching) {
             mOperatingAnim = AnimationUtils.loadAnimation(HomeActivity.this, R.anim.clock_bg);
             
             LinearInterpolator lin = new LinearInterpolator();
