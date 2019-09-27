@@ -51,7 +51,7 @@ public class ClockViewActivity extends BaseActivity {
     int minu;
     private String TAG = "ClockViewActivity";
     private TextView tvTime,tv_timetoast;
-    private Timer mTimer;
+    private Timer mTimer,mTimer2;
     
     
     @Override
@@ -102,10 +102,15 @@ public class ClockViewActivity extends BaseActivity {
                     btn_clock2.setText("开启");
                     tv_timetoast.setVisibility(View.INVISIBLE);
                     tv_timetoast.setText("");
+
                 }else{
                     btn_clock2.setText("取消");
                     tv_timetoast.setVisibility(View.VISIBLE);
-                    tv_timetoast.setText("闹钟将在1小时1分钟后唤醒");
+                    int selectedItemh = loopView_hour.getSelectedItem();
+                    String h = list_hour.get(selectedItemh);
+                    int selectedItemm = loopView_minu.getSelectedItem();
+                    String m = list_minu.get(selectedItemm);
+                    tv_timetoast.setText("闹钟将在"+h+"小时"+m+"分钟后唤醒");
                 }
 
             }
@@ -212,7 +217,6 @@ public class ClockViewActivity extends BaseActivity {
         }
         //设置原始数据
         loopView_hour.setItems(list_hour);
-        loopView_hour.setCurrentPosition(getMooth() - 1);
 
         //日的时间
         for (int i = 1; i <= 60; i++) {
@@ -220,7 +224,6 @@ public class ClockViewActivity extends BaseActivity {
         }
 //        //设置原始数据
         loopView_minu.setItems(list_minu);
-        loopView_minu.setCurrentPosition(1);
 
 
     }

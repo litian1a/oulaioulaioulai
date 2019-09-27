@@ -10,169 +10,178 @@
     <include
         android:id="@+id/t_rl_top"
         layout="@layout/base_toolbar_layout" />
-
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@+id/head">
     <RelativeLayout
-        android:id="@+id/rl_rotate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/head"
-        android:layout_centerHorizontal="true">
-
-
-        <ImageView
-            android:id="@+id/iv_rotate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="6dp"
-            android:layout_marginBottom="26dp"
-            android:src="@drawable/rotate" />
-
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <RelativeLayout
-            android:id="@+id/rl_rotatetime"
+            android:id="@+id/rl_rotate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true">
+            android:layout_below="@+id/head"
+            android:layout_centerHorizontal="true">
 
-            <com.biyi.hypnosis.loopview.LoopView
-                android:id="@+id/loopViewtime"
-                android:layout_width="70dp"
-                android:layout_height="150dp"
-                android:layout_centerHorizontal="true"
+
+            <ImageView
+                android:id="@+id/iv_rotate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
                 android:layout_marginTop="40dp"
-                android:textStyle="bold"
-                app:awv_textsize="28"
+                android:layout_marginRight="6dp"
+                android:layout_marginBottom="26dp"
+                android:src="@drawable/rotate" />
 
-                />
+            <RelativeLayout
+                android:id="@+id/rl_rotatetime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
+
+                <com.biyi.hypnosis.loopview.LoopView
+                    android:id="@+id/loopViewtime"
+                    android:layout_width="70dp"
+                    android:layout_height="150dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="40dp"
+                    android:textStyle="bold"
+                    app:awv_textsize="28"
+
+                    />
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/loopViewtime"
+                    android:text="min"
+                    android:textColor="#b43383"
+                    android:textSize="20sp" />
+
+
+            </RelativeLayout>
 
             <TextView
-                android:layout_width="100dp"
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/loopViewtime"
-                android:text="min"
+                android:layout_centerInParent="true"
                 android:textColor="#b43383"
-                android:textSize="20sp" />
-
+                android:textSize="30sp"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/tv_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="#b43383"
-            android:textSize="30sp"
-            android:visibility="gone"
-            tools:visibility="visible" />
-
-    </RelativeLayout>
-
-    <Button
-        android:id="@+id/btn_clock"
-        android:layout_width="120dp"
-        android:layout_height="44dp"
-        android:layout_below="@+id/rl_rotate"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:layout_marginTop="14dp"
-        android:background="@drawable/clock_finishbtn_shape"
-        android:gravity="center"
-        android:text="倒计时"
-        android:textSize="15sp" />
-
-
-    <RelativeLayout
-        android:paddingBottom="20dp"
-        android:id="@+id/ll_getupsetting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btn_clock"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/ll_hour"
-            android:layout_marginLeft="10dp"
+        <Button
+            android:id="@+id/btn_clock"
+            android:layout_width="120dp"
+            android:layout_height="44dp"
+            android:layout_below="@+id/rl_rotate"
             android:layout_centerHorizontal="true"
-            android:drawableLeft="@drawable/rise"
-            android:drawablePadding="5dp"
-            android:text="起床时间"
-            android:textSize="12sp" />
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/clock_finishbtn_shape"
+            android:gravity="center"
+            android:text="倒计时"
+            android:textSize="15sp" />
 
 
-        <LinearLayout
-            android:id="@+id/ll_hour"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_above="@id/btn_clock2"
-            android:orientation="horizontal">
+        <RelativeLayout
+            android:id="@+id/ll_getupsetting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btn_clock"
+            android:layout_marginTop="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center">
 
-
-            <com.biyi.hypnosis.loopview.LoopView
-                android:id="@+id/loopView_hour"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="70dp"
-                android:layout_marginBottom="20dp"
-                android:layout_weight="1"
-                app:awv_textsize="28" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/tv1"
+                android:layout_centerHorizontal="true"
+                android:drawableLeft="@drawable/rise"
+                android:drawablePadding="5dp"
+                android:text="起床时间"
+                android:textSize="12sp" />
+
+
+            <LinearLayout
+                android:id="@+id/ll_hour"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_below="@+id/tv1"
+                android:layout_marginTop="14dp"
+                android:orientation="horizontal">
+
+
+                <com.biyi.hypnosis.loopview.LoopView
+                    android:id="@+id/loopView_hour"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="70dp"
+                    android:layout_weight="1"
+                    app:awv_textsize="28" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="20dp"
+                    android:text=":"
+                    android:textColor="#b43383"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <com.biyi.hypnosis.loopview.LoopView
+                    android:id="@+id/loopView_minu"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="70dp"
+                    android:layout_weight="1"
+                    app:awv_textsize="28" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tv_timetoast"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_below="@+id/ll_hour"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
                 android:gravity="center"
-                android:padding="20dp"
-                android:text=":"
-                android:textColor="#b43383"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:layout_marginTop="20sp"
+                android:textColor="#ffffffff"
+                android:textSize="14sp" />
 
-            <com.biyi.hypnosis.loopview.LoopView
-                android:id="@+id/loopView_minu"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="70dp"
-                android:layout_marginBottom="20dp"
-                android:layout_weight="1"
-                app:awv_textsize="28" />
+            <Button
+                android:id="@+id/btn_clock2"
+                android:layout_width="132dp"
+                android:layout_height="52dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:layout_below="@+id/tv_timetoast"
+                android:background="@drawable/startclock"
+                android:gravity="center"
+                android:text="开启"
+                android:textColor="#fff"
+                android:textSize="15sp" />
+        </RelativeLayout>
 
-        </LinearLayout>
-
-
-        <TextView
-            android:id="@+id/tv_timetoast"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_above="@id/btn_clock2"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:text="闹钟将在11小时20分钟后开始唤醒"
-            android:textColor="#ffffffff"
-            android:textSize="14sp" />
-
-        <Button
-            android:id="@+id/btn_clock2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/startclock"
-            android:gravity="center"
-            android:text="开启"
-            android:textColor="#fff"
-            android:textSize="15sp" />
     </RelativeLayout>
+
+
+</ScrollView>
 
 </RelativeLayout>
