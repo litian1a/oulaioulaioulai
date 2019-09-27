@@ -170,7 +170,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                     break;
                 case Constant.MEDIA_PLAYER_SERVICE_IS_PLAYING:
                     boolean b = 1 == msgFromService.arg1;
-                    activity.playSelect(!b);
+                    activity.playSelect(b);
                     if (b) {//正在播放
 //                        activity.mBtnPlay.setImageResource(R.mipmap.play);
                     } else {
@@ -280,7 +280,14 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
-                tagListBean.setPlaying(true);
+                boolean playing = tagListBean.isPlaying();
+                List<MusicListModel.TagListBean> data = adapter.getData();
+                for (MusicListModel.TagListBean datum : data) {
+                    datum.setPlaying(false);
+                }
+                tagListBean.setPlaying(!playing);
+                
+                adapter.notifyDataSetChanged();
             }
         });
 //        mAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {

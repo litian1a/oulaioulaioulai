@@ -224,7 +224,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                     }
                     service.position = msgFromClient.arg1;
                     Log.e(TAG, "positon:" + service.position);
-                    service.playCustomSong(service.position);
+//                    service.playCustomSong(service.position);
                     break;
                 
             }
@@ -553,12 +553,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             Message msgToClient = Message.obtain();//发送给PlayingActivity
             msgToClient.arg1 = mediaPlayer.isPlaying() ? 1 : 0;//1表示在播放，0 表示没有播放
             msgToClient.what = Constant.MEDIA_PLAYER_SERVICE_IS_PLAYING;
-            Message msgToMain = Message.obtain();//发给MainActivity
-            msgToMain.arg1 = mediaPlayer.isPlaying() ? 1 : 0;//1表示在播放，0 表示没有播放
-            msgToMain.what = Constant.MEDIA_PLAYER_SERVICE_IS_PLAYING;
-            Message msgToLock = Message.obtain();//发送给LockActivity
-            msgToLock.arg1 = mediaPlayer.isPlaying() ? 1 : 0;//1表示在播放，0 表示没有播放
-            msgToLock.what = Constant.MEDIA_PLAYER_SERVICE_IS_PLAYING;
+            
             try {
                 mMessengerPlayingActivity.send(msgToClient);
                 
