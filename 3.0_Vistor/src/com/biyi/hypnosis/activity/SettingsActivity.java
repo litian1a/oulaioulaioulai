@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.biyi.hypnosis.R;
 import com.biyi.hypnosis.utils.SpUtils;
 import com.biyi.hypnosis.utils.ToastUtils;
+import com.biyi.hypnosis.utils.UpdateDialog;
 
 /**
  * 设置Activity
@@ -51,7 +52,23 @@ public class SettingsActivity extends BaseActivity {
         ll_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ToastUtils.getInstance().showToast(getApplicationContext(), "暂无最新版本");
+
+                String des = "有最新版本了，快来啊快来啊快来啊快来啊快来啊快来啊快来啊快来啊快来啊快来啊快来啊快来啊";
+                UpdateDialog.getInstance(SettingsActivity.this, R.style.UpdateDialog, des, "以后再说", "立即更新", new UpdateDialog.OnCustomDialogListener() {
+                            @Override
+                            public void refuseUpdate(String name) {
+                                    finish();
+                            }
+
+                            @Override
+                            public void doUpdate(String name) {
+
+                                //TODO 升级代码
+                            }
+                        }
+
+                ).show();
+//                ToastUtils.getInstance().showToast(getApplicationContext(), "暂无最新版本");
             }
         });
         iv_switchon.setOnClickListener(new View.OnClickListener() {
