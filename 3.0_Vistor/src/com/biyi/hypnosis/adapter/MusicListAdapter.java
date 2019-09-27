@@ -37,6 +37,14 @@ public class MusicListAdapter extends BaseQuickAdapter<MusicListModel.TagListBea
     @Override
     protected void convert(@NonNull BaseViewHolder helper, MusicListModel.TagListBean item) {
         helper.setText(R.id.music_name,item.getMusicName());
+        if (item.isPlaying()){
+            helper.setGone(R.id.tv_playing,true);
+            helper.setGone(R.id.iv_palysmall,false);
+           
+        }else {
+            helper.setGone(R.id.iv_palysmall,true);
+            helper.setGone(R.id.tv_playing,false);
+        }
     
     }
     

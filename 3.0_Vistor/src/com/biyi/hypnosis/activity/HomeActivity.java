@@ -62,13 +62,13 @@ import rx.Observer;
 public class HomeActivity extends BaseActivity implements View.OnClickListener {
     
     public float mPercent;
-    private ImageView iv_music_list, iv_settings, iv_rotatepic;
+    public ImageView iv_music_list, iv_settings, iv_rotatepic;
     private ImageView iv_play, iv_playtype, iv_clock;
     private RecyclerView mRecyclerView;
     public SeekBar sb_progress;
     private String path = getSDCardPathByEnvironment() + "/kaola_music/";
     private MediaPlayer mediaPlayer;
-    private Animation mOperatingAnim;
+    public Animation mOperatingAnim;
     Messenger mMessengerClient;
     private Messenger mPlaygingClientMessenger;
     private int currentTime;
@@ -169,7 +169,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                     }
                     break;
                 case Constant.MEDIA_PLAYER_SERVICE_IS_PLAYING:
-                    if (1 == msgFromService.arg1) {//正在播放
+                    boolean b = 1 == msgFromService.arg1;
+                    activity.playSelect(!b);
+                    if (b) {//正在播放
 //                        activity.mBtnPlay.setImageResource(R.mipmap.play);
                     } else {
 //                        activity.mBtnPlay.setImageResource(R.mipmap.pause);
@@ -186,6 +188,18 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         }
     }
     
+    private void updatePlayStatus(){
+        if (null != mServiceMessenger) {
+            Message msgToServicePlay = Message.obtain();
+            msgToServicePlay.arg1 = 0x40001;//表示这个暂停是由点击按钮造成的，
+            msgToServicePlay.what = Constant.PLAYING_ACTIVITY_PLAY;
+            try {
+                mServiceMessenger.send(msgToServicePlay);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     private void updatePlayMode() {
     
     }
@@ -266,6 +280,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
+                tagListBean.setPlaying(true);
             }
         });
 //        mAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
@@ -328,6 +343,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.iv_play:
                 playSelect();
+                updatePlayStatus();
                 break;
             case R.id.iv_playtype:
 //                Intent intent = new Intent();
@@ -345,8 +361,13 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     
     }
     
-    private void playSelect() {
+    public void playSelect() {
         boolean switching = !iv_play.isSelected();
+        
+        playSelect(switching);
+    }
+    
+    public void playSelect(boolean switching) {
         iv_play.setSelected(switching);
         SpUtils.putBoolean(SpUtils.KEY_TAG_PLAYMUSIC, switching);
         if (!switching) {
@@ -359,6 +380,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             mOperatingAnim.setInterpolator(lin);
             //        开始动画
             mOperatingAnim.startNow();
+            
         } else {
             iv_rotatepic.clearAnimation();
         }
