@@ -8,12 +8,14 @@
     <!-- 顶部tab -->
     <include layout="@layout/base_toolbar_layout" />
     <TextView
-        android:layout_marginTop="32dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/t_musictype"
+        android:layout_marginTop="20dp"
+        android:textColor="#EEEEEE"
         android:gravity="center"
-        android:text="当前选择的是：夏日"/>
+        android:textSize="14sp"
+        android:text="当前播放列表"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rycycler"
         android:layout_width="match_parent"

@@ -55,7 +55,7 @@ public class MusicTypeActivity extends BaseActivity {
     private void initView() {
         
         TextView tvMusic = findViewById(R.id.t_musictype);
-        tvMusic.setText("当前选择的是：" + SpUtils.getString(SpUtils.KEY_TAG_NAME));
+        tvMusic.setText("当前播放列表，" + SpUtils.getString(SpUtils.KEY_TAG_NAME));
         setTittle("全部分类");
         final RecyclerView recyclerView = findViewById(R.id.rycycler);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
