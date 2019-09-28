@@ -1,5 +1,7 @@
 package com.biyi.hypnosis.http.utils;
 
+import android.os.Environment;
+
 /**
  * Description：
  * Time：2019-09-23 14:45
@@ -18,7 +20,18 @@ public class Constans {
     public static final String BANNER_AD = "19187002";
     public static final String MESSAGE_AD = "19187003";
     public static final String AD_KEY = "df526fee30ea4106";
+    public static final int MUSICT_DANQU = 0;
+    public static final int MUSICT_SHUNXUN = 1;
+    public static final int MUSICT_SUIJI = 2;
     
+    public static String PATH = getSDCardPathByEnvironment() + "/kaola_music/";
+    
+    public static String getSDCardPathByEnvironment() {
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            return Environment.getExternalStorageDirectory().getAbsolutePath();
+        }
+        return "";
+    }
     
     
 }

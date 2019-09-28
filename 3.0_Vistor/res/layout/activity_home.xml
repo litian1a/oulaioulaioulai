@@ -26,11 +26,11 @@
                 android:src="@drawable/h_music_list" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="180dp"
+                android:layout_height="180dp"
                 android:id="@+id/iv_rotatepic"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="50dp"
                 android:src="@drawable/h_pic" />
 
             <ImageView

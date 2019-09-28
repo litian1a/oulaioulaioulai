@@ -21,7 +21,11 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.biyi.hypnosis.MyApplication;
+import com.biyi.hypnosis.download.DownLoadCallback;
+import com.biyi.hypnosis.download.DownloadManager;
+import com.biyi.hypnosis.http.utils.Constans;
 import com.biyi.hypnosis.http.utils.NetUtils;
+import com.biyi.hypnosis.utils.ListUtils;
 import com.biyi.hypnosis.utils.SpUtils;
 import com.biyi.hypnosis.utils.TimeUtil;
 
@@ -29,7 +33,10 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
@@ -44,9 +51,12 @@ import rx.schedulers.Schedulers;
  */
 public class MusicService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
     private static final String TAG = MusicService.class.getName();
+    public static final Map<String ,String> map = new HashMap();
     //音乐列表
     private List<String> musicsList = new ArrayList<>();
     private int musicsListSize;
+    private static int mPlayMode;
+    
     //通知栏
     private String bean;
     //MediaPlayer
@@ -97,24 +107,31 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         //初始化服务端的Messenger
         myHandler = new MyHandler(this);
         mServiceMessenger = new Messenger(myHandler);
-        mObservable = Observable.interval(1, 1, TimeUnit.SECONDS, Schedulers.computation());
-        mSubscriber = new Subscriber() {
-            @Override
-            public void onCompleted() {
+        if (mObservable == null) {
+            Log.e(TAG, " Observable.interval");
+    
+            mObservable = Observable.interval(1, 1, TimeUnit.SECONDS, Schedulers.computation());
+            mSubscriber = new Subscriber() {
+                @Override
+                public void onCompleted() {
             
-            }
+                }
+        
+                @Override
+                public void onError(Throwable e) {
             
-            @Override
-            public void onError(Throwable e) {
-            
-            }
-            
-            @Override
-            public void onNext(Object o) {
-                sendUpdateProgressMsg();
-                checkTime2();
-            }
-        };
+                }
+        
+                @Override
+                public void onNext(Object o) {
+                    sendUpdateProgressMsg();
+                    checkTime2();
+                }
+            };
+                    mObservable.subscribe(mSubscriber);
+            initplayMode(this);
+    
+        }
         
     }
     
@@ -140,6 +157,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     
     @Override
     public boolean onUnbind(Intent intent) {
+        Log.e(TAG, "onUnbind: ");
         return super.onUnbind(intent);
     }
     
@@ -162,7 +180,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     
     static class MyHandler extends Handler {
         private WeakReference<MusicService> weakService;
-        
+    
         public MyHandler(MusicService service) {
             weakService = new WeakReference<MusicService>(service);
         }
@@ -179,7 +197,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                         service.currentTime = msgFromClient.arg1;
                     }
                     //将现在播放的歌曲发送给PlayingActivity
-                    service.updateSongName();
+//                    service.updateSongName();
                     break;
                 case Constant.PLAYING_ACTIVITY_PLAY:
                     service.playSong(service.position, msgFromClient.arg1);
@@ -189,16 +207,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                     service.nextSong();
                     break;
                 case Constant.PLAYING_ACTIVITY_SINGLE://是否单曲循环
-                    int playMode = (int) SpUtils.getInt(Constant.SP_PLAY_MODE);
-                    if (0 == playMode) {
-                        service.mediaPlayer.setLooping(true);
-                        SpUtils.putInt(Constant.SP_PLAY_MODE, 1);
-                        service.sendPlayModeMsgToPlayingActivity();
-                    } else if (1 == playMode) {
-                        service.mediaPlayer.setLooping(false);
-                        SpUtils.putInt(Constant.SP_PLAY_MODE, 0);
-                        service.sendPlayModeMsgToPlayingActivity();
-                    }
+                    service.initplayMode(service);
                     break;
                 case Constant.PLAYING_ACTIVITY_CUSTOM_PROGRESS://在用户拖动进度条的位置播放
                     int percent = msgFromClient.arg1;
@@ -241,6 +250,22 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             }
             super.handleMessage(msgFromClient);
         }
+    
+     
+    }
+    private void initplayMode(MusicService service) {
+        mPlayMode = (int) SpUtils.getInt(SpUtils.KEY_PLAYER_TYPE,0)%3;
+        Log.e(TAG, "initplayMode: "+mPlayMode );
+        if (0 == mPlayMode) {
+            service.mediaPlayer.setLooping(true);
+            service.sendPlayModeMsgToPlayingActivity();
+        } else if (1 == mPlayMode) {
+            service.mediaPlayer.setLooping(false);
+            service.sendPlayModeMsgToPlayingActivity();
+        }else {
+            service.mediaPlayer.setLooping(false);
+            
+        }
     }
     
     /**
@@ -264,19 +289,37 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
      *
      * @param musicUrl
      */
-    private void play(String musicUrl) {
+    private void play(final String musicUrl) {
         //给予无网络提示
-        if (!NetUtils.isConnected(MyApplication.getAppContext())) {
-            Toast.makeText(MyApplication.getAppContext(), "没有网络了哟，请检查网络设置", Toast.LENGTH_SHORT).show();
-        }
         updateSongPosition(mMessengerPlayingActivity);
         Log.e(TAG, "play(String musicUrl)--musicUrl" + musicUrl);
         if (null == mediaPlayer) return;
         mediaPlayer.reset();//停止音乐后，不重置的话就会崩溃
         try {
-            mediaPlayer.setDataSource(getApplicationContext(), Uri.parse(musicUrl));
-            mediaPlayer.prepareAsync();
-        } catch (IOException e) {
+            DownloadManager.getInstance().downloadUrl(musicUrl, map.get(musicUrl), new DownLoadCallback() {
+                @Override
+                public void onProgress(long currentOffset, long mTotalLength) {
+        
+                }
+    
+                @Override
+                public void onSuccess() {
+                    try {
+                        mediaPlayer.setDataSource( map.get(musicUrl));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    mediaPlayer.prepareAsync();
+                }
+    
+                @Override
+                public void onFail() {
+        
+                }
+            });
+            if (0 == mPlayMode) mediaPlayer.setLooping(true);
+         
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -368,6 +411,19 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
      * 播放
      */
     private void playSong(int newPosition, int isOnClick) {
+        if (0x40002 == isOnClick){
+            try {
+                mediaPlayer.stop();
+                sendIsPlayingMsg();//发送播放器是否在播放的状态
+    
+    
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return;
+        }
+        sendIsPlayingMsg();//发送播放器是否在播放的状态
+    
         requestAudioFocus();//请求音频焦点
         Log.e(TAG, "playSong()");
         if (null == musicsList && 0 == musicsList.size()) return;//数据为空直接返回
@@ -379,6 +435,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         }
         if (null != musicsList && 0 < musicsList.size()) bean = musicsList.get(position);
         Log.e(TAG, "playSong()--position:" + position + " currentTime:" + currentTime);
+      
         if (mediaPlayer.isPlaying() && 0x40001 == isOnClick) {//如果是正在播放状态的话，就暂停
             pause();
         } else {
@@ -408,34 +465,49 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
      * 下一首
      */
     private void nextSong() {
-        Log.e(TAG, "nextSong()");
+        Log.e(TAG, "nextSong()"+mPlayMode);
         currentTime = 0;
         if (position < 0) {
             position = 0;
         }
-        if (musicsListSize > 0) {
-            position++;
-            if (position < musicsListSize) {//当前歌曲的索引小于歌曲集合的长度
-                bean = musicsList.get(position);
-                play(bean);
-            } else {
-                position = 0;
-                bean = musicsList.get(position);
-                play(bean);
-            }
-            //通知PalyingActivity跟换专辑图片  歌曲信息等
-            if (null != mMessengerPlayingActivity) {
-                Message msgToClient = Message.obtain();
-                msgToClient.arg1 = position;
-                msgToClient.what = Constant.MEDIA_PLAYER_SERVICE_UPDATE_SONG;
-                try {
-                    mMessengerPlayingActivity.send(msgToClient);
-                    Log.e(TAG, "自动播放下一首，发送更新UI的消息");
-                } catch (RemoteException e) {
-                    e.printStackTrace();
+        
+        switch (mPlayMode){
+            case Constans.MUSICT_DANQU:
+                return;
+            case Constans.MUSICT_SHUNXUN:
+                if (musicsListSize > 0) {
+                    position++;
+                    if (position < musicsListSize) {//当前歌曲的索引小于歌曲集合的长度
+                        bean = musicsList.get(position);
+                        play(bean);
+                    } else {
+                        position = 0;
+                        bean = musicsList.get(position);
+                        play(bean);
+                    }
+                    //通知PalyingActivity跟换专辑图片  歌曲信息等
+        
                 }
+                break;
+            case Constans.MUSICT_SUIJI:
+                position = randomPos(position);
+                bean = musicsList.get(position);
+                play(bean);
+                break;
+        }
+      
+    }
+    private int randomPos(int position){
+        if (!ListUtils.isEmpty(musicsList) && position != -1){
+            Random random = new Random();
+            int i = random.nextInt(musicsList.size());
+            if (position == i){
+                return  randomPos(position);
+            }else {
+                return i;
             }
         }
+        return position;
     }
     
     /**
@@ -467,7 +539,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
      */
     private void updateSeekBarProgress(boolean playing) {
         Log.e(TAG, "updateSeekBarProgress更新进度条");
-        mObservable.subscribe(mSubscriber);
+//        mObservable.subscribe(mSubscriber);
         /*Observable.interval(1,1, TimeUnit.SECONDS, Schedulers.computation()).subscribe(new Action1<Long>() {
             @Override
             public void call(Long aLong) {
@@ -486,7 +558,6 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                 SpUtils.putLong(SpUtils.KEY_COUNT_DOWN_TIME, 0);
             }
             try {
-        
                 Message msgToPlayingAcitvity = Message.obtain();
             msgToPlayingAcitvity.what = Constant.MEDIA_PLAYER_SERVICE_PROGRESS;
             msgToPlayingAcitvity.arg1 = mediaPlayer.getCurrentPosition();
@@ -511,7 +582,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         if (null != mMessengerPlayingActivity && null != this.musicsList) {
             Message msgToCLient = Message.obtain();
             Bundle bundle = new Bundle();
-            bundle.putSerializable(Constant.MEDIA_PLAYER_SERVICE_MODEL_PLAYING, (Serializable) this.musicsList);
+            bundle.putInt(Constant.MEDIA_PLAYER_SERVICE_MODEL_PLAYING, position);
             msgToCLient.setData(bundle);
             msgToCLient.arg1 = position;
             msgToCLient.what = Constant.MEDIA_PLAYER_SERVICE_SONG_PLAYING;
@@ -532,7 +603,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             Log.e(TAG, "updateSongPosition--发送消息");
             Message msgToCLient = Message.obtain();
             Bundle bundle = new Bundle();
-            bundle.putSerializable(Constant.MEDIA_PLAYER_SERVICE_MODEL_PLAYING, this.bean);
+            bundle.putInt(Constant.MEDIA_PLAYER_SERVICE_MODEL_PLAYING, position);
             msgToCLient.setData(bundle);
             msgToCLient.what = Constant.MEDIA_PLAYER_SERVICE_SONG_PLAYING;
             try {

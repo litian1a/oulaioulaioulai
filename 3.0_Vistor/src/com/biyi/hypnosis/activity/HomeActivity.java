@@ -31,20 +31,26 @@ import com.biyi.hypnosis.http.model.MusicListModel;
 import com.biyi.hypnosis.http.model.TagListModel;
 import com.biyi.hypnosis.http.rxjava.TransformUtils;
 import com.biyi.hypnosis.http.utils.Constans;
+import com.biyi.hypnosis.http.utils.ToastUtils;
 import com.biyi.hypnosis.services.Constant;
 import com.biyi.hypnosis.services.MusicService;
 import com.biyi.hypnosis.utils.ListUtils;
 import com.biyi.hypnosis.utils.SpUtils;
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+
 import cn.com.ad4.quad.ad.QUAD;
 import cn.com.ad4.quad.listener.QuadBannerAdLoadListener;
 import cn.com.ad4.quad.loader.QuadBannerAdLoader;
 import cn.com.ad4.quad.view.QuadBannerAd;
 import rx.Observer;
+
+import static com.biyi.hypnosis.services.Constant.MEDIA_PLAYER_SERVICE_MODEL_PLAYING;
 
 
 public class HomeActivity extends BaseActivity implements View.OnClickListener {
@@ -54,7 +60,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private ImageView iv_play, iv_playtype, iv_clock;
     private RecyclerView mRecyclerView;
     public SeekBar sb_progress;
-    private String path = getSDCardPathByEnvironment() + "/kaola_music/";
     private MediaPlayer mediaPlayer;
     public Animation mOperatingAnim;
     Messenger mMessengerClient;
@@ -69,6 +74,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            Log.i(TAG, "onServiceConnected: ");
             mServiceMessenger = new Messenger(iBinder);
             Message msgToService = Message.obtain();
             msgToService.replyTo = mPlaygingClientMessenger;
@@ -82,7 +88,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 e.printStackTrace();
             }
             mPosition = getIntent().getIntExtra("position", 0);
-            if (null != mServiceMessenger ) {
+            if (null != mServiceMessenger) {
                 Message msgToService1 = Message.obtain();
                 msgToService.arg1 = mPosition;
                 
@@ -115,13 +121,15 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         }
     };
     private MusicListAdapter mAdapter;
-   
+    private static boolean mIsPlaying;
+    
+    
     private String TAG = "HomeActivity1";
     
     
     static class MyHandler extends Handler {
         private WeakReference<HomeActivity> weakActivity;
-        
+    
         public MyHandler(HomeActivity activity) {
             weakActivity = new WeakReference<HomeActivity>(activity);
         }
@@ -139,6 +147,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                     break;
                 case Constant.MEDIA_PLAYER_SERVICE_SONG_PLAYING:
                     Bundle bundle = msgFromService.getData();
+                    int positionPlaying = bundle.getInt(MEDIA_PLAYER_SERVICE_MODEL_PLAYING);
+                    activity.mPosition = positionPlaying;
+                    Log.i("fHomeActivity", "handleMessage: " + positionPlaying);
+                    activity.playPosMus(positionPlaying);
 //                    activity.mList.clear();
 //                    activity.mList.addAll(bundle.getStringArrayList(Constant.MEDIA_PLAYER_SERVICE_MODEL_PLAYING));
 //                    Message msgToService = Message.obtain();
@@ -159,9 +171,11 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                     }
                     break;
                 case Constant.MEDIA_PLAYER_SERVICE_IS_PLAYING:
-                    boolean b = 1 == msgFromService.arg1;
-                    activity.playSelect(b);
-                    if (b) {//正在播放
+                    mIsPlaying = 1 == msgFromService.arg1;
+                    Log.i("fHomeActivity", "handleMessage: " + mIsPlaying);
+                    
+                    activity.playSelect(mIsPlaying);
+                    if (mIsPlaying) {//正在播放
 //                        activity.mBtnPlay.setImageResource(R.mipmap.play);
                     } else {
 //                        activity.mBtnPlay.setImageResource(R.mipmap.pause);
@@ -170,20 +184,17 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 case Constant.PLAYING_ACTIVITY_PLAY_MODE://显示播放器的播放模式
                     activity.updatePlayMode();
                     break;
-                case Constant.MEDIA_PLAYER_SERVICE_UPDATE_SONG://播放完成自动播放下一首时，更新正在播放UI
-                    int positionPlaying = msgFromService.arg1;
-                    activity.selectPosMus(positionPlaying);
-                    
+                
                 
             }
             super.handleMessage(msgFromService);
         }
     }
     
-    private void updatePlayStatus(){
+    private void updatePlayStatus(int i) {
         if (null != mServiceMessenger) {
             Message msgToServicePlay = Message.obtain();
-            msgToServicePlay.arg1 = 0x40001;//表示这个暂停是由点击按钮造成的，
+            msgToServicePlay.arg1 = i;//表示这个暂停是由点击按钮造成的，
             msgToServicePlay.what = Constant.PLAYING_ACTIVITY_PLAY;
             try {
                 mServiceMessenger.send(msgToServicePlay);
@@ -192,6 +203,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             }
         }
     }
+    
     private void updatePlayMode() {
     
     }
@@ -213,16 +225,51 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     }
     
     private void bindService() {
-        myHandler = new MyHandler(this);
-        mPlaygingClientMessenger = new Messenger(myHandler);
-        bindService(new Intent(this, MusicService.class), mServiceConnection, BIND_AUTO_CREATE);
+        if (mPlaygingClientMessenger == null) {
+            myHandler = new MyHandler(this);
+            mPlaygingClientMessenger = new Messenger(myHandler);
+            bindService(new Intent(this, MusicService.class), mServiceConnection, BIND_AUTO_CREATE);
+        }else {
+            if (null != mServiceMessenger) {
+                Message msgToService1 = Message.obtain();
+        
+                if (!ListUtils.isEmpty(mList)) {
+                  /*  for (int i = 0; i < list.size(); i++) {
+                        JLog.e(TAG, list.get(i).getSongname() + "--" + list.get(i).getUrl());
+                    }*/
+                    //更新专辑图片
+//                    mAlbumFragmentAdapater.addList(mList);
+//                    mAlbumFragmentAdapater.notifyDataSetChanged();
+                    //显示是否收藏了这首歌曲
+//                    showIsLike();
+                    //传递歌曲集合数据
+                    Bundle songsData = new Bundle();
+                    songsData.putSerializable(Constant.PLAYING_ACTIVITY_DATA_KEY, (Serializable) mList);
+                    msgToService1.setData(songsData);
+                    msgToService1.what = Constant.PLAYING_ACTIVITY_INIT;
+                    try {
+                        mServiceMessenger.send(msgToService1);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    updatePlayStatus(0x40002);
+    
+    
+                }
+        
+            }
+        }
     }
     
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         initView();
-        
+       playSelect(false);
+    
+    
+    
+    
     }
     
     @Override
@@ -248,10 +295,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         iv_play.setOnClickListener(this);
         iv_playtype.setOnClickListener(this);
         iv_clock.setOnClickListener(this);
-    
-      
+
+
 //        sb_progress.setOnClickListener(this);
-        
+    
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new MusicListAdapter(R.layout.item_music_list, new ArrayList<MusicListModel.TagListBean>());
         
@@ -260,20 +307,20 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 boolean playing = selectPosMus(position);
-    
-                mAdapter.notifyDataSetChanged();
-    
+                
+                mAdapter.refreshNotifyItemChanged(position);
+                
                 if (mPosition == position ) {
                     Message msgToService = Message.obtain();
-                    msgToService.arg1 = playing?0x40001:0;
+                    msgToService.arg1 = playing ? 0x40001 : 0;
                     msgToService.what = Constant.PLAYING_ACTIVITY_PLAY;
                     try {
                         mServiceMessenger.send(msgToService);
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
-                
-                }else {
+                    
+                } else {
                     mPosition = position;
                     Message msgToService = Message.obtain();
                     msgToService.arg1 = mPosition;
@@ -296,8 +343,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 //
 //            }
 //        });
-        //进度条的监听
-        sb_progress.setOnSeekBarChangeListener(new MyOnSeekBarChangeListeger(this));
         
         if (SpUtils.getInt(SpUtils.KEY_TAG_ID) == -1) {
             RetrofitManager.getAppApi(this).getAppStoreService()
@@ -316,8 +361,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                         
                         @Override
                         public void onNext(TagListModel tagListModel) {
-                            if (tagListModel == null || ListUtils.isEmpty(tagListModel.getTagList()))
-                                return;
+                            if (tagListModel == null || ListUtils.isEmpty(tagListModel.getTagList())) return;
                             TagListModel.TagListBean tagListBean = tagListModel.getTagList().get(0);
                             int tagId = tagListBean.getTagId();
                             SpUtils.putInt(SpUtils.KEY_TAG_ID, tagId);
@@ -328,12 +372,29 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         } else {
             requestMusicList();
         }
+    
+        initPlay();
+    }
+    
+    private void initPlay() {
+        int playType = SpUtils.getInt(SpUtils.KEY_PLAYER_TYPE, 0);
+        initPlayMode(playType);
         
+        String iconUrl = SpUtils.getString(SpUtils.KEY_TYPE_MUSIC_URL);
+        if (iconUrl !=null){
+            Glide.with(this).load(iconUrl).into(iv_rotatepic);
+        }
+        playSelect(false);
+        iv_play.setSelected(false);
+        sb_progress.setOnSeekBarChangeListener(null);
+        
+        sb_progress.setProgress(0);
+        //进度条的监听
+        sb_progress.setOnSeekBarChangeListener(new MyOnSeekBarChangeListeger(this));
     }
     
     private boolean selectPosMus(int position) {
         final MusicListModel.TagListBean tagListBean = mAdapter.getItem(position);
-        String url = tagListBean.getUrl();
         
         boolean playing = tagListBean.isPlaying();
         List<MusicListModel.TagListBean> data = mAdapter.getData();
@@ -342,6 +403,19 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         }
         tagListBean.setPlaying(!playing);
         return playing;
+    }
+    
+    private void playPosMus(int position) {
+        
+        List<MusicListModel.TagListBean> data = mAdapter.getData();
+        for (MusicListModel.TagListBean datum : data) {
+            datum.setPlaying(false);
+        }
+        if (position != -1) {
+            final MusicListModel.TagListBean tagListBean = mAdapter.getItem(position);
+            tagListBean.setPlaying(true);
+        }
+        mAdapter.notifyDataSetChanged();
     }
     
     
@@ -360,13 +434,21 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.iv_play:
                 playSelect();
-                updatePlayStatus();
+                updatePlayStatus(0x40001);
                 break;
             case R.id.iv_playtype:
-//                Intent intent = new Intent();
-//                intent.setType("image/*");
-//                intent.setAction(Intent.ACTION_GET_CONTENT);
-//                startActivityForResult( intent, 1);
+                
+                int playType = SpUtils.getInt(SpUtils.KEY_PLAYER_TYPE, 0);
+                playType+=1;
+                SpUtils.putInt(SpUtils.KEY_PLAYER_TYPE, playType);
+                initPlayMode(playType);
+                Message msgToService = Message.obtain();
+                msgToService.what = Constant.PLAYING_ACTIVITY_SINGLE;
+                try {
+                    mServiceMessenger.send(msgToService);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.iv_clock:
                 Intent intent = new Intent(HomeActivity.this, ClockViewActivity.class);
@@ -376,6 +458,24 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 //        }
 //        }
     
+    }
+    
+    private void initPlayMode(int playType) {
+        switch (playType % 3) {
+            case Constans.MUSICT_DANQU:
+                iv_playtype.setImageResource(R.drawable.h_single);
+                ToastUtils.show(this, "单曲循环");
+                break;
+            case Constans.MUSICT_SHUNXUN:
+                iv_playtype.setImageResource(R.drawable.h_loop);
+
+                ToastUtils.show(this, "顺序播放");
+                break;
+            case Constans.MUSICT_SUIJI:
+                iv_playtype.setImageResource(R.drawable.h_random);
+                ToastUtils.show(this, "随机播放");
+                break;
+        }
     }
     
     public void playSelect() {
@@ -400,13 +500,14 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             
         } else {
             iv_rotatepic.clearAnimation();
+            playPosMus(-1);
         }
     }
     
     private void requestMusicList() {
         int tagId = SpUtils.getInt(SpUtils.KEY_TAG_ID);
-    
-    
+        
+        
         RetrofitManager.getAppApi(this)
                 .getAppStoreService()
                 .requestMusiclist(tagId)
@@ -430,6 +531,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                         mAdapter.setNewData(tagList);
                         mList.clear();
                         for (MusicListModel.TagListBean tagListBean : tagList) {
+                            MusicService.map.put(tagListBean.getUrl(),Constans.PATH+tagListBean.getMusicId()+"/.mp3");
                             mList.add(tagListBean.getUrl());
                         }
                         bindService();
@@ -443,19 +545,22 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                                 layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
                                 quadBannerAd.setLayoutParams(layoutParams);
                                 mAdapter.addHeaderView(quadBannerAd);
+                                mAdapter.notifyDataSetChanged();
+                                
+                                
                             }
-        
+                            
                             @Override
                             public void onAdShowed() {
                                 Log.i(TAG, "onAdShowed: ");
                             }
-        
+                            
                             @Override
                             public void onAdClick() {
                                 Log.i(TAG, "onAdClick: ");
-            
+                                
                             }
-        
+                            
                             @Override
                             public void onAdFailed(int i, String s) {
                                 Log.i(TAG, "onAdFailed: ");
@@ -464,11 +569,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                         if (bannerAdLoader != null) {
                             bannerAdLoader.loadAds();
                         }
-
-    
-                      
-    
-    
+                        
+                        
                     }
                 });
     }
@@ -483,11 +585,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     
     }
     
-    public static String getSDCardPathByEnvironment() {
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            return Environment.getExternalStorageDirectory().getAbsolutePath();
-        }
-        return "";
-    }
+   
     
 }

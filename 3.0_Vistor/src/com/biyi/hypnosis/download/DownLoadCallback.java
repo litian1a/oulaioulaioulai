@@ -72,10 +72,8 @@ public abstract class DownLoadCallback extends DownloadListener4WithSpeed {
         Log.i(TAG, "taskEnd:     cause:" + cause + "   Exception" + realCause);
         if (realCause == null) {
             if (cause.equals(EndCause.COMPLETED)) {
-                ToastUtils.show(MyApplication.getAppContext(),"下载完成");
-    
+                onSuccess();
             }
-            onSuccess();
         } else {
             ToastUtils.show(MyApplication.getAppContext(),"下载失败");
             onFail();

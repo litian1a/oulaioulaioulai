@@ -22,9 +22,12 @@ import android.util.Log;
 import android.util.SparseArray;
 
 
+import com.biyi.hypnosis.MyApplication;
 import com.biyi.hypnosis.http.apiservice.AppService;
 import com.biyi.hypnosis.http.ssl.SSLSocketFactoryUtils;
 import com.biyi.hypnosis.http.utils.Constans;
+import com.biyi.hypnosis.http.utils.NetUtils;
+import com.biyi.hypnosis.utils.SpUtils;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -34,9 +37,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.FormBody;
@@ -44,9 +45,11 @@ import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -166,30 +169,45 @@ public class RetrofitManager {
                                             if (!TextUtils.isEmpty(feekInfo)){
                                                 jsonObject.put("info", feekInfo);
                                             }
+                                            String key = request.url().toString();
     
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                        Log.i("aaaaa", "intercept: " + jsonObject.toString());
-
-//                                        String json = "{\n" +
-//                                                " \"sign\":\"e6f47e91396a133f35ebee2fbe4d409a\",\n" +
-//                                                " \"ver\":\"1.0.1\",\n" +
-//                                                " \"sys\":0,\n" +
-//                                                " \"time\":123,\n" +
-//                                                " \"ch\":\"baidu\"\n" +
-//                                                "}";
-                                        try {
+    
+                                            String value = SpUtils.getString(key);
+                                            if (!NetUtils.isConnected(MyApplication.getAppContext())&&!TextUtils.isEmpty(value)){
+                                                //构建一个新的response响应结果
+                                                int maxStale = 60 * 60 * 24 * 28;
+    
+                                                return new Response.Builder()
+                                                        .removeHeader("Pragma")
+                                                        .header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
+                                                        .body(ResponseBody.create(MediaType.parse("application/json"), value.getBytes()))
+                                                        .message("111")
+                                                        .request(request)
+                                                        .protocol(Protocol.HTTP_1_1)
+                                                        .code(200)
+                                                        .build();
+                                            }
     
                                             RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonObject.toString());
     
                                             request = request.newBuilder().post(body).build();
-                                        } catch (Exception e) {
+                                            Response proceed = chain.proceed(request);
+                                            
+                                            
+                                            if (proceed !=null && proceed.code()%200 <10){
+                                                ResponseBody responseBody = proceed.peekBody(1024 * 1024);
     
+                                                SpUtils.putString(key,new String(responseBody.bytes()));
+                                                
+                                            }
+                                            return proceed ;
+    
+                                        } catch (Exception e) {
+                                                e.printStackTrace();
                                         }
     
                                     }
-                                    return chain.proceed(request);
+                                    return null ;
                                 }
                             })
                             .build();

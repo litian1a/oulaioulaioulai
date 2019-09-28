@@ -19,11 +19,13 @@ public class SpUtils {
     private static Context mContext;
     
     public static final String KEY_TAG_NAME = "KEY_TAG_NAME";
+    public static final String KEY_TYPE_MUSIC_URL= "KEY_TYPE_MUSIC_URL";
     public static final String KEY_TAG_ID = "KEY_TAG_ID";
     public static final String KEY_COUNT_DOWN_TIME = "KEY_COUNT_DOWN_TIME";
     public static final String KEY_TAG_CLOCKSWIFT = "KEY_TAG_CLOCKSWIFT";
     public static final String KEY_TAG_PLAYMUSIC = "KEY_TAG_PLAYMUSIC";
     public static final String KEY_TAG_TIME1 = "KEY_TAG_TIME1";
+    public static final String KEY_PLAYER_TYPE = "KEY_PLAYER_TYPE";
     public SpUtils() {
     
     }
@@ -85,6 +87,11 @@ public class SpUtils {
         return sharePreferenceUtils.mSharedPreferences.getInt(key,
                 DEFAULT_VALUE);
     }
+    public static int getInt(String key,int DEFAULT_VALUE) {
+        return sharePreferenceUtils.mSharedPreferences.getInt(key,
+                DEFAULT_VALUE);
+    }
+    
     
     public static String getString(String key) {
         return sharePreferenceUtils.mSharedPreferences.getString(key, null);

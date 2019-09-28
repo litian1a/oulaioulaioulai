@@ -54,21 +54,20 @@ public class SettingsActivity extends BaseActivity {
             public void onClick(View view) {
 
                 String des = "有最新版本了，快来啊快来啊快来啊快来啊快来啊快来啊快来啊快来啊快来啊快来啊快来啊快来啊";
-                UpdateDialog.getInstance(SettingsActivity.this, R.style.UpdateDialog, des, "以后再说", "立即更新", new UpdateDialog.OnCustomDialogListener() {
+                final UpdateDialog instance = UpdateDialog.getInstance(SettingsActivity.this, R.style.UpdateDialog, des, "以后再说", "立即更新", new UpdateDialog.OnCustomDialogListener() {
                             @Override
                             public void refuseUpdate(String name) {
-                                    finish();
                             }
-
+                
                             @Override
                             public void doUpdate(String name) {
-
                                 //TODO 升级代码
-                                finish();
+                    
                             }
                         }
-
-                ).show();
+    
+                );
+                instance.show();
 //                ToastUtils.getInstance().showToast(getApplicationContext(), "暂无最新版本");
             }
         });

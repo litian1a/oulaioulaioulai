@@ -139,6 +139,7 @@ public class MusicTypeActivity extends BaseActivity {
                                 TagListModel.TagListBean tagListBean = musicTypeAdapter.getItem(position);
                                 SpUtils.putInt(SpUtils.KEY_TAG_ID, tagListBean.getTagId());
                                 SpUtils.putString(SpUtils.KEY_TAG_NAME, tagListBean.getTagName());
+                                SpUtils.putString(SpUtils.KEY_TYPE_MUSIC_URL, tagListBean.getIconUrl());
                                 HomeActivity.startActivity(MusicTypeActivity.this);
                                 finish();
                             }
