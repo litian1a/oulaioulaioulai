@@ -64,6 +64,7 @@ public class SettingsActivity extends BaseActivity {
                             public void doUpdate(String name) {
 
                                 //TODO 升级代码
+                                finish();
                             }
                         }
 

@@ -1,13 +1,9 @@
 package com.biyi.hypnosis.activity;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,46 +12,38 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.SeekBar;
-import android.widget.Toast;
 
 import com.biyi.hypnosis.R;
 import com.biyi.hypnosis.adapter.MusicListAdapter;
-import com.biyi.hypnosis.download.DownLoadCallback;
-import com.biyi.hypnosis.download.DownloadManager;
 import com.biyi.hypnosis.http.RetrofitManager;
 import com.biyi.hypnosis.http.model.MusicListModel;
 import com.biyi.hypnosis.http.model.TagListModel;
 import com.biyi.hypnosis.http.rxjava.TransformUtils;
+import com.biyi.hypnosis.http.utils.Constans;
 import com.biyi.hypnosis.services.Constant;
 import com.biyi.hypnosis.services.MusicService;
 import com.biyi.hypnosis.utils.ListUtils;
 import com.biyi.hypnosis.utils.SpUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.liulishuo.okdownload.DownloadListener;
-import com.liulishuo.okdownload.DownloadTask;
-
-import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
-
+import cn.com.ad4.quad.ad.QUAD;
+import cn.com.ad4.quad.listener.QuadBannerAdLoadListener;
+import cn.com.ad4.quad.loader.QuadBannerAdLoader;
+import cn.com.ad4.quad.view.QuadBannerAd;
 import rx.Observer;
 
 
@@ -127,6 +115,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         }
     };
     private MusicListAdapter mAdapter;
+   
+    private String TAG = "HomeActivity1";
     
     
     static class MyHandler extends Handler {
@@ -182,6 +172,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                     break;
                 case Constant.MEDIA_PLAYER_SERVICE_UPDATE_SONG://播放完成自动播放下一首时，更新正在播放UI
                     int positionPlaying = msgFromService.arg1;
+                    activity.selectPosMus(positionPlaying);
+                    
                 
             }
             super.handleMessage(msgFromService);
@@ -256,38 +248,42 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         iv_play.setOnClickListener(this);
         iv_playtype.setOnClickListener(this);
         iv_clock.setOnClickListener(this);
+    
+      
 //        sb_progress.setOnClickListener(this);
         
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new MusicListAdapter(R.layout.item_music_list, new ArrayList<MusicListModel.TagListBean>());
-        LayoutInflater from = LayoutInflater.from(this);
-        View inflate = from.inflate(R.layout.rv_header, null);
-        View rv_footer = from.inflate(R.layout.rv_footer, null);
-        mAdapter.addHeaderView(inflate);
-        mAdapter.addFooterView(rv_footer);
+        
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                final MusicListModel.TagListBean tagListBean = mAdapter.getItem(position);
-                String url = tagListBean.getUrl();
-                mPosition = position;
-                Message msgToService = Message.obtain();
-                msgToService.arg1 = mPosition;
-                msgToService.what = Constant.PLAYING_ACTIVITY_PLAYING_POSITION;
-                try {
-                    mServiceMessenger.send(msgToService);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-                boolean playing = tagListBean.isPlaying();
-                List<MusicListModel.TagListBean> data = adapter.getData();
-                for (MusicListModel.TagListBean datum : data) {
-                    datum.setPlaying(false);
-                }
-                tagListBean.setPlaying(!playing);
+                boolean playing = selectPosMus(position);
+    
+                mAdapter.notifyDataSetChanged();
+    
+                if (mPosition == position ) {
+                    Message msgToService = Message.obtain();
+                    msgToService.arg1 = playing?0x40001:0;
+                    msgToService.what = Constant.PLAYING_ACTIVITY_PLAY;
+                    try {
+                        mServiceMessenger.send(msgToService);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                 
-                adapter.notifyDataSetChanged();
+                }else {
+                    mPosition = position;
+                    Message msgToService = Message.obtain();
+                    msgToService.arg1 = mPosition;
+                    msgToService.what = Constant.PLAYING_ACTIVITY_PLAYING_POSITION;
+                    try {
+                        mServiceMessenger.send(msgToService);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
 //        mAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
@@ -334,6 +330,20 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         }
         
     }
+    
+    private boolean selectPosMus(int position) {
+        final MusicListModel.TagListBean tagListBean = mAdapter.getItem(position);
+        String url = tagListBean.getUrl();
+        
+        boolean playing = tagListBean.isPlaying();
+        List<MusicListModel.TagListBean> data = mAdapter.getData();
+        for (MusicListModel.TagListBean datum : data) {
+            datum.setPlaying(false);
+        }
+        tagListBean.setPlaying(!playing);
+        return playing;
+    }
+    
     
     @Override
     public void onClick(View view) {
@@ -395,6 +405,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     
     private void requestMusicList() {
         int tagId = SpUtils.getInt(SpUtils.KEY_TAG_ID);
+    
+    
         RetrofitManager.getAppApi(this)
                 .getAppStoreService()
                 .requestMusiclist(tagId)
@@ -421,13 +433,51 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                             mList.add(tagListBean.getUrl());
                         }
                         bindService();
+                        QuadBannerAdLoader bannerAdLoader = QUAD.getBannerAdLoader(HomeActivity.this, Constans.BANNER_AD, new QuadBannerAdLoadListener() {
+                            @Override
+                            public void onAdReady(QuadBannerAd quadBannerAd) {
+                                Log.i(TAG, "onAdReady: ");
+//                                RelativeLayout.LayoutParams ad_lp = new RelativeLayout.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+//                                quadBannerAd.setLayoutParams(ad_lp);
+                                ViewGroup.LayoutParams layoutParams = quadBannerAd.getLayoutParams();
+                                layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                quadBannerAd.setLayoutParams(layoutParams);
+                                mAdapter.addHeaderView(quadBannerAd);
+                            }
+        
+                            @Override
+                            public void onAdShowed() {
+                                Log.i(TAG, "onAdShowed: ");
+                            }
+        
+                            @Override
+                            public void onAdClick() {
+                                Log.i(TAG, "onAdClick: ");
+            
+                            }
+        
+                            @Override
+                            public void onAdFailed(int i, String s) {
+                                Log.i(TAG, "onAdFailed: ");
+                            }
+                        });
+                        if (bannerAdLoader != null) {
+                            bannerAdLoader.loadAds();
+                        }
+
     
+                      
     
     
                     }
                 });
     }
     
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SpUtils.putLong(SpUtils.KEY_COUNT_DOWN_TIME, 0);
+    }
     
     private void setHeader(RecyclerView view) {
     

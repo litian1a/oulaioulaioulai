@@ -58,27 +58,6 @@
                 android:background="@drawable/clock_selector" />
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/ll_evaluate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingBottom="15dp"
-            android:paddingLeft="24dp"
-            android:paddingTop="15dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:src="@drawable/evaluate" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:text="给个好评" />
-        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ll_feeckback"

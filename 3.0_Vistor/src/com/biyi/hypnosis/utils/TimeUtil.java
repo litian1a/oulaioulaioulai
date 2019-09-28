@@ -1,8 +1,12 @@
 
 package com.biyi.hypnosis.utils;
 
+import android.text.TextUtils;
+
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -61,8 +65,8 @@ public class TimeUtil {
     public static String DateFormatToString(Long time){
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-
-
+        
+        
         String format = sdf.format(new Date(time));
         return format;
     }
@@ -129,6 +133,7 @@ public class TimeUtil {
     public static Long getTimeLong(String filter, String date) {
         try {
             SimpleDateFormat format = new SimpleDateFormat(filter);
+    
             Date dateTime = format.parse(date);
             return dateTime.getTime();
         } catch (Exception e) {
@@ -136,6 +141,53 @@ public class TimeUtil {
         }
 
         return 0L;
+    }
+    /**
+     * 获取时
+     * @return
+     */
+    public static int getHour(){
+        Calendar cd = Calendar.getInstance();
+        return  cd.get(Calendar.HOUR_OF_DAY);
+    }
+    /**
+     * 获取分
+     * @return
+     */
+    public static int getMinute(){
+        Calendar cd = Calendar.getInstance();
+        return  cd.get(Calendar.MINUTE);
+    }
+    
+    public static String getTimeDiff( String date){
+        Long timeLong = getTimeLong("HH:mm", date);
+        Calendar instance = Calendar.getInstance();
+        String s = instance.get(Calendar.HOUR_OF_DAY)+":"+instance.get(Calendar.MINUTE)+":"+instance.get(Calendar.SECOND);
+        Long timeLong2 = getTimeLong("HH:mm:ss", s);
+        if (timeLong < timeLong2){
+            timeLong +=24*60*60*1000;
+        }
+        long time = timeLong - timeLong2;
+        return DateFormatToString(time);
+        
+    
+    
+    }
+    
+    
+    public static boolean isShowTime1( String date){
+        if (TextUtils.isEmpty(date)) return false;
+        Long timeLong = getTimeLong("HH:mm", date);
+        Calendar instance = Calendar.getInstance();
+        String s = instance.get(Calendar.HOUR_OF_DAY)+":"+instance.get(Calendar.MINUTE)+":"+instance.get(Calendar.SECOND);
+        Long timeLong2 = getTimeLong("HH:mm:ss", s);
+        if (timeLong < timeLong2){
+            timeLong +=24*60*60*1000;
+        }
+        long time = timeLong - timeLong2;
+        return time <2000 ;
+        
+        
     }
 
 

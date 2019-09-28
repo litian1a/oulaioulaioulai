@@ -16,12 +16,14 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.biyi.hypnosis.MyApplication;
 import com.biyi.hypnosis.http.utils.NetUtils;
 import com.biyi.hypnosis.utils.SpUtils;
+import com.biyi.hypnosis.utils.TimeUtil;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -110,9 +112,18 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             @Override
             public void onNext(Object o) {
                 sendUpdateProgressMsg();
+                checkTime2();
             }
         };
         
+    }
+    
+    private void checkTime2() {
+        String time = SpUtils.getString(SpUtils.KEY_TAG_TIME1);
+        
+        if (TimeUtil.isShowTime1(time) && !mediaPlayer.isPlaying() && !TextUtils.isEmpty(bean)) {
+            play(bean);
+        }
     }
     
     
@@ -467,20 +478,28 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     
     //发送更新进度的消息
     private void sendUpdateProgressMsg() {
+       
         if (null != mediaPlayer && mediaPlayer.isPlaying()) {
-            Message msgToPlayingAcitvity = Message.obtain();
+            long aLong = SpUtils.getLong(SpUtils.KEY_COUNT_DOWN_TIME);
+            if (aLong >0 && System.currentTimeMillis()>aLong){
+                mediaPlayer.stop();
+                SpUtils.putLong(SpUtils.KEY_COUNT_DOWN_TIME, 0);
+            }
+            try {
+        
+                Message msgToPlayingAcitvity = Message.obtain();
             msgToPlayingAcitvity.what = Constant.MEDIA_PLAYER_SERVICE_PROGRESS;
             msgToPlayingAcitvity.arg1 = mediaPlayer.getCurrentPosition();
             msgToPlayingAcitvity.arg2 = mediaPlayer.getDuration();
             Log.e(TAG, "发给客户端的时间--getCurrentPosition:" + mediaPlayer.getCurrentPosition() + " getDuration" + mediaPlayer.getDuration());
-            try {
                 if (null != mMessengerPlayingActivity) {
                     mMessengerPlayingActivity.send(msgToPlayingAcitvity);
 //                    Log.e(TAG, "发消息了");
                 }
-            } catch (RemoteException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
+           
         }
     }
     

@@ -29,7 +29,7 @@ public class SplashActivity extends BaseActivity {
     private String TAG = "SplashActivity1";
     private ViewGroup mParent;
     private boolean isShow;
-    
+    private Handler mHandler;
     
     
     @Override
@@ -39,6 +39,16 @@ public class SplashActivity extends BaseActivity {
         
         mParent = findViewById(R.id.parent);
         mQuadSplashAd = new QuadSplashAd(SplashActivity.this);
+        mHandler = new Handler();
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!isFinishing()) {
+                    HomeActivity.startActivity(SplashActivity.this);
+                    finish();
+                }
+            }
+        }, 5000);
         final QuadSplashAdLoader splashAdLoader = QUAD.getSplashAdLoader(SplashActivity.this, Constans.SPLASH_AD, new QuadSplashAdLoadListener() {
             
             @Override
@@ -53,7 +63,7 @@ public class SplashActivity extends BaseActivity {
             
             @Override
             public void onAdReady(QuadSplashAd quadSplashAd) {
-                
+                mHandler.removeCallbacks(null);
                 Log.i(TAG, "onAdReady: " + quadSplashAd);
                 mParent.removeAllViews();
                 mParent.addView(quadSplashAd);
@@ -74,21 +84,13 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onAdFailed(int i, String s) {
                 Log.i(TAG, "onAdFailed: ");
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!isFinishing()) {
-                            HomeActivity.startActivity(SplashActivity.this);
-                            finish();
-                        }
-                    }
-                }, 5000);
+            
             }
         });
         if (splashAdLoader != null) {
             splashAdLoader.loadAds();
         }
-        
+     
         
     }
     

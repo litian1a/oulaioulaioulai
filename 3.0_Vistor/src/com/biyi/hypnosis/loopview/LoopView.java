@@ -9,6 +9,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,7 +35,8 @@ public class LoopView extends View {
     private static final float DEFAULT_LINE_SPACE = 2f;
 
     private static final int DEFAULT_VISIBIE_ITEMS = 9;
-
+    private String TAG = "LoopView";
+    
     public enum ACTION {
         CLICK, FLING, DAGGLE
     }
@@ -363,6 +365,12 @@ public class LoopView extends View {
             invalidate();
         }
     }
+    
+    public String getSelectTtr() {
+        return selectTtr;
+    }
+    
+    public String selectTtr;
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -436,6 +444,8 @@ public class LoopView extends View {
                     canvas.clipRect(0, firstLineY - translateY, measuredWidth, (int) (itemHeight));
                     canvas.drawText(drawingStrings[i], getTextX(drawingStrings[i], paintCenterText, tempRect),
                             maxTextHeight, paintCenterText);
+                    Log.i(TAG, "onDraw3: " + drawingStrings[i]);
+                    selectTtr = drawingStrings[i];
                     canvas.restore();
                 } else if (translateY <= secondLineY && maxTextHeight + translateY >= secondLineY) {
                     // second divider
@@ -449,12 +459,16 @@ public class LoopView extends View {
                     canvas.clipRect(0, secondLineY - translateY, measuredWidth, (int) (itemHeight));
                     canvas.drawText(drawingStrings[i], getTextX(drawingStrings[i], paintOuterText, tempRect),
                             maxTextHeight, paintOuterText);
+                    Log.i(TAG, "onDraw2: " + drawingStrings[i]);
+    
                     canvas.restore();
                 } else if (translateY >= firstLineY && maxTextHeight + translateY <= secondLineY) {
                     // center item
                     canvas.clipRect(0, 0, measuredWidth, (int) (itemHeight));
+    
                     canvas.drawText(drawingStrings[i], getTextX(drawingStrings[i], paintCenterText, tempRect),
                             maxTextHeight, paintCenterText);
+                    Log.i(TAG, "onDraw1: " + drawingStrings[i]);
                     selectedItem = items.indexOf(drawingStrings[i]);
                 } else {
                     // other item
