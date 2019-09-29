@@ -16,6 +16,7 @@ import android.os.RemoteException;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -376,14 +377,23 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         initPlay();
     }
     
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent home = new Intent(Intent.ACTION_MAIN);
+            home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            home.addCategory(Intent.CATEGORY_HOME);
+            startActivity(home);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+    
     private void initPlay() {
         int playType = SpUtils.getInt(SpUtils.KEY_PLAYER_TYPE, 0);
         initPlayMode(playType);
         
-        String iconUrl = SpUtils.getString(SpUtils.KEY_TYPE_MUSIC_URL);
-        if (iconUrl != null) {
-            Glide.with(this).load(iconUrl).into(iv_rotatepic);
-        }
         playSelect(false);
         iv_play.setSelected(false);
         sb_progress.setOnSeekBarChangeListener(null);
