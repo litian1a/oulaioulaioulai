@@ -99,11 +99,14 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/music_list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:descendantFocusability="blocksDescendants"
-                android:divider="@color/bg_gray"
-                android:dividerHeight="1dp"
-                android:scrollbars="none" />
+                android:divider="#FFFFFF"
+                style="@style/scrollbarsstyle"
+                android:verticalScrollbarPosition = "left"
+                android:scrollbars="vertical"
+                android:scrollbarSize="1dp"
+                android:dividerHeight="1dp" />
         </LinearLayout>
 
 

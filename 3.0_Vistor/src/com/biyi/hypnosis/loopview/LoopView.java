@@ -200,7 +200,7 @@ public class LoopView extends View {
         paintOuterText.setColor(outerTextColor);
         paintOuterText.setAntiAlias(true);
         paintOuterText.setTypeface(Typeface.MONOSPACE);
-        paintOuterText.setTextSize(textSize);
+        paintOuterText.setTextSize(textSize-16);
 
         paintCenterText = new Paint();
         paintCenterText.setColor(centerTextColor);
@@ -237,7 +237,7 @@ public class LoopView extends View {
         maxTextHeight = tempRect.height();
         halfCircumference = (int) (measuredHeight * Math.PI / 2);
 
-        maxTextHeight = (int)( (halfCircumference / (lineSpacingMultiplier * (itemsVisibleCount - 1)))*3);
+        maxTextHeight = (int)( (halfCircumference / (lineSpacingMultiplier * (itemsVisibleCount - 1)))*2);
 
         radius = measuredHeight / 2;
         firstLineY = (int) ((measuredHeight - lineSpacingMultiplier * maxTextHeight) / 2.0F);

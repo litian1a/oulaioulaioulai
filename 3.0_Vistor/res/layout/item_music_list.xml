@@ -33,4 +33,12 @@
         android:textSize="14sp"
         android:layout_alignParentRight="true"
         android:text="正在播放"/>
+    <View
+        android:id="@+id/view2"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_alignParentBottom="true"
+        android:background="#FFFFFF" />
 </RelativeLayout>

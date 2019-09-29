@@ -40,11 +40,11 @@ public class ClockViewActivity extends BaseActivity {
     private ImageView iv_rotate;
     LoopView loopView_minu,loopViewtime;
     LoopView loopView_hour;
-    private Button btn_clock;
-    private RelativeLayout rl_rotatetime;
+    private TextView btn_clock;
+    private View rl_rotatetime;
     private View ll_clock;
 
-    private Button btn_clock2;
+    private TextView btn_clock2;
     ArrayList<String> list_minu1 = new ArrayList<String>();
     ArrayList<String> list_hour = new ArrayList<String>();
     ArrayList<String> list_minu = new ArrayList<String>();
@@ -74,13 +74,13 @@ public class ClockViewActivity extends BaseActivity {
     
     @Override
     int getLayoutId() {
-        return R.layout.activity_clock;
+        return R.layout.activity_time;
     }
     
     private void initView() {
         tv_timetoast = findViewById(R.id.tv_timetoast);
         ll_clock = findViewById(R.id.ll_getupsetting);//闹钟的UI
-        rl_rotatetime = findViewById(R.id.rl_rotatetime);
+//        rl_rotatetime = findViewById(R.id.rl_rotatetime);
         btn_clock2 = findViewById(R.id.btn_clock2);
         btn_clock = findViewById(R.id.btn_clock);
         iv_rotate = findViewById(R.id.iv_rotate);
@@ -157,7 +157,7 @@ public class ClockViewActivity extends BaseActivity {
     
                     mTimer.cancel();
                     iv_rotate.clearAnimation();
-                    rl_rotatetime.setVisibility(View.VISIBLE);
+//                    rl_rotatetime.setVisibility(View.VISIBLE);
                     tvTime.setVisibility(View.GONE);
                     btn_clock.setText("倒计时");
             
@@ -252,7 +252,7 @@ public class ClockViewActivity extends BaseActivity {
         mOperatingAnim.setInterpolator(lin);
 //        开始动画
         mOperatingAnim.startNow();
-        rl_rotatetime.setVisibility(View.GONE);
+//        rl_rotatetime.setVisibility(View.GONE);
  
         try {
             mTimer = new Timer();
@@ -278,7 +278,7 @@ public class ClockViewActivity extends BaseActivity {
                                 SpUtils.putLong(SpUtils.KEY_COUNT_DOWN_TIME, 0);
                                 mTimer.cancel();
                                 iv_rotate.clearAnimation();
-                                rl_rotatetime.setVisibility(View.VISIBLE);
+//                                rl_rotatetime.setVisibility(View.VISIBLE);
                                 tvTime.setVisibility(View.GONE);
                             }
                             

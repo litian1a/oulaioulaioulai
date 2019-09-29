@@ -23,4 +23,9 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowCloseOnTouchOutside">false</item>
     </style>
+
+    <style name="scrollbarsstyle">
+        <item name="android:scrollbarThumbVertical">@drawable/scrollbar_height</item>
+        <item name="android:scrollbars">vertical</item>
+    </style>
 </resources>
