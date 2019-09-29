@@ -1,5 +1,6 @@
 package com.biyi.hypnosis.activity;
 
+import android.animation.ObjectAnimator;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -61,7 +62,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private RecyclerView mRecyclerView;
     public SeekBar sb_progress;
     private MediaPlayer mediaPlayer;
-    public Animation mOperatingAnim;
     Messenger mMessengerClient;
     private Messenger mPlaygingClientMessenger;
     private int currentTime;
@@ -125,6 +125,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     
     
     private String TAG = "HomeActivity1";
+    private ObjectAnimator animtorAlpha;
     
     
     static class MyHandler extends Handler {
@@ -488,17 +489,26 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         iv_play.setSelected(switching);
         SpUtils.putBoolean(SpUtils.KEY_TAG_PLAYMUSIC, switching);
         if (switching) {
-            mOperatingAnim = AnimationUtils.loadAnimation(HomeActivity.this, R.anim.clock_bg);
-            
-            LinearInterpolator lin = new LinearInterpolator();
-            if (mOperatingAnim != null) {
-                iv_rotatepic.startAnimation(mOperatingAnim);
+            //设置旋转的样式
+            if (animtorAlpha == null) {
+                animtorAlpha = ObjectAnimator.ofFloat(iv_rotatepic, "rotation", 0f, 359f);
+                //旋转不停顿
+                animtorAlpha.setInterpolator(new LinearInterpolator());
+                //设置动画重复次数
+                animtorAlpha.setRepeatCount(Integer.MAX_VALUE);
+                //旋转时长
+                animtorAlpha.setDuration(7000);
+                //开始旋转
+                animtorAlpha.start();
+            }else {
+                animtorAlpha.resume();
             }
-            mOperatingAnim.setInterpolator(lin);
-            //        开始动画
-            mOperatingAnim.startNow();
+    
+           
             
         } else {
+            if (animtorAlpha!=null)
+                animtorAlpha.pause();
             iv_rotatepic.clearAnimation();
             playPosMus(-1);
         }
@@ -578,6 +588,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (animtorAlpha !=null){
+            animtorAlpha.cancel();
+        }
         SpUtils.putLong(SpUtils.KEY_COUNT_DOWN_TIME, 0);
     }
     
