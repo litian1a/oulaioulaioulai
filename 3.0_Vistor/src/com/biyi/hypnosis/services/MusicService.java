@@ -282,7 +282,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             }
         }
     }
-    
+    private String lastMusicUrl = "";
     
     /**
      * 音乐播放
@@ -296,6 +296,10 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         if (null == mediaPlayer) return;
         mediaPlayer.reset();//停止音乐后，不重置的话就会崩溃
         try {
+            if (!lastMusicUrl.equals(musicUrl)){
+                DownloadManager.getInstance().cancel(musicUrl);
+            }
+            lastMusicUrl = musicUrl;
             DownloadManager.getInstance().downloadUrl(musicUrl, map.get(musicUrl), new DownLoadCallback() {
                 @Override
                 public void onProgress(long currentOffset, long mTotalLength) {
@@ -303,13 +307,15 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                 }
     
                 @Override
-                public void onSuccess() {
-                    try {
-                        mediaPlayer.setDataSource( map.get(musicUrl));
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                public void onSuccess(String url) {
+                    if (lastMusicUrl.equals(url)) {
+                        try {
+                            mediaPlayer.setDataSource(map.get(musicUrl));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        mediaPlayer.prepareAsync();
                     }
-                    mediaPlayer.prepareAsync();
                 }
     
                 @Override
