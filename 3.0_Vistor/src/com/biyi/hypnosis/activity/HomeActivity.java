@@ -1,5 +1,6 @@
 package com.biyi.hypnosis.activity;
 
+import android.animation.ObjectAnimator;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.os.RemoteException;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -61,7 +63,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private RecyclerView mRecyclerView;
     public SeekBar sb_progress;
     private MediaPlayer mediaPlayer;
-    public Animation mOperatingAnim;
     Messenger mMessengerClient;
     private Messenger mPlaygingClientMessenger;
     private int currentTime;
@@ -125,11 +126,12 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     
     
     private String TAG = "HomeActivity1";
+    private ObjectAnimator animtorAlpha;
     
     
     static class MyHandler extends Handler {
         private WeakReference<HomeActivity> weakActivity;
-    
+        
         public MyHandler(HomeActivity activity) {
             weakActivity = new WeakReference<HomeActivity>(activity);
         }
@@ -229,10 +231,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             myHandler = new MyHandler(this);
             mPlaygingClientMessenger = new Messenger(myHandler);
             bindService(new Intent(this, MusicService.class), mServiceConnection, BIND_AUTO_CREATE);
-        }else {
+        } else {
             if (null != mServiceMessenger) {
                 Message msgToService1 = Message.obtain();
-        
+                
                 if (!ListUtils.isEmpty(mList)) {
                   /*  for (int i = 0; i < list.size(); i++) {
                         JLog.e(TAG, list.get(i).getSongname() + "--" + list.get(i).getUrl());
@@ -253,10 +255,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                         e.printStackTrace();
                     }
                     updatePlayStatus(0x40002);
-    
-    
+                    
+                    
                 }
-        
+                
             }
         }
     }
@@ -265,11 +267,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         initView();
-       playSelect(false);
-    
-    
-    
-    
+        playSelect(false);
+        
+        
     }
     
     @Override
@@ -298,7 +298,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
 
 //        sb_progress.setOnClickListener(this);
-    
+        
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new MusicListAdapter(R.layout.item_music_list, new ArrayList<MusicListModel.TagListBean>());
         
@@ -310,7 +310,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 
                 mAdapter.refreshNotifyItemChanged(position);
                 
-                if (mPosition == position ) {
+                if (mPosition == position) {
                     Message msgToService = Message.obtain();
                     msgToService.arg1 = playing ? 0x40001 : 0;
                     msgToService.what = Constant.PLAYING_ACTIVITY_PLAY;
@@ -361,7 +361,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                         
                         @Override
                         public void onNext(TagListModel tagListModel) {
-                            if (tagListModel == null || ListUtils.isEmpty(tagListModel.getTagList())) return;
+                            if (tagListModel == null || ListUtils.isEmpty(tagListModel.getTagList()))
+                                return;
                             TagListModel.TagListBean tagListBean = tagListModel.getTagList().get(0);
                             int tagId = tagListBean.getTagId();
                             SpUtils.putInt(SpUtils.KEY_TAG_ID, tagId);
@@ -372,18 +373,27 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         } else {
             requestMusicList();
         }
-    
+        
         initPlay();
+    }
+    
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent home = new Intent(Intent.ACTION_MAIN);
+            home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            home.addCategory(Intent.CATEGORY_HOME);
+            startActivity(home);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
     
     private void initPlay() {
         int playType = SpUtils.getInt(SpUtils.KEY_PLAYER_TYPE, 0);
         initPlayMode(playType);
         
-        String iconUrl = SpUtils.getString(SpUtils.KEY_TYPE_MUSIC_URL);
-        if (iconUrl !=null){
-            Glide.with(this).load(iconUrl).into(iv_rotatepic);
-        }
         playSelect(false);
         iv_play.setSelected(false);
         sb_progress.setOnSeekBarChangeListener(null);
@@ -406,16 +416,25 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     }
     
     private void playPosMus(int position) {
-        
+        List<Integer> playPosition = new ArrayList<Integer>();
         List<MusicListModel.TagListBean> data = mAdapter.getData();
-        for (MusicListModel.TagListBean datum : data) {
-            datum.setPlaying(false);
+        
+        for (int i = 0; i < data.size(); i++) {
+            MusicListModel.TagListBean tagListBean2 = data.get(i);
+                tagListBean2.setPlaying(false);
+                playPosition.add(i);
         }
         if (position != -1) {
             final MusicListModel.TagListBean tagListBean = mAdapter.getItem(position);
             tagListBean.setPlaying(true);
         }
-        mAdapter.notifyDataSetChanged();
+        
+        
+        if (!ListUtils.isEmpty(playPosition)) {
+            for (Integer integer : playPosition) {
+                mAdapter.refreshNotifyItemChanged(integer);
+            }
+        }
     }
     
     
@@ -439,7 +458,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             case R.id.iv_playtype:
                 
                 int playType = SpUtils.getInt(SpUtils.KEY_PLAYER_TYPE, 0);
-                playType+=1;
+                playType += 1;
                 SpUtils.putInt(SpUtils.KEY_PLAYER_TYPE, playType);
                 initPlayMode(playType);
                 Message msgToService = Message.obtain();
@@ -468,7 +487,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case Constans.MUSICT_SHUNXUN:
                 iv_playtype.setImageResource(R.drawable.h_loop);
-
+                
                 ToastUtils.show(this, "顺序播放");
                 break;
             case Constans.MUSICT_SUIJI:
@@ -488,17 +507,25 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         iv_play.setSelected(switching);
         SpUtils.putBoolean(SpUtils.KEY_TAG_PLAYMUSIC, switching);
         if (switching) {
-            mOperatingAnim = AnimationUtils.loadAnimation(HomeActivity.this, R.anim.clock_bg);
-            
-            LinearInterpolator lin = new LinearInterpolator();
-            if (mOperatingAnim != null) {
-                iv_rotatepic.startAnimation(mOperatingAnim);
+            //设置旋转的样式
+            if (animtorAlpha == null) {
+                animtorAlpha = ObjectAnimator.ofFloat(iv_rotatepic, "rotation", 0f, 359f);
+                //旋转不停顿
+                animtorAlpha.setInterpolator(new LinearInterpolator());
+                //设置动画重复次数
+                animtorAlpha.setRepeatCount(Integer.MAX_VALUE);
+                //旋转时长
+                animtorAlpha.setDuration(7000);
+                //开始旋转
+                animtorAlpha.start();
+            } else {
+                animtorAlpha.resume();
             }
-            mOperatingAnim.setInterpolator(lin);
-            //        开始动画
-            mOperatingAnim.startNow();
+            
             
         } else {
+            if (animtorAlpha != null)
+                animtorAlpha.pause();
             iv_rotatepic.clearAnimation();
             playPosMus(-1);
         }
@@ -531,7 +558,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                         mAdapter.setNewData(tagList);
                         mList.clear();
                         for (MusicListModel.TagListBean tagListBean : tagList) {
-                            MusicService.map.put(tagListBean.getUrl(),Constans.PATH+tagListBean.getMusicId()+"/.mp3");
+                            MusicService.map.put(tagListBean.getUrl(), Constans.PATH + tagListBean.getMusicId() + "/.mp3");
                             mList.add(tagListBean.getUrl());
                         }
                         bindService();
@@ -578,6 +605,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (animtorAlpha != null) {
+            animtorAlpha.cancel();
+        }
         SpUtils.putLong(SpUtils.KEY_COUNT_DOWN_TIME, 0);
     }
     
@@ -585,6 +615,5 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     
     }
     
-   
     
 }
