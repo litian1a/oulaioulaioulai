@@ -1,6 +1,7 @@
 package com.biyi.hypnosis.activity;
 
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -472,6 +473,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             case R.id.iv_clock:
                 Intent intent = new Intent(HomeActivity.this, ClockViewActivity.class);
                 startActivity(intent);
+//                MainActivity2.startActivity(this);
                 break;
         }
 //        }
@@ -513,7 +515,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 //旋转不停顿
                 animtorAlpha.setInterpolator(new LinearInterpolator());
                 //设置动画重复次数
-                animtorAlpha.setRepeatCount(Integer.MAX_VALUE);
+                animtorAlpha.setRepeatCount(Integer.MAX_VALUE -10);
                 //旋转时长
                 animtorAlpha.setDuration(7000);
                 //开始旋转
@@ -526,7 +528,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         } else {
             if (animtorAlpha != null)
                 animtorAlpha.pause();
-            iv_rotatepic.clearAnimation();
             playPosMus(-1);
         }
     }

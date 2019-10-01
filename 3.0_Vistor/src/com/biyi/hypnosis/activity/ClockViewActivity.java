@@ -56,7 +56,7 @@ public class ClockViewActivity extends BaseActivity {
     private TextView tvTime,tv_timetoast ,tvTime2;
     private Timer mTimer,mTimer2;
     private Animation mOperatingAnim;
-    private View llHour;
+    private View llHour2,llHour;
     
     
     @Override
@@ -87,6 +87,7 @@ public class ClockViewActivity extends BaseActivity {
         tvTime = findViewById(R.id.tv_time);
         tvTime2 = findViewById(R.id.tv_time2);
         llHour = findViewById(R.id.ll_hour);
+        llHour2 = findViewById(R.id.ll_hour_2);
         loopViewtime = (LoopView) findViewById(R.id.loopViewtime);
         loopView_minu = (LoopView) findViewById(R.id.loopView_minu);
         loopView_hour = (LoopView) findViewById(R.id.loopView_hour);
@@ -122,6 +123,7 @@ public class ClockViewActivity extends BaseActivity {
                     tv_timetoast.setVisibility(View.INVISIBLE);
                     tv_timetoast.setText("");
                     llHour.setVisibility(View.VISIBLE);
+                    llHour2.setVisibility(View.GONE);
                     tvTime2.setVisibility(View.GONE);
                   
 
@@ -146,7 +148,7 @@ public class ClockViewActivity extends BaseActivity {
                 if (btn_clock.getText().equals("倒计时")){
                     //TODO  倒计时功能
                     tvTime.setVisibility(View.VISIBLE);
-    
+                    loopViewtime.setVisibility(View.GONE);
                     Long time1 = Long.valueOf(loopViewtime.selectTtr);
                     long countTime = System.currentTimeMillis() + time1 *60*1000;
                     SpUtils.putLong(SpUtils.KEY_COUNT_DOWN_TIME, countTime);
@@ -154,7 +156,7 @@ public class ClockViewActivity extends BaseActivity {
                     showTimer1();
                 }else{
                     SpUtils.putLong(SpUtils.KEY_COUNT_DOWN_TIME, 0);
-    
+                    loopViewtime.setVisibility(View.VISIBLE);
                     mTimer.cancel();
                     iv_rotate.clearAnimation();
 //                    rl_rotatetime.setVisibility(View.VISIBLE);
@@ -177,9 +179,16 @@ public class ClockViewActivity extends BaseActivity {
 //        minu1 = getMinu();
 
 //        分的时间
-        for (int i = 1; i <= 180; i++) {
-            list_minu1.add(i+"");
-        }
+        
+//        for (int i = 1; i <= i180; i++) {
+            list_minu1.add(15+"");
+            list_minu1.add(30+"");
+            list_minu1.add(60+"");
+            list_minu1.add(90+"");
+            list_minu1.add(120+"");
+            list_minu1.add(150+"");
+            list_minu1.add(180+"");
+//        }
         //设置原始数据
         
         loopViewtime.setItems(list_minu1);
@@ -191,14 +200,20 @@ public class ClockViewActivity extends BaseActivity {
 //
 //
 //        //月的时间
-        for (int i = 1; i <= 24; i++) {
+        for (int i = 1; i <= 9; i++) {
+            list_hour.add("0" + i);
+        }
+        for (int i = 10; i <= 24; i++) {
             list_hour.add("" + i);
         }
         //设置原始数据
         loopView_hour.setItems(list_hour);
 
         //日的时间
-        for (int i = 1; i <= 60; i++) {
+        for (int i = 1; i <= 9; i++) {
+            list_minu.add("0" + i);
+        }
+        for (int i = 10; i <= 60; i++) {
             list_minu.add("" + i);
         }
 //        //设置原始数据
@@ -209,6 +224,7 @@ public class ClockViewActivity extends BaseActivity {
     
     private void showTimer2() {
         llHour.setVisibility(View.GONE);
+        llHour2.setVisibility(View.VISIBLE);
         tvTime2.setVisibility(View.VISIBLE);
         btn_clock2.setText("取消");
         tv_timetoast.setVisibility(View.VISIBLE);

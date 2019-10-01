@@ -82,7 +82,6 @@ dependencies {
     api 'io.reactivex:rxandroid:1.1.0'
     api 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
 
-
     // Retrofit库
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     api 'com.squareup.retrofit2:converter-gson:2.5.0'

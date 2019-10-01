@@ -40,5 +40,6 @@
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
         android:layout_alignParentBottom="true"
+        android:alpha="0.1"
         android:background="#FFFFFF" />
 </RelativeLayout>
