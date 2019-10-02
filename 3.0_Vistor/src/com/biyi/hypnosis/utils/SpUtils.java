@@ -42,6 +42,9 @@ public class SpUtils {
         }
         
     }
+    public static SharedPreferences getSp(){
+        return sharePreferenceUtils.mSharedPreferences;
+    }
     
     public static void putString(String key, String value) {
         SharedPreferences.Editor editor = sharePreferenceUtils.mSharedPreferences.edit();

@@ -10,6 +10,7 @@ import com.biyi.hypnosis.http.model.MusicListModel;
 import com.biyi.hypnosis.http.model.TagListModel;
 import com.biyi.hypnosis.utils.SpUtils;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -28,17 +29,22 @@ public class MusicTypeAdapter extends BaseQuickAdapter<TagListModel.TagListBean,
         super(layoutResId, data);
     }
     
-
+    
     @Override
     protected void convert(@NonNull BaseViewHolder helper, TagListModel.TagListBean item) {
         helper.setText(R.id.tv_t_type, item.getTagName());
-        Glide.with(mContext).load(item.getIconUrl()).into((ImageView) helper.getView(R.id.iv_t_type));
-        if (SpUtils.getInt(SpUtils.KEY_TAG_ID)== item.getTagId()){
-            helper.setGone(R.id.iv_t_play ,false);
-        }else {
-            helper.setGone(R.id.iv_t_play ,true);
-    
+        Glide.with(mContext)
+//                                        .frame(3000000)
+                
+                .load(item.getIconUrl())
+                .fitCenter()
+                .into((ImageView) helper.getView(R.id.iv_t_type));
+        if (SpUtils.getInt(SpUtils.KEY_TAG_ID) == item.getTagId()) {
+            helper.setGone(R.id.iv_t_play, false);
+        } else {
+            helper.setGone(R.id.iv_t_play, true);
+            
         }
-    
+        
     }
 }

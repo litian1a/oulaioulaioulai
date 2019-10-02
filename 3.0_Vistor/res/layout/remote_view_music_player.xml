@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@id/layout_root"
+    android:layout_width="fill_parent"
+    android:layout_height="100.0dip"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@id/image_view_album"
+        android:layout_width="100.0dip"
+        android:layout_height="100.0dip"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_laucnher" />
+
+    <FrameLayout
+        android:id="@id/button_close"
+        android:layout_width="48.0dip"
+        android:layout_height="48.0dip"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/selector_remote_views_action_background"
+        android:clickable="true">
+
+        <ImageView
+            android:id="@id/image_view_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_remote_view_close" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@id/text_view_name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="12.0dip"
+        android:layout_marginTop="12.0dip"
+        android:layout_marginBottom="2.0dip"
+        android:layout_toLeftOf="@id/button_close"
+        android:layout_toRightOf="@id/image_view_album"
+        android:singleLine="true"
+        android:textColor="#ff333333"
+        android:textSize="16.0sp" />
+
+    <TextView
+        android:id="@id/text_view_artist"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_view_name"
+        android:layout_alignLeft="@id/text_view_name"
+        android:layout_marginBottom="8.0dip"
+        android:singleLine="true"
+        android:textColor="#ab000000"
+        android:textSize="14.0sp" />
+
+    <RelativeLayout
+        android:id="@id/layout_play_controls"
+        android:layout_width="fill_parent"
+        android:layout_height="48.0dip"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/image_view_album">
+
+        <FrameLayout
+            android:id="@id/button_play_toggle"
+            android:layout_width="48.0dip"
+            android:layout_height="48.0dip"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="20.0dip"
+            android:layout_marginRight="20.0dip"
+            android:background="@drawable/selector_remote_views_action_background"
+            android:clickable="true">
+
+            <ImageView
+                android:id="@id/image_view_play_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_remote_view_play" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@id/button_play_last"
+            android:layout_width="48.0dip"
+            android:layout_height="48.0dip"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/button_play_toggle"
+            android:background="@drawable/selector_remote_views_action_background"
+            android:clickable="true">
+
+            <ImageView
+                android:id="@id/image_view_play_last"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_remote_view_play_last" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@id/button_play_next"
+            android:layout_width="48.0dip"
+            android:layout_height="48.0dip"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/button_play_toggle"
+            android:background="@drawable/selector_remote_views_action_background"
+            android:clickable="true">
+
+            <ImageView
+                android:id="@id/image_view_play_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_remote_view_play_next" />
+        </FrameLayout>
+    </RelativeLayout>
+</RelativeLayout>

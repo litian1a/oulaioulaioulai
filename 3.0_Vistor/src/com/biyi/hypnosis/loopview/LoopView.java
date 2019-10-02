@@ -176,7 +176,7 @@ public class LoopView extends View {
         drawingStrings = new String[itemsVisibleCount];
         
         totalScrollY = 0;
-        initPosition = 3;
+        initPosition = 2;
         
         initPaints();
     }
@@ -201,7 +201,7 @@ public class LoopView extends View {
         paintOuterText.setColor(outerTextColor);
         paintOuterText.setAntiAlias(true);
         paintOuterText.setTypeface(Typeface.MONOSPACE);
-        paintOuterText.setTextSize(textSize);
+        paintOuterText.setTextSize(textSize - 18);
         
         paintCenterText = new Paint();
         paintCenterText.setColor(centerTextColor);
@@ -237,8 +237,8 @@ public class LoopView extends View {
         paintCenterText.getTextBounds("\u661F\u671F", 0, 2, tempRect); // 星期
         maxTextHeight = tempRect.height();
         halfCircumference = (int) (measuredHeight * Math.PI / 2);
-    
-        maxTextHeight = (int)( (halfCircumference / (lineSpacingMultiplier * (itemsVisibleCount - 1)))*3);
+        
+        maxTextHeight = (int) ((halfCircumference / (lineSpacingMultiplier * (itemsVisibleCount - 1))) * 2 - 4);
         
         radius = measuredHeight / 2;
         firstLineY = (int) ((measuredHeight - lineSpacingMultiplier * maxTextHeight) / 2.0F);
@@ -247,7 +247,7 @@ public class LoopView extends View {
             if (isLoop) {
                 initPosition = (items.size() + 1) / 2;
             } else {
-                initPosition = 0;
+                initPosition = 2;
             }
         }
         
@@ -378,7 +378,13 @@ public class LoopView extends View {
         if (items == null) {
             return;
         }
-        
+        Log.i(TAG, "onDraw: totalScrollY:" + totalScrollY);
+        if (totalScrollY < 0 && !isLoop) {
+            totalScrollY = 0;
+            if (onItemSelectedListener != null){
+                onItemSelectedListener.onItemSelected(0);
+            }
+        }
         change = (int) (totalScrollY / (lineSpacingMultiplier * maxTextHeight));
         preCurrentIndex = initPosition + change % items.size();
         
@@ -427,6 +433,8 @@ public class LoopView extends View {
         while (i < itemsVisibleCount) {
             canvas.save();
             float itemHeight = maxTextHeight * lineSpacingMultiplier;
+            Log.i(TAG, "onDraw4: " + drawingStrings[i]);
+            
             double radian = ((itemHeight * i - j2) * Math.PI) / halfCircumference;
             if (radian >= Math.PI || radian <= 0) {
                 canvas.restore();
@@ -471,7 +479,7 @@ public class LoopView extends View {
                             maxTextHeight, paintCenterText);
                     Log.i(TAG, "onDraw1: " + drawingStrings[i]);
                     selectedItem = items.indexOf(drawingStrings[i]);
-                    if (TextUtils.isEmpty(selectTtr)){
+                    if (TextUtils.isEmpty(selectTtr)) {
                         selectTtr = drawingStrings[i];
                     }
                 } else {

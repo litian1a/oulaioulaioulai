@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_root"
+    android:background="#fff"
+    android:layout_width="fill_parent"
+    android:layout_height="64.0dip">
+
+    <ImageView
+        android:id="@+id/image_view_album"
+        android:layout_width="40.0dip"
+        android:layout_height="40.0dip"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="12.0dip"
+        android:layout_marginRight="12.0dip"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_laucnher" />
+
+    <FrameLayout
+        android:id="@+id/button_close"
+        android:layout_width="36.0dip"
+        android:layout_height="36.0dip"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/selector_remote_views_action_background"
+        android:clickable="true"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/image_view_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_remote_view_close" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/layout_play_controls"
+        android:layout_toRightOf="@id/image_view_album"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/text_view_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2.0dip"
+            android:singleLine="true"
+            android:textColor="#ff333333"
+            android:textSize="16.0sp" />
+
+        <TextView
+            android:id="@+id/text_view_artist"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textColor="#ab000000"
+            android:textSize="14.0sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_play_controls"
+        android:layout_width="wrap_content"
+        android:layout_height="48.0dip"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true">
+
+        <FrameLayout
+            android:id="@+id/button_play_last"
+            android:layout_width="48.0dip"
+            android:layout_height="48.0dip"
+            android:background="@drawable/selector_remote_views_action_background"
+            android:clickable="true">
+
+            <ImageView
+                android:id="@+id/image_view_play_last"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:scaleType="center"
+                android:src="@drawable/ic_remote_view_play_last" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/button_play_toggle"
+            android:layout_width="48.0dip"
+            android:layout_height="48.0dip"
+            android:background="@drawable/selector_remote_views_action_background"
+            android:clickable="true">
+
+            <ImageView
+                android:id="@+id/image_view_play_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:scaleType="center"
+                android:src="@drawable/ic_remote_view_play" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/button_play_next"
+            android:layout_width="48.0dip"
+            android:layout_height="48.0dip"
+            android:background="@drawable/selector_remote_views_action_background"
+            android:clickable="true">
+
+            <ImageView
+                android:id="@+id/image_view_play_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:scaleType="center"
+                android:src="@drawable/ic_remote_view_play_next" />
+        </FrameLayout>
+    </LinearLayout>
+</RelativeLayout>

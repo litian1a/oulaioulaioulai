@@ -17,6 +17,7 @@
 package com.biyi.hypnosis.http.rxjava;
 
 import com.biyi.hypnosis.MyApplication;
+import com.biyi.hypnosis.activity.FeedbackActivity;
 import com.biyi.hypnosis.http.model.Result;
 import com.biyi.hypnosis.http.utils.NetUtils;
 import com.biyi.hypnosis.http.utils.ToastUtils;
@@ -59,9 +60,13 @@ public class TransformUtils {
         public T call(Result<T> httpResult) {
             if (httpResult.code != 0) {
                 if (NetUtils.isConnected(MyApplication.getAppContext())) {
-                    ToastUtils.show(MyApplication.getAppContext(),"无网络");
+                    com.biyi.hypnosis.utils.ToastUtils.getInstance().showToast(MyApplication.getAppContext(),"无网络");
+//
+//                    ToastUtils.show(MyApplication.getAppContext(),"无网络");
                 }else {
-                    ToastUtils.show(MyApplication.getAppContext(),httpResult.msg);
+                    com.biyi.hypnosis.utils.ToastUtils.getInstance().showToast(MyApplication.getAppContext(),httpResult.msg);
+//
+//                    ToastUtils.show(MyApplication.getAppContext(),httpResult.msg);
     
         
                 }

@@ -55,7 +55,9 @@ public class FeedbackActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
             if (TextUtils.isEmpty(et_feedback.getText())){
-                ToastUtils.show(FeedbackActivity.this,"输入不许为空");
+//                ToastUtils.show(FeedbackActivity.this,"输入不许为空");
+                com.biyi.hypnosis.utils.ToastUtils.getInstance().showToast(FeedbackActivity.this,"输入不许为空");
+//
                 return;
             }
                 RetrofitManager.getAppApi(getApplicationContext())
@@ -76,7 +78,9 @@ public class FeedbackActivity extends BaseActivity {
                             @Override
                             public void onNext(FeedbackModel feedbackModel) {
                                 if (feedbackModel == null) return;
-                                ToastUtils.show(FeedbackActivity.this,feedbackModel.getMessage());
+                                com.biyi.hypnosis.utils.ToastUtils.getInstance().showToast(FeedbackActivity.this,feedbackModel.getMessage());
+//
+//                                ToastUtils.show(FeedbackActivity.this,feedbackModel.getMessage());
     
                             }
                         });

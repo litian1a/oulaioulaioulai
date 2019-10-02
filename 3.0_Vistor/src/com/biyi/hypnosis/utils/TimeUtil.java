@@ -64,9 +64,16 @@ public class TimeUtil {
     }
     public static String DateFormatToString(Long time){
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        
+        
+        String format = sdf.format(new Date(time));
+        return format;
+    }
+    public static String dateFormatToString(Long time){
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-        
-        
+    
+    
         String format = sdf.format(new Date(time));
         return format;
     }
@@ -162,13 +169,13 @@ public class TimeUtil {
     public static String getTimeDiff( String date){
         Long timeLong = getTimeLong("HH:mm", date);
         Calendar instance = Calendar.getInstance();
-        String s = instance.get(Calendar.HOUR_OF_DAY)+":"+instance.get(Calendar.MINUTE)+":"+instance.get(Calendar.SECOND);
-        Long timeLong2 = getTimeLong("HH:mm:ss", s);
+        String s = instance.get(Calendar.HOUR_OF_DAY)+":"+instance.get(Calendar.MINUTE);
+        Long timeLong2 = getTimeLong("HH:mm", s);
         if (timeLong < timeLong2){
             timeLong +=24*60*60*1000;
         }
         long time = timeLong - timeLong2;
-        return DateFormatToString(time);
+        return dateFormatToString(time);
         
     
     

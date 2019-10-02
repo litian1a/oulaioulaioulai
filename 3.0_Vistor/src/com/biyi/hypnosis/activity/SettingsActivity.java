@@ -2,6 +2,7 @@ package com.biyi.hypnosis.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,9 +12,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.biyi.hypnosis.R;
+import com.biyi.hypnosis.http.RetrofitManager;
+import com.biyi.hypnosis.http.model.CheckVerModel;
+import com.biyi.hypnosis.http.rxjava.TransformUtils;
+import com.biyi.hypnosis.http.utils.ToastUtils;
 import com.biyi.hypnosis.utils.SpUtils;
-import com.biyi.hypnosis.utils.ToastUtils;
 import com.biyi.hypnosis.utils.UpdateDialog;
+
+import rx.Observer;
 
 /**
  * 设置Activity
@@ -52,22 +58,54 @@ public class SettingsActivity extends BaseActivity {
         ll_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                String des = "有最新版本了，快来啊快来啊快来啊快来啊快来啊快来啊快来啊快来啊快来啊快来啊快来啊快来啊";
-                final UpdateDialog instance = UpdateDialog.getInstance(SettingsActivity.this, R.style.UpdateDialog, des, "以后再说", "立即更新", new UpdateDialog.OnCustomDialogListener() {
-                            @Override
-                            public void refuseUpdate(String name) {
-                            }
-                
-                            @Override
-                            public void doUpdate(String name) {
-                                //TODO 升级代码
-                    
-                            }
-                        }
+                RetrofitManager.getAppApi(SettingsActivity.this)
+                            .getAppStoreService()
+                            .requestCheckVer()
+                            .compose(TransformUtils.<CheckVerModel>defaultSchedulers())
+                            .subscribe(new Observer<CheckVerModel>() {
+                                @Override
+                                public void onCompleted() {
+        
+                                }
     
-                );
-                instance.show();
+                                @Override
+                                public void onError(Throwable e) {
+        
+                                }
+    
+                                @Override
+                                public void onNext(final CheckVerModel checkVerModel) {
+                                    if (checkVerModel != null && checkVerModel.getUpdate() == 1) {
+                                        String des = checkVerModel.getMessage();
+                                        final UpdateDialog instance = UpdateDialog.getInstance(SettingsActivity.this, R.style.UpdateDialog, des, "以后再说", "立即更新", new UpdateDialog.OnCustomDialogListener() {
+                                                    @Override
+                                                    public void refuseUpdate(String name) {
+    
+                                                        String downloadUrl = checkVerModel.getDownloadUrl();
+                                                        if (!downloadUrl.startsWith("http")){
+                                                            downloadUrl =  "http://"+downloadUrl;
+                                                        }
+                                                        Uri uri = Uri.parse(downloadUrl);
+                                                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                                                        startActivity(intent);
+                                                    }
+                
+                                                    @Override
+                                                    public void doUpdate(String name) {
+                                                    
+                    
+                                                    }
+                                                }
+    
+                                        );
+                                        instance.show();
+                                    }else {
+                                        com.biyi.hypnosis.utils.ToastUtils.getInstance().showToast(SettingsActivity.this,"已经是最新版本了,无需更新");
+//                                        ToastUtils.show(SettingsActivity.this,"已经是最新版本了,无需更新");
+                                    }
+                                }
+                            });
+               
 //                ToastUtils.getInstance().showToast(getApplicationContext(), "暂无最新版本");
             }
         });

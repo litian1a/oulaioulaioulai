@@ -93,8 +93,11 @@
     <dimen name="compat_control_corner_material">2.0dip</dimen>
     <dimen name="compat_notification_large_icon_max_height">320.0dip</dimen>
     <dimen name="compat_notification_large_icon_max_width">320.0dip</dimen>
-    <dimen name="date_picker_height">140.0dip</dimen>
+    <dimen name="date_picker_height">151.0dip</dimen>
+    <dimen name="date_picker_width">160.0dip</dimen>
+    <dimen name="date_picker_min">126.0dip</dimen>
     <dimen name="def_height">50.0dip</dimen>
+    <dimen name="date_picker_mintop">0.0dip</dimen>
     <dimen name="design_appbar_elevation">4.0dip</dimen>
     <dimen name="design_bottom_navigation_active_item_max_width">168.0dip</dimen>
     <dimen name="design_bottom_navigation_active_item_min_width">96.0dip</dimen>

@@ -1,11 +1,13 @@
 package com.biyi.hypnosis.services;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -23,6 +25,7 @@ import android.widget.Toast;
 import com.biyi.hypnosis.MyApplication;
 import com.biyi.hypnosis.download.DownLoadCallback;
 import com.biyi.hypnosis.download.DownloadManager;
+import com.biyi.hypnosis.http.model.MusicListModel;
 import com.biyi.hypnosis.http.utils.Constans;
 import com.biyi.hypnosis.http.utils.NetUtils;
 import com.biyi.hypnosis.utils.ListUtils;
@@ -51,11 +54,13 @@ import rx.schedulers.Schedulers;
  */
 public class MusicService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
     private static final String TAG = MusicService.class.getName();
-    public static final Map<String ,String> map = new HashMap();
+    public static final Map<String, MusicListModel.TagListBean> map = new HashMap();
     //音乐列表
     private List<String> musicsList = new ArrayList<>();
     private int musicsListSize;
     private static int mPlayMode;
+    //通知栏
+    private MusicNotification musicNotification;
     
     //通知栏
     private String bean;
@@ -67,6 +72,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     //来自通知栏的action
     private final String MUSIC_NOTIFICATION_ACTION_PLAY = "musicnotificaion.To.PLAY";
     private final String MUSIC_NOTIFICATION_ACTION_NEXT = "musicnotificaion.To.NEXT";
+    private final String MUSIC_NOTIFICATION_ACTION_LAST= "musicnotificaion.To.LAST";
     private final String MUSIC_NOTIFICATION_ACTION_CLOSE = "musicnotificaion.To.CLOSE";
     //播放的位置
     private int position = 0;
@@ -82,11 +88,15 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     //
     private Observable mObservable;
     private Subscriber mSubscriber;
+    private SharedPreferences.OnSharedPreferenceChangeListener mListener;
     
     @Override
     public void onCreate() {
         super.onCreate();
         Log.e(TAG, "onCreate");
+        //初始化通知栏
+        musicNotification = MusicNotification.getMusicNotification();
+        musicNotification.setService(this);
         //初始化通知栏
         
         //初始化MediaPlayer,设置监听事件
@@ -109,36 +119,57 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         mServiceMessenger = new Messenger(myHandler);
         if (mObservable == null) {
             Log.e(TAG, " Observable.interval");
-    
+            
             mObservable = Observable.interval(1, 1, TimeUnit.SECONDS, Schedulers.computation());
             mSubscriber = new Subscriber() {
                 @Override
                 public void onCompleted() {
-            
+                
                 }
-        
+                
                 @Override
                 public void onError(Throwable e) {
-            
+                
                 }
-        
+                
                 @Override
                 public void onNext(Object o) {
                     sendUpdateProgressMsg();
                     checkTime2();
                 }
             };
-                    mObservable.subscribe(mSubscriber);
+            mObservable.subscribe(mSubscriber);
             initplayMode(this);
-    
+            mListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+                @Override
+                public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                    Log.e(TAG, "sendUpdateProgressMsg: key" + key);
+        
+                    if (key.equals(SpUtils.KEY_COUNT_DOWN_TIME)) {
+                        long aLong = SpUtils.getLong(SpUtils.KEY_COUNT_DOWN_TIME);
+            
+                        if (aLong == 0 || System.currentTimeMillis() > aLong) {
+                            Log.e(TAG, "sendUpdateProgressMsg: stop" + TimeUtil.DateFormatToString(aLong));
+                            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                                pause();
+                            }
+                        }
+                    }
+                }
+            };
+            SpUtils.getSp().registerOnSharedPreferenceChangeListener(mListener);
+            
         }
         
     }
     
     private void checkTime2() {
         String time = SpUtils.getString(SpUtils.KEY_TAG_TIME1);
-        
-        if (TimeUtil.isShowTime1(time) && !mediaPlayer.isPlaying() && !TextUtils.isEmpty(bean)) {
+    
+        boolean showTime1 = TimeUtil.isShowTime1(time);
+        Log.i(TAG, "checkTime2: "+showTime1);
+        if (showTime1 && !mediaPlayer.isPlaying() && !ListUtils.isEmpty(musicsList) ) {
+            bean = musicsList.get(0);
             play(bean);
         }
     }
@@ -180,7 +211,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     
     static class MyHandler extends Handler {
         private WeakReference<MusicService> weakService;
-    
+        
         public MyHandler(MusicService service) {
             weakService = new WeakReference<MusicService>(service);
         }
@@ -192,7 +223,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             switch (msgFromClient.what) {
                 case Constant.PLAYING_ACTIVITY:
                     service.mMessengerPlayingActivity = msgFromClient.replyTo;
-                    Log.e(TAG, "mMessengerPlayingActivity初始化--  "+msgFromClient.replyTo+   "positon:" + service.position + " currentTime:" + service.currentTime + " isPlaying:" + service.mediaPlayer.isPlaying() + " isLooping:" + service.mediaPlayer.isLooping());
+                    Log.e(TAG, "mMessengerPlayingActivity初始化--  " + msgFromClient.replyTo + "positon:" + service.position + " currentTime:" + service.currentTime + " isPlaying:" + service.mediaPlayer.isPlaying() + " isLooping:" + service.mediaPlayer.isLooping());
                     if (0 != msgFromClient.arg1) {
                         service.currentTime = msgFromClient.arg1;
                     }
@@ -250,19 +281,20 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             }
             super.handleMessage(msgFromClient);
         }
-    
-     
+        
+        
     }
+    
     private void initplayMode(MusicService service) {
-        mPlayMode = (int) SpUtils.getInt(SpUtils.KEY_PLAYER_TYPE,0)%3;
-        Log.e(TAG, "initplayMode: "+mPlayMode );
+        mPlayMode = (int) SpUtils.getInt(SpUtils.KEY_PLAYER_TYPE, 0) % 3;
+        Log.e(TAG, "initplayMode: " + mPlayMode);
         if (0 == mPlayMode) {
             service.mediaPlayer.setLooping(true);
             service.sendPlayModeMsgToPlayingActivity();
         } else if (1 == mPlayMode) {
             service.mediaPlayer.setLooping(false);
             service.sendPlayModeMsgToPlayingActivity();
-        }else {
+        } else {
             service.mediaPlayer.setLooping(false);
             
         }
@@ -282,6 +314,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             }
         }
     }
+    
     private String lastMusicUrl = "";
     
     /**
@@ -296,35 +329,35 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         if (null == mediaPlayer) return;
         mediaPlayer.reset();//停止音乐后，不重置的话就会崩溃
         try {
-            if (!lastMusicUrl.equals(musicUrl)){
+            if (!lastMusicUrl.equals(musicUrl)) {
                 DownloadManager.getInstance().cancel(musicUrl);
             }
             lastMusicUrl = musicUrl;
-            DownloadManager.getInstance().downloadUrl(musicUrl, map.get(musicUrl), new DownLoadCallback() {
+            DownloadManager.getInstance().downloadUrl(musicUrl, Constans.PATH + map.get(musicUrl).getMusicId() + ".mp3", new DownLoadCallback() {
                 @Override
                 public void onProgress(long currentOffset, long mTotalLength) {
-        
+                
                 }
-    
+                
                 @Override
                 public void onSuccess(String url) {
                     if (lastMusicUrl.equals(url)) {
                         try {
-                            mediaPlayer.setDataSource(map.get(musicUrl));
+                            mediaPlayer.setDataSource(Constans.PATH + map.get(musicUrl).getMusicId() + ".mp3");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                         mediaPlayer.prepareAsync();
                     }
                 }
-    
+                
                 @Override
                 public void onFail() {
-        
+                
                 }
             });
             if (0 == mPlayMode) mediaPlayer.setLooping(true);
-         
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -340,6 +373,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             currentTime = mediaPlayer.getCurrentPosition();
             mediaPlayer.pause();
             sendIsPlayingMsg();//发送播放器是否在播放的状态
+            musicNotification.onUpdateMusicNotification(bean, mediaPlayer.isPlaying());
+    
         }
     }
     
@@ -369,7 +404,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         if (currentTime > 0) {
             mediaPlayer.seekTo(currentTime);
         }
-//        musicNotification.onUpdateMusicNotification(bean, mediaPlayer.isPlaying());
+        musicNotification.onUpdateMusicNotification(bean, mediaPlayer.isPlaying());
         
     }
     
@@ -417,19 +452,19 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
      * 播放
      */
     private void playSong(int newPosition, int isOnClick) {
-        if (0x40002 == isOnClick){
+        if (0x40002 == isOnClick) {
             try {
                 mediaPlayer.stop();
                 sendIsPlayingMsg();//发送播放器是否在播放的状态
-    
-    
-            }catch (Exception e){
+                
+                
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return;
         }
         sendIsPlayingMsg();//发送播放器是否在播放的状态
-    
+        
         requestAudioFocus();//请求音频焦点
         Log.e(TAG, "playSong()");
         if (null == musicsList && 0 == musicsList.size()) return;//数据为空直接返回
@@ -441,7 +476,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         }
         if (null != musicsList && 0 < musicsList.size()) bean = musicsList.get(position);
         Log.e(TAG, "playSong()--position:" + position + " currentTime:" + currentTime);
-      
+        
         if (mediaPlayer.isPlaying() && 0x40001 == isOnClick) {//如果是正在播放状态的话，就暂停
             pause();
         } else {
@@ -471,13 +506,13 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
      * 下一首
      */
     private void nextSong() {
-        Log.e(TAG, "nextSong()"+mPlayMode);
+        Log.e(TAG, "nextSong()" + mPlayMode);
         currentTime = 0;
         if (position < 0) {
             position = 0;
         }
         
-        switch (mPlayMode){
+        switch (mPlayMode) {
             case Constans.MUSICT_DANQU:
                 return;
             case Constans.MUSICT_SHUNXUN:
@@ -492,7 +527,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                         play(bean);
                     }
                     //通知PalyingActivity跟换专辑图片  歌曲信息等
-        
+                    
                 }
                 break;
             case Constans.MUSICT_SUIJI:
@@ -501,15 +536,16 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                 play(bean);
                 break;
         }
-      
+        
     }
-    private int randomPos(int position){
-        if (!ListUtils.isEmpty(musicsList) && position != -1){
+    
+    private int randomPos(int position) {
+        if (!ListUtils.isEmpty(musicsList) && position != -1) {
             Random random = new Random();
             int i = random.nextInt(musicsList.size());
-            if (position == i){
-                return  randomPos(position);
-            }else {
+            if (position == i) {
+                return randomPos(position);
+            } else {
                 return i;
             }
         }
@@ -522,8 +558,11 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     private void preSong() {
         Log.e(TAG, "preSong()");
         currentTime = 0;
-        if (position < 0) {
-            position = 0;
+        if (mPlayMode == Constans.MUSICT_SUIJI){
+            position = randomPos(position);
+            bean = musicsList.get(position);
+            play(bean);
+            return;
         }
         if (musicsListSize > 0) {
             position--;
@@ -531,9 +570,12 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                 bean = musicsList.get(position);
                 play(bean);
             } else {
-                bean = musicsList.get(0);//小于0时，播放第一首歌
+                position =musicsList.size()-1;
+                bean = musicsList.get(position);//小于0时，播放第一首歌
                 play(bean);
             }
+            Log.i(TAG, "preSong: "+position);
+    
         }
     }
     
@@ -556,19 +598,22 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     
     //发送更新进度的消息
     private void sendUpdateProgressMsg() {
-       
+        
         if (null != mediaPlayer && mediaPlayer.isPlaying()) {
+            
             long aLong = SpUtils.getLong(SpUtils.KEY_COUNT_DOWN_TIME);
-            if (aLong >0 && System.currentTimeMillis()>aLong){
-                mediaPlayer.stop();
+
+            if (aLong > 0 && System.currentTimeMillis() > aLong) {
+                Log.e(TAG, "sendUpdateProgressMsg: stop" + TimeUtil.DateFormatToString(aLong));
+                pause();
                 SpUtils.putLong(SpUtils.KEY_COUNT_DOWN_TIME, 0);
             }
             try {
                 Message msgToPlayingAcitvity = Message.obtain();
-            msgToPlayingAcitvity.what = Constant.MEDIA_PLAYER_SERVICE_PROGRESS;
-            msgToPlayingAcitvity.arg1 = mediaPlayer.getCurrentPosition();
-            msgToPlayingAcitvity.arg2 = mediaPlayer.getDuration();
-            Log.e(TAG, "发给客户端的时间--getCurrentPosition:" + mediaPlayer.getCurrentPosition() + " getDuration" + mediaPlayer.getDuration());
+                msgToPlayingAcitvity.what = Constant.MEDIA_PLAYER_SERVICE_PROGRESS;
+                msgToPlayingAcitvity.arg1 = mediaPlayer.getCurrentPosition();
+                msgToPlayingAcitvity.arg2 = mediaPlayer.getDuration();
+                Log.e(TAG, "发给客户端的时间--getCurrentPosition:" + mediaPlayer.getCurrentPosition() + " getDuration" + mediaPlayer.getDuration());
                 if (null != mMessengerPlayingActivity) {
                     mMessengerPlayingActivity.send(msgToPlayingAcitvity);
 //                    Log.e(TAG, "发消息了");
@@ -576,7 +621,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             } catch (Exception e) {
                 e.printStackTrace();
             }
-           
+            
         }
     }
     
@@ -700,8 +745,11 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                     service.nextSong();//下一首
                     break;
                 case 30003:
-//                    service.musicNotification.onCancelMusicNotification();//关闭通知栏
+                    service.musicNotification.onCancelMusicNotification();//关闭通知栏
                     service.stop();//停止音乐
+                    break;
+                case 30004:
+                    service.preSong();//上一首
                     break;
             }
         }
@@ -761,4 +809,6 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             }
         }
     }
+    
+   
 }

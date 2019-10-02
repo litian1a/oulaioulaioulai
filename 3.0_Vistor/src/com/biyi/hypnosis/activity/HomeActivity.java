@@ -485,16 +485,12 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         switch (playType % 3) {
             case Constans.MUSICT_DANQU:
                 iv_playtype.setImageResource(R.drawable.h_single);
-                ToastUtils.show(this, "单曲循环");
                 break;
             case Constans.MUSICT_SHUNXUN:
                 iv_playtype.setImageResource(R.drawable.h_loop);
-                
-                ToastUtils.show(this, "顺序播放");
                 break;
             case Constans.MUSICT_SUIJI:
                 iv_playtype.setImageResource(R.drawable.h_random);
-                ToastUtils.show(this, "随机播放");
                 break;
         }
     }
@@ -559,7 +555,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                         mAdapter.setNewData(tagList);
                         mList.clear();
                         for (MusicListModel.TagListBean tagListBean : tagList) {
-                            MusicService.map.put(tagListBean.getUrl(), Constans.PATH + tagListBean.getMusicId() + "/.mp3");
+                            MusicService.map.put(tagListBean.getUrl(), tagListBean);
                             mList.add(tagListBean.getUrl());
                         }
                         bindService();

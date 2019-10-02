@@ -45,15 +45,47 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 android:src="@drawable/rotate" />
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/rl_minu"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    >
+    <com.biyi.hypnosis.loopview.LoopView
+        android:id="@+id/loopViewtime"
+        android:layout_width="@dimen/date_picker_width"
+        android:layout_height="@dimen/date_picker_height"
+        android:layout_marginLeft="18dp"
+        app:awv_isLoop="false"
+        app:awv_textsize = "30"
+        android:layout_marginTop="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+    <View
+        android:layout_width="70dp"
+        android:layout_height="10dp"
+        android:background="@color/page_top"
+        android:layout_marginLeft="@dimen/design_tab_scrollable_min_width"
+        android:layout_alignBottom="@+id/loopViewtime"
+        />
 
-            <com.biyi.hypnosis.loopview.LoopView
-                android:id="@+id/loopViewtime"
-                android:layout_width="fill_parent"
-                android:layout_height="@dimen/date_picker_height"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/date_picker_min"
+        android:layout_marginTop="@dimen/date_picker_mintop"
+        android:alpha="0.3"
+        android:text="min"
+        android:textColor="#FFFFFF"
+        android:textSize="20.0sp" />
+</RelativeLayout>
 
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                 />
+
+
 
 
             <TextView
@@ -70,8 +102,8 @@
 
         <TextView
             android:id="@+id/btn_clock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="122dp"
+            android:layout_height="44dp"
             android:layout_marginTop="10.0dip"
             android:background="@drawable/clock_finishbtn_shape"
             android:gravity="center"
@@ -93,7 +125,7 @@
         android:layout_height="0.0dip"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout_close"
-        app:layout_constraintVertical_weight="1.0">
+        app:layout_constraintVertical_weight="1.1">
 
         <TextView
             android:id="@+id/img_title_alarm"
@@ -102,6 +134,7 @@
             android:gravity="center"
             android:padding="13.0dip"
             android:drawableLeft="@drawable/rise"
+            android:drawablePadding="6dp"
             android:text="起床时间"
             android:textColor="@color/white"
             android:textSize="12sp"
@@ -121,30 +154,41 @@
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/date_picker_height"
                 android:layout_marginTop="5.0dip"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <com.biyi.hypnosis.loopview.LoopView
                     android:id="@+id/loopView_hour"
-                    android:layout_width="0.0dip"
+                    android:layout_width="90dip"
+                    app:awv_textsize = "30"
                     android:layout_height="fill_parent"
-                    android:layout_weight="1.0"
+
                     />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="3dp"
                     android:text=":"
-                    android:textColor="@color/red"
+                    android:textColor="#b43383"
                     android:textSize="18.0sp" />
 
                 <com.biyi.hypnosis.loopview.LoopView
                     android:id="@+id/loopView_minu"
-                    android:layout_width="0.0dip"
+                    android:layout_width="90dp"
                     android:layout_height="fill_parent"
-                    android:layout_weight="1.0"
+                    app:awv_textsize = "30"
                      />
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_10"
+                android:background="@color/page_top"
+                android:layout_marginLeft="30dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+
+                />
             <RelativeLayout
                 android:visibility="gone"
                 android:id="@+id/ll_hour_2"
@@ -183,9 +227,9 @@
 
         <TextView
             android:id="@+id/btn_clock2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10.0dip"
+            android:layout_width="132dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="14.0dip"
             android:gravity="center"
             android:text="开启"
             android:background="@drawable/startclock"

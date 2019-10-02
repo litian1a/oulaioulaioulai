@@ -94,7 +94,10 @@
     <dimen name="compat_notification_large_icon_max_height">320.0dip</dimen>
     <dimen name="compat_notification_large_icon_max_width">320.0dip</dimen>
     <dimen name="date_picker_height">180.0dip</dimen>
+    <dimen name="date_picker_width">200.0dip</dimen>
+    <dimen name="date_picker_min">156.0dip</dimen>
     <dimen name="def_height">50.0dip</dimen>
+    <dimen name="date_picker_mintop">4.0dip</dimen>
     <dimen name="design_appbar_elevation">4.0dip</dimen>
     <dimen name="design_bottom_navigation_active_item_max_width">168.0dip</dimen>
     <dimen name="design_bottom_navigation_active_item_min_width">96.0dip</dimen>
@@ -135,7 +138,7 @@
     <dimen name="design_snackbar_padding_vertical_2lines">24.0dip</dimen>
     <dimen name="design_snackbar_text_size">14.0sp</dimen>
     <dimen name="design_tab_max_width">264.0dip</dimen>
-    <dimen name="design_tab_scrollable_min_width">72.0dip</dimen>
+    <dimen name="design_tab_scrollable_min_width">82.0dip</dimen>
     <dimen name="design_tab_text_size">14.0sp</dimen>
     <dimen name="design_tab_text_size_2line">12.0sp</dimen>
     <dimen name="design_textinput_caption_translate_y">5.0dip</dimen>
