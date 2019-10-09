@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true">
 
-                <com.biyi.hypnosis.loopview.LoopView
+                <com.kaola.sleep.loopview.LoopView
                     android:id="@+id/loopViewtime"
                     android:layout_width="70dp"
                     android:layout_height="150dp"
@@ -127,7 +127,7 @@
                     android:orientation="horizontal">
 
 
-                    <com.biyi.hypnosis.loopview.LoopView
+                    <com.kaola.sleep.loopview.LoopView
                         android:id="@+id/loopView_hour"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -147,7 +147,7 @@
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
-                    <com.biyi.hypnosis.loopview.LoopView
+                    <com.kaola.sleep.loopview.LoopView
                         android:id="@+id/loopView_minu"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"

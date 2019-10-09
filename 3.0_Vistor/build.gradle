@@ -50,7 +50,7 @@ android {
 
                 variant.outputs.all {
                     //这里修改apk文件名
-                    outputFileName = "com.biyi.hypnosis_${variant.versionName}.apk"
+                    outputFileName = "com.kaola.sleep_${variant.versionName}.apk"
                 }
             }
 
