@@ -1,5 +1,6 @@
 package com.biyi.hypnosis.activity;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,11 +26,12 @@ import rx.Observer;
 public class SplashActivity extends BaseActivity {
     
     private QuadSplashAd mQuadSplashAd;
-    private boolean aBoolean = true;
+    private boolean aBoolean = false;
     private String TAG = "SplashActivity1";
     private ViewGroup mParent;
     private boolean isShow;
     private Handler mHandler;
+    private Runnable mRunnable;
     
     
     @Override
@@ -40,21 +42,24 @@ public class SplashActivity extends BaseActivity {
         mParent = findViewById(R.id.parent);
         mQuadSplashAd = new QuadSplashAd(SplashActivity.this);
         mHandler = new Handler();
-        mHandler.postDelayed(new Runnable() {
+        mRunnable = new Runnable() {
             @Override
             public void run() {
                 if (!isFinishing()) {
+                    Log.i(TAG, "postDelayed: ");
+    
                     HomeActivity.startActivity(SplashActivity.this);
                     finish();
                 }
             }
-        }, 5000);
+        };
+        mHandler.postDelayed(mRunnable, 5000);
         final QuadSplashAdLoader splashAdLoader = QUAD.getSplashAdLoader(SplashActivity.this, Constans.SPLASH_AD, new QuadSplashAdLoadListener() {
             
             @Override
             public void onAdDismissed() {
                 Log.i(TAG, "onAdDismissed: ");
-                if (!isFinishing() && isShow) {
+                if (!isFinishing() && isShow && !aBoolean) {
                     HomeActivity.startActivity(SplashActivity.this);
                     finish();
                 }
@@ -63,7 +68,7 @@ public class SplashActivity extends BaseActivity {
             
             @Override
             public void onAdReady(QuadSplashAd quadSplashAd) {
-                mHandler.removeCallbacks(null);
+                mHandler.removeCallbacks(mRunnable);
                 Log.i(TAG, "onAdReady: " + quadSplashAd);
                 mParent.removeAllViews();
                 mParent.addView(quadSplashAd);
@@ -72,6 +77,7 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onAdShowed() {
                 isShow =true;
+                mHandler.removeCallbacks(mRunnable);
                 Log.i(TAG, "onAdShowed: ");
             }
             
@@ -97,19 +103,17 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        
         mQuadSplashAd.setSplash(false);
+        aBoolean=true;
     }
     
     @Override
     protected void onResume() {
         super.onResume();
-        if (aBoolean) {
-            mQuadSplashAd.next();
-            aBoolean = false;
-        } else {
-            mQuadSplashAd.setSplash(true);
-            mQuadSplashAd.next();
-            aBoolean = true;
+        if(aBoolean){
+            HomeActivity.startActivity(SplashActivity.this);
+            finish();
         }
     }
     

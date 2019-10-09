@@ -110,6 +110,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         filter.addAction(MUSIC_NOTIFICATION_ACTION_PLAY);
         filter.addAction(MUSIC_NOTIFICATION_ACTION_NEXT);
         filter.addAction(MUSIC_NOTIFICATION_ACTION_CLOSE);
+        filter.addAction(MUSIC_NOTIFICATION_ACTION_LAST);
         registerReceiver(musicBroadCast, filter);
         //初始化音频管理对象
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -165,12 +166,21 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     
     private void checkTime2() {
         String time = SpUtils.getString(SpUtils.KEY_TAG_TIME1);
+        if (TextUtils.isEmpty(time)) return;
     
         boolean showTime1 = TimeUtil.isShowTime1(time);
         Log.i(TAG, "checkTime2: "+showTime1);
         if (showTime1 && !mediaPlayer.isPlaying() && !ListUtils.isEmpty(musicsList) ) {
-            bean = musicsList.get(0);
-            play(bean);
+            if (position != 0){
+                playSong(position, -1);
+    
+            }else {
+                bean = musicsList.get(0);
+                playSong(position, -1);
+            }
+        }
+        if (showTime1){
+            SpUtils.putString(SpUtils.KEY_TAG_TIME1,"");
         }
     }
     
@@ -514,7 +524,6 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         
         switch (mPlayMode) {
             case Constans.MUSICT_DANQU:
-                return;
             case Constans.MUSICT_SHUNXUN:
                 if (musicsListSize > 0) {
                     position++;
@@ -746,7 +755,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                     break;
                 case 30003:
                     service.musicNotification.onCancelMusicNotification();//关闭通知栏
-                    service.stop();//停止音乐
+                    service.pause();//停止音乐
                     break;
                 case 30004:
                     service.preSong();//上一首

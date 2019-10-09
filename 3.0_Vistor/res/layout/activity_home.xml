@@ -117,10 +117,6 @@
                 android:layout_height="wrap_content"
                 android:descendantFocusability="blocksDescendants"
                 android:divider="#FFFFFF"
-                style="@style/scrollbarsstyle"
-                android:verticalScrollbarPosition = "left"
-                android:scrollbars="vertical"
-                android:scrollbarSize="1dp"
                 android:dividerHeight="1dp" />
         </LinearLayout>
 

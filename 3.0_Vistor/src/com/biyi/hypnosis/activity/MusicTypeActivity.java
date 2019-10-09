@@ -155,7 +155,10 @@ public class MusicTypeActivity extends BaseActivity {
                                 try {
                                     mAd_name.setText(json.optString("title"));
                                     
-                                    Glide.with(MusicTypeActivity.this).load(json.optJSONArray("contentimg").get(0)).into(mAd_img);
+                                    Glide.with(MusicTypeActivity.this)
+                                            .load(json.optJSONArray("contentimg").get(0))
+                                            .fitCenter()
+                                            .into(mAd_img);
                                     musicTypeAdapter.addFooterView(mInflate);
                                     nativeAD.onAdShowed(mAd_relative);
                                     musicTypeAdapter.notifyDataSetChanged();

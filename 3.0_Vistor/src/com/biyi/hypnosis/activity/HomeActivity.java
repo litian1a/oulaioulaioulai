@@ -2,6 +2,7 @@ package com.biyi.hypnosis.activity;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +26,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 
 import com.biyi.hypnosis.R;
@@ -36,6 +38,7 @@ import com.biyi.hypnosis.http.rxjava.TransformUtils;
 import com.biyi.hypnosis.http.utils.Constans;
 import com.biyi.hypnosis.http.utils.ToastUtils;
 import com.biyi.hypnosis.services.Constant;
+import com.biyi.hypnosis.services.MusicNotification;
 import com.biyi.hypnosis.services.MusicService;
 import com.biyi.hypnosis.utils.ListUtils;
 import com.biyi.hypnosis.utils.SpUtils;
@@ -45,7 +48,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import cn.com.ad4.quad.ad.QUAD;
 import cn.com.ad4.quad.listener.QuadBannerAdLoadListener;
@@ -166,12 +171,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 //                            e.printStackTrace();
 //                        }
 //                    }
-                    if (null != activity.mList && 0 < activity.mList.size()) {
 //                        activity.mTvSongName.setText(activity.mList.get(msgFromService.arg1).getSongname());
 //                        activity.mTvSinger.setText(activity.mList.get(msgFromService.arg1).getSingername());
                         
                         //更新专辑图片
-                    }
                     break;
                 case Constant.MEDIA_PLAYER_SERVICE_IS_PLAYING:
                     mIsPlaying = 1 == msgFromService.arg1;
@@ -224,7 +227,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
-        
+        requestMus();
     }
     
     private void bindService() {
@@ -267,12 +270,16 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        if (Constans.ACTION_MUSIC_NOTIFY.equals(intent.getAction())) return;
         initView();
+        MusicNotification.getMusicNotification().onCancelMusicNotification();
+        
         playSelect(false);
+        requestMusicList(true);
         
         
     }
-    
+     -
     @Override
     int getLayoutId() {
         return R.layout.activity_home;
@@ -308,8 +315,14 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 boolean playing = selectPosMus(position);
+                if (playing){
+                    if (mAdapter.getSelectedPosition() != -1){
+                        mAdapter.refreshNotifyItemChanged(mAdapter.getSelectedPosition());
+                    }
+                    mAdapter.setSelectedPosition(position);
+                    mAdapter.refreshNotifyItemChanged(position);
+                }
                 
-                mAdapter.refreshNotifyItemChanged(position);
                 
                 if (mPosition == position) {
                     Message msgToService = Message.obtain();
@@ -344,7 +357,12 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 //
 //            }
 //        });
-        
+    
+    
+        initPlay();
+    }
+    
+    private void requestMus() {
         if (SpUtils.getInt(SpUtils.KEY_TAG_ID) == -1) {
             RetrofitManager.getAppApi(this).getAppStoreService()
                     .requestTagList()
@@ -368,14 +386,12 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                             int tagId = tagListBean.getTagId();
                             SpUtils.putInt(SpUtils.KEY_TAG_ID, tagId);
                             SpUtils.putString(SpUtils.KEY_TAG_NAME, tagListBean.getTagName());
-                            requestMusicList();
+                            requestMusicList(false);
                         }
                     });
         } else {
-            requestMusicList();
+            requestMusicList(false);
         }
-        
-        initPlay();
     }
     
     @Override
@@ -406,28 +422,60 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     
     private boolean selectPosMus(int position) {
         final MusicListModel.TagListBean tagListBean = mAdapter.getItem(position);
-        
         boolean playing = tagListBean.isPlaying();
-        List<MusicListModel.TagListBean> data = mAdapter.getData();
-        for (MusicListModel.TagListBean datum : data) {
-            datum.setPlaying(false);
+        if (playing){
+            tagListBean.setPlaying(false);
         }
-        tagListBean.setPlaying(!playing);
         return playing;
     }
     
     private void playPosMus(int position) {
-        List<Integer> playPosition = new ArrayList<Integer>();
+        Set<Integer> playPosition = new HashSet<Integer>();
         List<MusicListModel.TagListBean> data = mAdapter.getData();
         
         for (int i = 0; i < data.size(); i++) {
             MusicListModel.TagListBean tagListBean2 = data.get(i);
+            if (tagListBean2.isPlaying()) {
                 tagListBean2.setPlaying(false);
                 playPosition.add(i);
+            }
         }
         if (position != -1) {
             final MusicListModel.TagListBean tagListBean = mAdapter.getItem(position);
             tagListBean.setPlaying(true);
+            playPosition.add(position);
+            if (mAdapter.getSelectedPosition() != -1){
+                mAdapter.refreshNotifyItemChanged(mAdapter.getSelectedPosition());
+            }
+            mAdapter.setSelectedPosition(position);
+    
+    
+        }
+        
+        
+        if (!ListUtils.isEmpty(playPosition)) {
+            for (Integer integer : playPosition) {
+                mAdapter.refreshNotifyItemChanged(integer);
+            }
+    
+        }
+    }
+    private void playPosMus(int position ,boolean isPlaying) {
+        Set<Integer> playPosition = new HashSet<Integer>();
+        List<MusicListModel.TagListBean> data = mAdapter.getData();
+        
+        for (int i = 0; i < data.size(); i++) {
+            MusicListModel.TagListBean tagListBean2 = data.get(i);
+            if (tagListBean2.isPlaying()) {
+                tagListBean2.setPlaying(false);
+                playPosition.add(i);
+            }
+        }
+        if (position != -1) {
+            final MusicListModel.TagListBean tagListBean = mAdapter.getItem(position);
+            tagListBean.setPlaying(!isPlaying);
+            playPosition.add(position);
+            
         }
         
         
@@ -437,6 +485,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             }
         }
     }
+    
     
     
     @Override
@@ -503,7 +552,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     
     public void playSelect(boolean switching) {
         iv_play.setSelected(switching);
-        SpUtils.putBoolean(SpUtils.KEY_TAG_PLAYMUSIC, switching);
         if (switching) {
             //设置旋转的样式
             if (animtorAlpha == null) {
@@ -528,7 +576,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         }
     }
     
-    private void requestMusicList() {
+    private void requestMusicList(final boolean isPlaying) {
         int tagId = SpUtils.getInt(SpUtils.KEY_TAG_ID);
         
         
@@ -559,12 +607,21 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                             mList.add(tagListBean.getUrl());
                         }
                         bindService();
+                        
+                        if (isPlaying){
+                            Message msgToService = Message.obtain();
+                            msgToService.arg1 = 0;
+                            msgToService.what = Constant.PLAYING_ACTIVITY_PLAYING_POSITION;
+                            try {
+                                mServiceMessenger.send(msgToService);
+                            } catch (RemoteException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         QuadBannerAdLoader bannerAdLoader = QUAD.getBannerAdLoader(HomeActivity.this, Constans.BANNER_AD, new QuadBannerAdLoadListener() {
                             @Override
                             public void onAdReady(QuadBannerAd quadBannerAd) {
                                 Log.i(TAG, "onAdReady: ");
-//                                RelativeLayout.LayoutParams ad_lp = new RelativeLayout.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-//                                quadBannerAd.setLayoutParams(ad_lp);
                                 ViewGroup.LayoutParams layoutParams = quadBannerAd.getLayoutParams();
                                 layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
                                 quadBannerAd.setLayoutParams(layoutParams);

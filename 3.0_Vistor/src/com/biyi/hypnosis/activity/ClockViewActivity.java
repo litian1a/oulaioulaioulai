@@ -252,7 +252,7 @@ public class ClockViewActivity extends BaseActivity {
         for (int i = 0; i <= 9; i++) {
             list_hour.add("0" + i);
         }
-        for (int i = 10; i <= 24; i++) {
+        for (int i = 10; i <= 23; i++) {
             list_hour.add("" + i);
         }
         //设置原始数据
@@ -298,14 +298,24 @@ public class ClockViewActivity extends BaseActivity {
     
     private void chageTime2Ui() {
         try {
+            
             String value = SpUtils.getString(KEY_TAG_TIME1);
-            String timeDiff = TimeUtil.getTimeDiff(value);
-            String format = "%s    :    %s";
-            String[] split = timeDiff.split(":");
-            String[] split2 = value.split(":");
-            Log.i(TAG, "chageTime2Ui: " + timeDiff);
-            tvTime2.setText(String.format(format, split2[0], split2[1]));
-            tv_timetoast.setText("闹钟将在" + split[0] + "小时" + split[1] + "分钟后唤醒");
+            if (!TextUtils.isEmpty(value)) {
+                String timeDiff = TimeUtil.getTimeDiff(value);
+                String format = "%s    :    %s";
+                String[] split = timeDiff.split(":");
+                String[] split2 = value.split(":");
+                Log.i(TAG, "chageTime2Ui: " + timeDiff);
+                tvTime2.setText(String.format(format, split2[0], split2[1]));
+                tv_timetoast.setText("闹钟将在" + split[0] + "小时" + split[1] + "分钟后唤醒");
+            }else {
+                btn_clock2.setText("开启");
+                tv_timetoast.setVisibility(View.GONE);
+                tv_timetoast.setText("");
+                llHour.setVisibility(View.VISIBLE);
+                llHour2.setVisibility(View.GONE);
+                tvTime2.setVisibility(View.GONE);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

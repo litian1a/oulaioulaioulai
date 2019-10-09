@@ -9,6 +9,7 @@ import android.os.Environment;
  * @author：ltc
  */
 public class Constans {
+    public static final String ACTION_MUSIC_NOTIFY = "ACTION_MUSIC_NOTIFY";
     public static String KAOLA = "https://app111.upapp.cc";
     public static int SYS = 0;
     public static String SIGN = "8A164f54BcF50B57478cd07FC8d3";

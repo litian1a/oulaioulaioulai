@@ -14,6 +14,7 @@ import com.biyi.hypnosis.MyApplication;
 import com.biyi.hypnosis.R;
 import com.biyi.hypnosis.activity.HomeActivity;
 import com.biyi.hypnosis.http.model.MusicListModel;
+import com.biyi.hypnosis.http.utils.Constans;
 
 /**
  * Created by dingmouren on 2017/1/20.
@@ -40,7 +41,7 @@ public class MusicNotification extends Notification {
     private final int MUSIC_NOTIFICATION_VALUE_NEXT = 30002;
     private final int MUSIC_NOTIFICATION_VALUE_CLOSE =30003;
     private final int MUSIC_NOTIFICATION_VALUE_Last =30004;
-    private Intent playIntent = null,nextIntent = null,closeIntent = null,backIntent = null;//播放、下一首、关闭的意图对象
+    private Intent playIntent = null,nextIntent = null,lastIntent = null,closeIntent = null,backIntent = null;//播放、下一首、关闭的意图对象
     private MusicService mService;
 
     public void setService(MusicService service){
@@ -58,7 +59,7 @@ public class MusicNotification extends Notification {
         big_remoteViews = new RemoteViews(MyApplication.getAppContext().getPackageName(), R.layout.remote_view_music_player);//初始化远程视图对象，使用自定义的通知布局
     
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT ==26){
+        if (Build.VERSION.SDK_INT == 26){
             NotificationChannel notificationChannel = new NotificationChannel(context.getPackageName(), context.getPackageName(), NotificationManager.IMPORTANCE_HIGH);
             notificationChannel.enableLights(false);
             notificationChannel.enableVibration(false);
@@ -73,11 +74,14 @@ public class MusicNotification extends Notification {
         playIntent.setAction(MUSIC_NOTIFICATION_ACTION_PLAY);
         nextIntent = new Intent();
         nextIntent.setAction(MUSIC_NOTIFICATION_ACTION_NEXT);
+        lastIntent = new Intent();
+        lastIntent.setAction(MUSIC_NOTIFICATION_ACTION_LAST);
         closeIntent = new Intent();
         closeIntent.setAction(MUSIC_NOTIFICATION_ACTION_CLOSE);
         
 
         backIntent = new Intent(MyApplication.getAppContext(), HomeActivity.class);
+        backIntent.setAction(Constans.ACTION_MUSIC_NOTIFY);
     }
 
     /**
@@ -108,9 +112,9 @@ public class MusicNotification extends Notification {
         PendingIntent pendingNextIntent = PendingIntent.getBroadcast(context,REQUEST_CODE,nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.image_view_play_next,pendingNextIntent);
         big_remoteViews.setOnClickPendingIntent(R.id.image_view_play_next,pendingNextIntent);
-        //2.下一首事件
-        nextIntent.putExtra("type",MUSIC_NOTIFICATION_VALUE_Last);
-        PendingIntent pendingLastIntent = PendingIntent.getBroadcast(context,REQUEST_CODE,nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        //2.上一首事件
+        lastIntent.putExtra("type",MUSIC_NOTIFICATION_VALUE_Last);
+        PendingIntent pendingLastIntent = PendingIntent.getBroadcast(context,REQUEST_CODE,lastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.image_view_play_last,pendingLastIntent);
         big_remoteViews.setOnClickPendingIntent(R.id.image_view_play_last,pendingLastIntent);
         //3.关闭通知事件
@@ -120,7 +124,7 @@ public class MusicNotification extends Notification {
         big_remoteViews.setOnClickPendingIntent(R.id.image_view_close,pendingCloseIntent);
         //4.点击通知返回App
         PendingIntent pendingBackIntent = PendingIntent.getActivity(MyApplication.getAppContext(),REQUEST_CODE,backIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent big_r = PendingIntent.getActivity(MyApplication.getAppContext(),REQUEST_CODE,backIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        PendingIntent big_r = PendingIntent.getActivity(MyApplication.getAppContext(),REQUEST_CODE,backIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.layout_root,pendingBackIntent);
         big_remoteViews.setOnClickPendingIntent(R.id.layout_root,pendingBackIntent);
         if (Build.VERSION.SDK_INT >24) {
