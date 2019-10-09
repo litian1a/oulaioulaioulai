@@ -10,4 +10,24 @@
     <string name="settings_title">设置</string>
     <string name="feedback">意见反馈</string>
     <string name="clock_title">定时关闭</string>
+
+
+
+    <!--权限-->
+    <string name="permission_name_calendar">日历</string>
+    <string name="permission_name_camera">相机</string>
+    <string name="permission_name_contacts">通讯录</string>
+    <string name="permission_name_location">位置信息</string>
+    <string name="permission_name_microphone">麦克风</string>
+    <string name="permission_name_phone">电话</string>
+    <string name="permission_name_sensors">身体传感器</string>
+    <string name="permission_name_sms">短信</string>
+    <string name="permission_name_storage">存储空间</string>
+    <string name="permission_setting">设置</string>
+    <string name="permission_cancle">取消</string>
+    <string name="permission_tips">权限申请失败</string>
+    <string name="message_permission_always_failed">请去系统设置打开以下权限:\n%1$s</string>
+
+    <!--权限-->
 </resources>
+

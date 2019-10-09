@@ -93,6 +93,14 @@
             android:name="cn.com.ad4.stat.ADActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
+        <!--permission界面  用于接收回调-->
+        <activity
+            android:name=".permission.PermissionActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="standard"
+            android:theme="@style/Permission.Theme.Activity"
+            android:windowSoftInputMode="stateHidden|stateAlwaysHidden" />
+
 
     </application>
 

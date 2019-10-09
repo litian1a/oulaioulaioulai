@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,11 @@ import com.biyi.hypnosis.http.model.RequestBean;
 import com.biyi.hypnosis.http.model.TagListModel;
 import com.biyi.hypnosis.http.rxjava.TransformUtils;
 import com.biyi.hypnosis.http.utils.Constans;
+import com.biyi.hypnosis.permission.Action;
+import com.biyi.hypnosis.permission.AndPermission;
+import com.biyi.hypnosis.permission.Permission;
+
+import java.util.List;
 
 import cn.com.ad4.quad.ad.QUAD;
 import cn.com.ad4.quad.listener.QuadSplashAdLoadListener;
@@ -32,13 +38,38 @@ public class SplashActivity extends BaseActivity {
     private boolean isShow;
     private Handler mHandler;
     private Runnable mRunnable;
+    //   必要权限  如果没有获取到直接退出程序
+    public static String[] MUST_PERMISSION = {Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE,
+            Permission.READ_PHONE_STATE ,Permission.ACCESS_COARSE_LOCATION,Permission.ACCESS_FINE_LOCATION};
     
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        
+        AndPermission.with(this)
+                .runtime()
+                .permission(MUST_PERMISSION)
+                .onGranted(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+                        Log.i(TAG, "onAction: onGranted");
+                        initView();
+    
+                    }
+                })
+                .onDenied(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+                        Log.i(TAG, "onAction: onDenied");
+                        System.exit(0);
+                    }
+                })
+                .start();
+    
+    
+    }
+    
+    private void initView() {
         mParent = findViewById(R.id.parent);
         mQuadSplashAd = new QuadSplashAd(SplashActivity.this);
         mHandler = new Handler();
@@ -96,14 +127,12 @@ public class SplashActivity extends BaseActivity {
         if (splashAdLoader != null) {
             splashAdLoader.loadAds();
         }
-     
-        
     }
     
     @Override
     protected void onPause() {
         super.onPause();
-        
+        if (mQuadSplashAd == null) return;
         mQuadSplashAd.setSplash(false);
         aBoolean=true;
     }
@@ -111,6 +140,7 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (mQuadSplashAd == null) return;
         if(aBoolean){
             HomeActivity.startActivity(SplashActivity.this);
             finish();
