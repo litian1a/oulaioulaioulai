@@ -163,7 +163,7 @@ public class RetrofitManager {
                                             String sign = md5Hex(string);
                                             Log.i("OKHttp", "sign: " + sign);
     
-                                            jsonObject.put("ch", "baidu");
+                                            jsonObject.put("ch", MyApplication.instance.mChannel);
     
                                             jsonObject.put("sign", sign);
                                             if (!TextUtils.isEmpty(feekInfo)){

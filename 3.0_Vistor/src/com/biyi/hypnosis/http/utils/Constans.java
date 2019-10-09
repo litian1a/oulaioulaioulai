@@ -1,6 +1,6 @@
 package com.biyi.hypnosis.http.utils;
 
-import android.os.Environment;
+import android.content.Context;
 
 /**
  * Description：
@@ -25,14 +25,20 @@ public class Constans {
     public static final int MUSICT_SHUNXUN = 1;
     public static final int MUSICT_SUIJI = 2;
     
-    public static String PATH = getSDCardPathByEnvironment() + "/kaola_music/";
-    
-    public static String getSDCardPathByEnvironment() {
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            return Environment.getExternalStorageDirectory().getAbsolutePath();
-        }
-        return "";
+
+    /**
+     * 得到手机的缓存目录
+     *
+     * @param context
+     * @return
+     */
+    public static String getCacheDir(Context context) {
+        return context.getFilesDir().getParent();
     }
+    public static String getCachePath(Context context) {
+        return getCacheDir(context)+ "/kaola_music/";
+    }
+    
     
     
 }

@@ -4,6 +4,7 @@ import android.support.multidex.MultiDexApplication;
 
 import com.biyi.hypnosis.http.utils.Constans;
 import com.biyi.hypnosis.utils.SpUtils;
+import com.meituan.android.walle.WalleChannelReader;
 
 import cn.com.ad4.quad.ad.QUAD;
 
@@ -14,6 +15,7 @@ import cn.com.ad4.quad.ad.QUAD;
 
 public class MyApplication extends MultiDexApplication {
     public static MyApplication instance;
+    public String mChannel;
     
     public static MyApplication getAppContext() {
         return instance;
@@ -27,8 +29,10 @@ public class MyApplication extends MultiDexApplication {
 //        LeakCanary.install(this);
         initBugly();  // release环境关闭
         QUAD.initSdk(this, Constans.AD_KEY ,true, -1,-1);
-        
-        
+        mChannel = WalleChannelReader.getChannel(this.getApplicationContext(),"xiaomi");
+    
+    
+    
         /**
          * 设置传输数据加密类型 1：RSA  2：DES 3：AES
          */

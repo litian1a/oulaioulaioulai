@@ -343,7 +343,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                 DownloadManager.getInstance().cancel(musicUrl);
             }
             lastMusicUrl = musicUrl;
-            DownloadManager.getInstance().downloadUrl(musicUrl, Constans.PATH + map.get(musicUrl).getMusicId() + ".mp3", new DownLoadCallback() {
+            DownloadManager.getInstance().downloadUrl(musicUrl, Constans.getCachePath(this) + map.get(musicUrl).getMusicId() + ".mp3", new DownLoadCallback() {
                 @Override
                 public void onProgress(long currentOffset, long mTotalLength) {
                 
@@ -353,7 +353,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                 public void onSuccess(String url) {
                     if (lastMusicUrl.equals(url)) {
                         try {
-                            mediaPlayer.setDataSource(Constans.PATH + map.get(musicUrl).getMusicId() + ".mp3");
+                            mediaPlayer.setDataSource(Constans.getCachePath(getApplicationContext()) + map.get(musicUrl).getMusicId() + ".mp3");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

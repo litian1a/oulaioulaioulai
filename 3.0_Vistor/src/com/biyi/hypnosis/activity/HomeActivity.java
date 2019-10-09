@@ -279,7 +279,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         
         
     }
-     -
     @Override
     int getLayoutId() {
         return R.layout.activity_home;
