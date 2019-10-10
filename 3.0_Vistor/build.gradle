@@ -41,10 +41,21 @@ android {
 
         }
     }
+
+    signingConfigs {
+        debugConfig {
+            keyAlias "android"
+            keyPassword "android"
+            storeFile file("../debug.keystore")
+            storePassword "android"
+        }
+
+    }
+
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            signingConfig signingConfigs.debugConfig
 
             applicationVariants.all { variant ->
 
@@ -53,9 +64,13 @@ android {
                     outputFileName = "com.kaola.sleep_${variant.versionName}.apk"
                 }
             }
+        }
 
+        debug {
+            signingConfig signingConfigs.debugConfig
         }
     }
+
 }
 
 dependencies {
