@@ -635,6 +635,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 mQuadBannerAd = quadBannerAd;
                 mAdapter.addHeaderView(mQuadBannerAd);
                 mAdapter.notifyDataSetChanged();
+                mHandler.removeCallbacks(null);
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
