@@ -125,6 +125,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     
     private String TAG = "HomeActivity1";
     private ObjectAnimator animtorAlpha;
+    private Handler mHandler;
+    private QuadBannerAd mQuadBannerAd;
     
     
     static class MyHandler extends Handler {
@@ -165,8 +167,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 //                    }
 //                        activity.mTvSongName.setText(activity.mList.get(msgFromService.arg1).getSongname());
 //                        activity.mTvSinger.setText(activity.mList.get(msgFromService.arg1).getSingername());
-                        
-                        //更新专辑图片
+                    
+                    //更新专辑图片
                     break;
                 case Constant.MEDIA_PLAYER_SERVICE_IS_PLAYING:
                     mIsPlaying = 1 == msgFromService.arg1;
@@ -271,6 +273,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         
         
     }
+    
     @Override
     int getLayoutId() {
         return R.layout.activity_home;
@@ -306,8 +309,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 boolean playing = selectPosMus(position);
-                if (playing){
-                    if (mAdapter.getSelectedPosition() != -1){
+                if (playing) {
+                    if (mAdapter.getSelectedPosition() != -1) {
                         mAdapter.refreshNotifyItemChanged(mAdapter.getSelectedPosition());
                     }
                     mAdapter.setSelectedPosition(position);
@@ -348,9 +351,11 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 //
 //            }
 //        });
-    
-    
+        
+        
         initPlay();
+        
+        mHandler = new Handler();
     }
     
     private void requestMus() {
@@ -414,7 +419,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private boolean selectPosMus(int position) {
         final MusicListModel.TagListBean tagListBean = mAdapter.getItem(position);
         boolean playing = tagListBean.isPlaying();
-        if (playing){
+        if (playing) {
             tagListBean.setPlaying(false);
         }
         return playing;
@@ -435,12 +440,12 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             final MusicListModel.TagListBean tagListBean = mAdapter.getItem(position);
             tagListBean.setPlaying(true);
             playPosition.add(position);
-            if (mAdapter.getSelectedPosition() != -1){
+            if (mAdapter.getSelectedPosition() != -1) {
                 mAdapter.refreshNotifyItemChanged(mAdapter.getSelectedPosition());
             }
             mAdapter.setSelectedPosition(position);
-    
-    
+            
+            
         }
         
         
@@ -448,10 +453,11 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             for (Integer integer : playPosition) {
                 mAdapter.refreshNotifyItemChanged(integer);
             }
-    
+            
         }
     }
-    private void playPosMus(int position ,boolean isPlaying) {
+    
+    private void playPosMus(int position, boolean isPlaying) {
         Set<Integer> playPosition = new HashSet<Integer>();
         List<MusicListModel.TagListBean> data = mAdapter.getData();
         
@@ -476,7 +482,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             }
         }
     }
-    
     
     
     @Override
@@ -550,7 +555,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 //旋转不停顿
                 animtorAlpha.setInterpolator(new LinearInterpolator());
                 //设置动画重复次数
-                animtorAlpha.setRepeatCount(Integer.MAX_VALUE -10);
+                animtorAlpha.setRepeatCount(Integer.MAX_VALUE - 10);
                 //旋转时长
                 animtorAlpha.setDuration(7000);
                 //开始旋转
@@ -599,7 +604,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                         }
                         bindService();
                         
-                        if (isPlaying){
+                        if (isPlaying) {
                             Message msgToService = Message.obtain();
                             msgToService.arg1 = 0;
                             msgToService.what = Constant.PLAYING_ACTIVITY_PLAYING_POSITION;
@@ -609,42 +614,55 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                                 e.printStackTrace();
                             }
                         }
-                        QuadBannerAdLoader bannerAdLoader = QUAD.getBannerAdLoader(HomeActivity.this, Constans.BANNER_AD, new QuadBannerAdLoadListener() {
-                            @Override
-                            public void onAdReady(QuadBannerAd quadBannerAd) {
-                                Log.i(TAG, "onAdReady: ");
-                                ViewGroup.LayoutParams layoutParams = quadBannerAd.getLayoutParams();
-                                layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-                                quadBannerAd.setLayoutParams(layoutParams);
-                                mAdapter.addHeaderView(quadBannerAd);
-                                mAdapter.notifyDataSetChanged();
-                                
-                                
-                            }
-                            
-                            @Override
-                            public void onAdShowed() {
-                                Log.i(TAG, "onAdShowed: ");
-                            }
-                            
-                            @Override
-                            public void onAdClick() {
-                                Log.i(TAG, "onAdClick: ");
-                                
-                            }
-                            
-                            @Override
-                            public void onAdFailed(int i, String s) {
-                                Log.i(TAG, "onAdFailed: ");
-                            }
-                        });
-                        if (bannerAdLoader != null) {
-                            bannerAdLoader.loadAds();
-                        }
-                        
-                        
+                        loadAd();
+    
+    
                     }
                 });
+    }
+    
+    private void loadAd() {
+        QuadBannerAdLoader bannerAdLoader = QUAD.getBannerAdLoader(HomeActivity.this, Constans.BANNER_AD, new QuadBannerAdLoadListener() {
+            @Override
+            public void onAdReady(QuadBannerAd quadBannerAd) {
+                Log.i(TAG, "onAdReady: ");
+                if (mQuadBannerAd != null) {
+                    mAdapter.removeHeaderView(mQuadBannerAd);
+                }
+                ViewGroup.LayoutParams layoutParams = quadBannerAd.getLayoutParams();
+                layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+                quadBannerAd.setLayoutParams(layoutParams);
+                mQuadBannerAd = quadBannerAd;
+                mAdapter.addHeaderView(mQuadBannerAd);
+                mAdapter.notifyDataSetChanged();
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadAd();
+                    }
+                },30000);
+                
+            }
+            
+            @Override
+            public void onAdShowed() {
+                Log.i(TAG, "onAdShowed: ");
+            }
+            
+            @Override
+            public void onAdClick() {
+                Log.i(TAG, "onAdClick: ");
+                
+            }
+            
+            @Override
+            public void onAdFailed(int i, String s) {
+                Log.i(TAG, "onAdFailed: ");
+            }
+        });
+        if (bannerAdLoader != null) {
+            bannerAdLoader.loadAds();
+        }
     }
     
     @Override
@@ -654,6 +672,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             animtorAlpha.cancel();
         }
         SpUtils.putLong(SpUtils.KEY_COUNT_DOWN_TIME, 0);
+        
+        mHandler.removeCallbacks(null);
     }
     
     private void setHeader(RecyclerView view) {
