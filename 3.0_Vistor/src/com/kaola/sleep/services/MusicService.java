@@ -257,6 +257,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                     break;
                 case Constant.PLAYING_ACTIVITY_PLAYING_POSITION:
                     int newPosition = msgFromClient.arg1;
+                    service.reset();
                     service.playSong(newPosition, -1);
                     Log.e(TAG, "上一首或下一首执行playSong()");
                     break;
@@ -447,7 +448,12 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         //准备加载的时候
         resume();
     }
+    public void reset(){
+        if (mediaPlayer != null) {
+            mediaPlayer.reset();
+        }
     
+    }
     
     /**
      * 播放
@@ -475,6 +481,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             currentTime = 0;
             position = newPosition;
         }
+    
         if (null != musicsList && 0 < musicsList.size()) bean = musicsList.get(position);
         Log.e(TAG, "playSong()--position:" + position + " currentTime:" + currentTime);
         
