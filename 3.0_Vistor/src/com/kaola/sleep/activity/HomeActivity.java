@@ -526,6 +526,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     
     }
     
+    
     private void initPlayMode(int playType) {
         switch (playType % 3) {
             case Constans.MUSICT_DANQU:
@@ -613,12 +614,25 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                             } catch (RemoteException e) {
                                 e.printStackTrace();
                             }
+                        }else {
+//                            loadAd();
                         }
-                        loadAd();
     
     
                     }
                 });
+    }
+    
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mHandler.removeCallbacksAndMessages(null);
+    }
+    
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadAd();
     }
     
     private void loadAd() {

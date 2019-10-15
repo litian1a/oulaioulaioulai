@@ -162,6 +162,8 @@ public class RetrofitManager {
                                             Log.i("OKHttp", "sign: " + sign);
     
                                             jsonObject.put("ch", MyApplication.instance.mChannel);
+                                            Log.i("OKHttp", "ch: " +MyApplication.instance.mChannel);
+    
     
                                             jsonObject.put("sign", sign);
                                             if (!TextUtils.isEmpty(feekInfo)){
