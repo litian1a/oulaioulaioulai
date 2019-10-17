@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,7 +26,7 @@ import rx.Observer;
 public class SettingsActivity extends BaseActivity {
 
     private ImageView iv_back,iv_switchon;
-    private TextView tv_title;
+    private TextView tvp1,tvp2;
     private LinearLayout ll_evaluate,ll_update;
     private RelativeLayout rl_riseup;
     public static void startActivity(Context context){
@@ -50,9 +51,28 @@ public class SettingsActivity extends BaseActivity {
     private void initView() {
         ll_evaluate = findViewById(R.id.ll_feeckback);
         ll_update = findViewById(R.id.ll_update);
+        tvp1 = findViewById(R.id.tvp1);
         iv_switchon = findViewById(R.id.iv_switchon);
         iv_switchon.setSelected(SpUtils.getBoolean(SpUtils.KEY_TAG_CLOCKSWIFT,false));
-
+        tvp1.setText(Html.fromHtml("<u>"+"用户条款 & 隐私协议"+"</u>"));
+        tvp1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setData(Uri.parse("https://app111.upapp.cc/private.html"));
+                intent.setAction(Intent.ACTION_VIEW);
+                startActivity(intent);
+            }
+        });
+//        tvp2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent();
+//                intent.setData(Uri.parse("https://app111.upapp.cc/private.html"));
+//                intent.setAction(Intent.ACTION_VIEW);
+//                startActivity(intent);
+//            }
+//        });
         ll_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
