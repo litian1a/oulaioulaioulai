@@ -28,7 +28,7 @@ public class MyApplication extends MultiDexApplication {
         SpUtils.init(this);
 //        LeakCanary.install(this);
         initBugly();  // release环境关闭
-        QUAD.initSdk(this, Constans.AD_KEY ,true, -1,-1);
+        QUAD.initSdk(this, Constans.AD_KEY ,BuildConfig.DEBUG, -1,-1);
         mChannel = WalleChannelReader.getChannel(this.getApplicationContext(),"xiaomi");
     
     
