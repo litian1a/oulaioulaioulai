@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kaola.sleep.permission.util;
+package com.sleep.kaola.permission.util;
 
 import android.os.Handler;
 import android.os.Looper;

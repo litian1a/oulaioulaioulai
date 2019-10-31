@@ -1,4 +1,4 @@
-package com.kaola.sleep.utils;
+package com.sleep.kaola.utils;
 
 import java.util.List;
 import java.util.Set;

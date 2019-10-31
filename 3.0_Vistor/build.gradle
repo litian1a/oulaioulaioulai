@@ -61,7 +61,7 @@ android {
 
                 variant.outputs.all {
                     //这里修改apk文件名
-                    outputFileName = "com.kaola.sleep_${variant.versionName}.apk"
+                    outputFileName = "com.sleep.kaola_${variant.versionName}.apk"
                 }
             }
         }

@@ -4,7 +4,7 @@
     android:layout_height="60dp"
     android:orientation="horizontal">
     
-    <com.kaola.sleep.utils.MusicNameTextView
+    <com.sleep.kaola.utils.MusicNameTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/music_name"

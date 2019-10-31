@@ -1,4 +1,4 @@
-package com.kaola.sleep.loopview;
+package com.sleep.kaola.loopview;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -16,7 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 
-import com.kaola.sleep.R;
+import com.sleep.kaola.R;
 
 import java.util.List;
 import java.util.concurrent.Executors;

@@ -1,10 +1,10 @@
-package com.kaola.sleep.http.apiservice;
+package com.sleep.kaola.http.apiservice;
 
-import com.kaola.sleep.http.model.CheckVerModel;
-import com.kaola.sleep.http.model.FeedbackModel;
-import com.kaola.sleep.http.model.MusicListModel;
-import com.kaola.sleep.http.model.Result;
-import com.kaola.sleep.http.model.TagListModel;
+import com.sleep.kaola.http.model.CheckVerModel;
+import com.sleep.kaola.http.model.FeedbackModel;
+import com.sleep.kaola.http.model.MusicListModel;
+import com.sleep.kaola.http.model.Result;
+import com.sleep.kaola.http.model.TagListModel;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;

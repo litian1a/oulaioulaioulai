@@ -1,4 +1,4 @@
-package com.kaola.sleep.http.model;
+package com.sleep.kaola.http.model;
 
 /**
  * 公共数据格式

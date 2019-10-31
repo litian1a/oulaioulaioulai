@@ -1,10 +1,10 @@
 
-package com.kaola.sleep.activity;
+package com.sleep.kaola.activity;
 
 import android.os.Handler;
 import android.os.Message;
 
-import com.kaola.sleep.loopview.LoopView;
+import com.sleep.kaola.loopview.LoopView;
 
 
 final class MessageHandler extends Handler {

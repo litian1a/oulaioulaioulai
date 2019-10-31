@@ -1,12 +1,12 @@
-package com.kaola.sleep.adapter;
+package com.sleep.kaola.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
-import com.kaola.sleep.R;
-import com.kaola.sleep.http.model.TagListModel;
-import com.kaola.sleep.utils.SpUtils;
+import com.sleep.kaola.R;
+import com.sleep.kaola.http.model.TagListModel;
+import com.sleep.kaola.utils.SpUtils;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;

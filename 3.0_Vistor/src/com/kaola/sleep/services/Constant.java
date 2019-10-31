@@ -1,4 +1,4 @@
-package com.kaola.sleep.services;
+package com.sleep.kaola.services;
 
 /**
  * Created by dingmouren on 2017/1/19.

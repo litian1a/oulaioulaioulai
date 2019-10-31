@@ -1,4 +1,4 @@
-package com.kaola.sleep.activity;
+package com.sleep.kaola.activity;
 
 import android.app.Activity;
 import android.app.Application;
@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.kaola.sleep.R;
+import com.sleep.kaola.R;
 
 /**
  * Description：

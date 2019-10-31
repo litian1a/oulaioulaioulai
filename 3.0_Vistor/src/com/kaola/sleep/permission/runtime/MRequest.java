@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kaola.sleep.permission.runtime;
+package com.sleep.kaola.permission.runtime;
 
 import android.content.Context;
 import android.util.Log;
 
-import com.kaola.sleep.permission.Action;
-import com.kaola.sleep.permission.PermissionActivity;
-import com.kaola.sleep.permission.Rationale;
-import com.kaola.sleep.permission.RequestExecutor;
-import com.kaola.sleep.permission.checker.DoubleChecker;
-import com.kaola.sleep.permission.checker.PermissionChecker;
-import com.kaola.sleep.permission.checker.StandardChecker;
-import com.kaola.sleep.permission.source.Source;
-import com.kaola.sleep.permission.util.MainExecutor;
+import com.sleep.kaola.permission.Action;
+import com.sleep.kaola.permission.PermissionActivity;
+import com.sleep.kaola.permission.Rationale;
+import com.sleep.kaola.permission.RequestExecutor;
+import com.sleep.kaola.permission.checker.DoubleChecker;
+import com.sleep.kaola.permission.checker.PermissionChecker;
+import com.sleep.kaola.permission.checker.StandardChecker;
+import com.sleep.kaola.permission.source.Source;
+import com.sleep.kaola.permission.util.MainExecutor;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kaola.sleep.permission;
+package com.sleep.kaola.permission;
 
 import android.os.Build;
 
-import com.kaola.sleep.permission.install.InstallRequest;
-import com.kaola.sleep.permission.install.NRequestFactory;
-import com.kaola.sleep.permission.install.ORequestFactory;
-import com.kaola.sleep.permission.overlay.LRequestFactory;
-import com.kaola.sleep.permission.overlay.MRequestFactory;
-import com.kaola.sleep.permission.overlay.OverlayRequest;
-import com.kaola.sleep.permission.runtime.PermissionRequest;
-import com.kaola.sleep.permission.source.Source;
-import  com.kaola.sleep.permission.runtime.Runtime;
+import com.sleep.kaola.permission.install.InstallRequest;
+import com.sleep.kaola.permission.install.NRequestFactory;
+import com.sleep.kaola.permission.install.ORequestFactory;
+import com.sleep.kaola.permission.overlay.LRequestFactory;
+import com.sleep.kaola.permission.overlay.MRequestFactory;
+import com.sleep.kaola.permission.overlay.OverlayRequest;
+import com.sleep.kaola.permission.runtime.PermissionRequest;
+import com.sleep.kaola.permission.source.Source;
+import  com.sleep.kaola.permission.runtime.Runtime;
 
 
 /**

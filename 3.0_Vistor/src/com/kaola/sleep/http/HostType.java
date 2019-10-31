@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-package com.kaola.sleep.http;
+package com.sleep.kaola.http;
 
 import android.support.annotation.IntDef;
 

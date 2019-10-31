@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kaola.sleep.permission.runtime.setting;
+package com.sleep.kaola.permission.runtime.setting;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -24,7 +24,7 @@ import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
 
-import com.kaola.sleep.permission.source.Source;
+import com.sleep.kaola.permission.source.Source;
 
 import java.io.BufferedReader;
 import java.io.IOException;

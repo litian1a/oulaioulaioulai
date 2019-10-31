@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kaola.sleep.permission.checker;
+package com.sleep.kaola.permission.checker;
 
 import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Build;
 
-import com.kaola.sleep.permission.Permission;
+import com.sleep.kaola.permission.Permission;
 
 import java.util.List;
 

@@ -52,7 +52,7 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     >
-    <com.kaola.sleep.loopview.LoopView
+    <com.sleep.kaola.loopview.LoopView
         android:id="@+id/loopViewtime"
         android:layout_width="@dimen/date_picker_width"
         android:layout_height="@dimen/date_picker_height"
@@ -157,7 +157,7 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <com.kaola.sleep.loopview.LoopView
+                <com.sleep.kaola.loopview.LoopView
                     android:id="@+id/loopView_hour"
                     android:layout_width="90dip"
                     app:awv_textsize = "30"
@@ -173,7 +173,7 @@
                     android:textColor="#b43383"
                     android:textSize="18.0sp" />
 
-                <com.kaola.sleep.loopview.LoopView
+                <com.sleep.kaola.loopview.LoopView
                     android:id="@+id/loopView_minu"
                     android:layout_width="90dp"
                     android:layout_height="fill_parent"

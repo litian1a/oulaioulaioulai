@@ -1,4 +1,4 @@
-package com.kaola.sleep.http.ssl;
+package com.sleep.kaola.http.ssl;
 
 import android.content.Context;
 

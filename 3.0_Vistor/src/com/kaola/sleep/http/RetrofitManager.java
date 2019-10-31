@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-package com.kaola.sleep.http;
+package com.sleep.kaola.http;
 
 import android.content.Context;
 import android.os.Handler;
@@ -23,12 +23,12 @@ import android.util.Log;
 import android.util.SparseArray;
 
 
-import com.kaola.sleep.MyApplication;
-import com.kaola.sleep.http.apiservice.AppService;
-import com.kaola.sleep.http.ssl.SSLSocketFactoryUtils;
-import com.kaola.sleep.http.utils.Constans;
-import com.kaola.sleep.http.utils.NetUtils;
-import com.kaola.sleep.utils.SpUtils;
+import com.sleep.kaola.MyApplication;
+import com.sleep.kaola.http.apiservice.AppService;
+import com.sleep.kaola.http.ssl.SSLSocketFactoryUtils;
+import com.sleep.kaola.http.utils.Constans;
+import com.sleep.kaola.http.utils.NetUtils;
+import com.sleep.kaola.utils.SpUtils;
 
 import org.json.JSONObject;
 
@@ -54,7 +54,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.kaola.sleep.http.HostType.KAOLA;
+import static com.sleep.kaola.http.HostType.KAOLA;
 
 
 /**

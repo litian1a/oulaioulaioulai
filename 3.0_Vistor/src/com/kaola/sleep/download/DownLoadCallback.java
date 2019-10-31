@@ -1,11 +1,11 @@
-package com.kaola.sleep.download;
+package com.sleep.kaola.download;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.kaola.sleep.MyApplication;
-import com.kaola.sleep.http.utils.ToastUtils;
+import com.sleep.kaola.MyApplication;
+import com.sleep.kaola.http.utils.ToastUtils;
 import com.liulishuo.okdownload.DownloadTask;
 import com.liulishuo.okdownload.SpeedCalculator;
 import com.liulishuo.okdownload.core.breakpoint.BlockInfo;

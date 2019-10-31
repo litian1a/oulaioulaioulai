@@ -1,4 +1,4 @@
-package com.kaola.sleep.services;
+package com.sleep.kaola.services;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -10,11 +10,11 @@ import android.os.Build;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import com.kaola.sleep.MyApplication;
-import com.kaola.sleep.R;
-import com.kaola.sleep.activity.HomeActivity;
-import com.kaola.sleep.http.model.MusicListModel;
-import com.kaola.sleep.http.utils.Constans;
+import com.sleep.kaola.MyApplication;
+import com.sleep.kaola.R;
+import com.sleep.kaola.activity.HomeActivity;
+import com.sleep.kaola.http.model.MusicListModel;
+import com.sleep.kaola.http.utils.Constans;
 
 /**
  * Created by dingmouren on 2017/1/20.

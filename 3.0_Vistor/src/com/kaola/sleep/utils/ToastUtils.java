@@ -1,4 +1,4 @@
-package com.kaola.sleep.utils;
+package com.sleep.kaola.utils;
 
 import android.content.Context;
 import android.os.Handler;

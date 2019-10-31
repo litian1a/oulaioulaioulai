@@ -1,4 +1,4 @@
-package com.kaola.sleep.activity;
+package com.sleep.kaola.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,10 +9,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.kaola.sleep.R;
-import com.kaola.sleep.http.RetrofitManager;
-import com.kaola.sleep.http.model.FeedbackModel;
-import com.kaola.sleep.http.rxjava.TransformUtils;
+import com.sleep.kaola.R;
+import com.sleep.kaola.http.RetrofitManager;
+import com.sleep.kaola.http.model.FeedbackModel;
+import com.sleep.kaola.http.rxjava.TransformUtils;
 
 import rx.Observer;
 
@@ -52,7 +52,7 @@ public class FeedbackActivity extends BaseActivity {
             public void onClick(View view) {
             if (TextUtils.isEmpty(et_feedback.getText())){
 //                ToastUtils.show(FeedbackActivity.this,"输入不许为空");
-                com.kaola.sleep.utils.ToastUtils.getInstance().showToast(FeedbackActivity.this,"输入不许为空");
+                com.sleep.kaola.utils.ToastUtils.getInstance().showToast(FeedbackActivity.this,"输入不许为空");
 //
                 return;
             }
@@ -74,7 +74,7 @@ public class FeedbackActivity extends BaseActivity {
                             @Override
                             public void onNext(FeedbackModel feedbackModel) {
                                 if (feedbackModel == null) return;
-                                com.kaola.sleep.utils.ToastUtils.getInstance().showToast(FeedbackActivity.this,feedbackModel.getMessage());
+                                com.sleep.kaola.utils.ToastUtils.getInstance().showToast(FeedbackActivity.this,feedbackModel.getMessage());
 //
 //                                ToastUtils.show(FeedbackActivity.this,feedbackModel.getMessage());
     

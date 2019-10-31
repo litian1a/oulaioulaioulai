@@ -1,10 +1,10 @@
-package com.kaola.sleep.activity;
+package com.sleep.kaola.activity;
 
 import android.os.Message;
 import android.os.RemoteException;
 import android.widget.SeekBar;
 
-import com.kaola.sleep.services.Constant;
+import com.sleep.kaola.services.Constant;
 
 import java.lang.ref.WeakReference;
 

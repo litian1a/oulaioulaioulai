@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kaola.sleep.permission;
+package com.sleep.kaola.permission;
 
 import android.app.Activity;
 import android.content.Context;
@@ -24,10 +24,10 @@ import android.provider.Settings;
 import android.view.KeyEvent;
 import android.view.View;
 
-import com.kaola.sleep.permission.overlay.setting.AlertWindowSettingPage;
-import com.kaola.sleep.permission.overlay.setting.OverlaySettingPage;
-import com.kaola.sleep.permission.runtime.setting.RuntimeSettingPage;
-import com.kaola.sleep.permission.source.ContextSource;
+import com.sleep.kaola.permission.overlay.setting.AlertWindowSettingPage;
+import com.sleep.kaola.permission.overlay.setting.OverlaySettingPage;
+import com.sleep.kaola.permission.runtime.setting.RuntimeSettingPage;
+import com.sleep.kaola.permission.source.ContextSource;
 
 /**
  * <p>

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kaola.sleep.permission.overlay.setting;
+package com.sleep.kaola.permission.overlay.setting;
 
 import android.content.ComponentName;
 import android.content.Intent;
@@ -21,7 +21,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 
-import com.kaola.sleep.permission.source.Source;
+import com.sleep.kaola.permission.source.Source;
 
 
 /**

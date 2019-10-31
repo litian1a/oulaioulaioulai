@@ -14,11 +14,11 @@
  * limitations under the License.
  *
  */
-package com.kaola.sleep.http.rxjava;
+package com.sleep.kaola.http.rxjava;
 
-import com.kaola.sleep.MyApplication;
-import com.kaola.sleep.http.model.Result;
-import com.kaola.sleep.http.utils.NetUtils;
+import com.sleep.kaola.MyApplication;
+import com.sleep.kaola.http.model.Result;
+import com.sleep.kaola.http.utils.NetUtils;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -58,11 +58,11 @@ public class TransformUtils {
         public T call(Result<T> httpResult) {
             if (httpResult.code != 0) {
                 if (NetUtils.isConnected(MyApplication.getAppContext())) {
-                    com.kaola.sleep.utils.ToastUtils.getInstance().showToast(MyApplication.getAppContext(),"无网络");
+                    com.sleep.kaola.utils.ToastUtils.getInstance().showToast(MyApplication.getAppContext(),"无网络");
 //
 //                    ToastUtils.show(MyApplication.getAppContext(),"无网络");
                 }else {
-                    com.kaola.sleep.utils.ToastUtils.getInstance().showToast(MyApplication.getAppContext(),httpResult.msg);
+                    com.sleep.kaola.utils.ToastUtils.getInstance().showToast(MyApplication.getAppContext(),httpResult.msg);
 //
 //                    ToastUtils.show(MyApplication.getAppContext(),httpResult.msg);
     

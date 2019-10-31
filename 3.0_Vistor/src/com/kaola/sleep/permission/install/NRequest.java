@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kaola.sleep.permission.install;
+package com.sleep.kaola.permission.install;
 
-import com.kaola.sleep.permission.source.Source;
+import com.sleep.kaola.permission.source.Source;
 
 /**
  * Created by YanZhenjie on 2018/4/28.

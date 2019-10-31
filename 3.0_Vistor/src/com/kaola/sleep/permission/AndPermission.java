@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kaola.sleep.permission;
+package com.sleep.kaola.permission;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
 
-import com.kaola.sleep.permission.checker.PermissionChecker;
-import com.kaola.sleep.permission.checker.StandardChecker;
-import com.kaola.sleep.permission.source.ContextSource;
-import com.kaola.sleep.permission.source.FragmentSource;
-import com.kaola.sleep.permission.source.Source;
-import com.kaola.sleep.permission.source.SupportFragmentSource;
+import com.sleep.kaola.permission.checker.PermissionChecker;
+import com.sleep.kaola.permission.checker.StandardChecker;
+import com.sleep.kaola.permission.source.ContextSource;
+import com.sleep.kaola.permission.source.FragmentSource;
+import com.sleep.kaola.permission.source.Source;
+import com.sleep.kaola.permission.source.SupportFragmentSource;
 
 import java.util.List;
 

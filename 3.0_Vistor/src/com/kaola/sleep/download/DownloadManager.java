@@ -1,4 +1,4 @@
-package com.kaola.sleep.download;
+package com.sleep.kaola.download;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

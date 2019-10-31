@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kaola.sleep.permission.overlay;
+package com.sleep.kaola.permission.overlay;
 
-import com.kaola.sleep.permission.Options;
-import com.kaola.sleep.permission.source.Source;
+import com.sleep.kaola.permission.Options;
+import com.sleep.kaola.permission.source.Source;
 
 /**
  * Created by YanZhenjie on 2018/5/29.

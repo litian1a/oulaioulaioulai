@@ -1,9 +1,9 @@
-package com.kaola.sleep;
+package com.sleep.kaola;
 
 import android.support.multidex.MultiDexApplication;
 
-import com.kaola.sleep.http.utils.Constans;
-import com.kaola.sleep.utils.SpUtils;
+import com.sleep.kaola.http.utils.Constans;
+import com.sleep.kaola.utils.SpUtils;
 import com.meituan.android.walle.WalleChannelReader;
 
 import cn.com.ad4.quad.ad.QUAD;

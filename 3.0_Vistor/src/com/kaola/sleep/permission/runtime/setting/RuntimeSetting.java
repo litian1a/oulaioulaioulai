@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kaola.sleep.permission.runtime.setting;
+package com.sleep.kaola.permission.runtime.setting;
 
-import com.kaola.sleep.permission.PermissionActivity;
-import com.kaola.sleep.permission.Setting;
-import com.kaola.sleep.permission.source.Source;
-import com.kaola.sleep.permission.util.MainExecutor;
+import com.sleep.kaola.permission.PermissionActivity;
+import com.sleep.kaola.permission.Setting;
+import com.sleep.kaola.permission.source.Source;
+import com.sleep.kaola.permission.util.MainExecutor;
 
 /**
  * <p>Setting executor.</p>

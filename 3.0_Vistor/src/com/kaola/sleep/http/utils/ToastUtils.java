@@ -1,5 +1,5 @@
 
-package com.kaola.sleep.http.utils;
+package com.sleep.kaola.http.utils;
 
 import android.content.Context;
 import android.os.Handler;

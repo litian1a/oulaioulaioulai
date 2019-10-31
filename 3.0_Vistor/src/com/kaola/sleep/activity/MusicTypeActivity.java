@@ -1,4 +1,4 @@
-package com.kaola.sleep.activity;
+package com.sleep.kaola.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,14 +12,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.kaola.sleep.R;
-import com.kaola.sleep.adapter.MusicTypeAdapter;
-import com.kaola.sleep.http.RetrofitManager;
-import com.kaola.sleep.http.model.TagListModel;
-import com.kaola.sleep.http.rxjava.TransformUtils;
-import com.kaola.sleep.http.utils.Constans;
-import com.kaola.sleep.utils.ListUtils;
-import com.kaola.sleep.utils.SpUtils;
+import com.sleep.kaola.R;
+import com.sleep.kaola.adapter.MusicTypeAdapter;
+import com.sleep.kaola.http.RetrofitManager;
+import com.sleep.kaola.http.model.TagListModel;
+import com.sleep.kaola.http.rxjava.TransformUtils;
+import com.sleep.kaola.http.utils.Constans;
+import com.sleep.kaola.utils.ListUtils;
+import com.sleep.kaola.utils.SpUtils;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 

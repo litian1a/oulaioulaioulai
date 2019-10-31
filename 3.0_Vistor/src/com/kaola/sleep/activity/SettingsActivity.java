@@ -1,4 +1,4 @@
-package com.kaola.sleep.activity;
+package com.sleep.kaola.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,12 +11,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.kaola.sleep.R;
-import com.kaola.sleep.http.RetrofitManager;
-import com.kaola.sleep.http.model.CheckVerModel;
-import com.kaola.sleep.http.rxjava.TransformUtils;
-import com.kaola.sleep.utils.SpUtils;
-import com.kaola.sleep.utils.UpdateDialog;
+import com.sleep.kaola.R;
+import com.sleep.kaola.http.RetrofitManager;
+import com.sleep.kaola.http.model.CheckVerModel;
+import com.sleep.kaola.http.rxjava.TransformUtils;
+import com.sleep.kaola.utils.SpUtils;
+import com.sleep.kaola.utils.UpdateDialog;
 
 import rx.Observer;
 
@@ -118,7 +118,7 @@ public class SettingsActivity extends BaseActivity {
                                         );
                                         instance.show();
                                     }else {
-                                        com.kaola.sleep.utils.ToastUtils.getInstance().showToast(SettingsActivity.this,"已经是最新版本了,无需更新");
+                                        com.sleep.kaola.utils.ToastUtils.getInstance().showToast(SettingsActivity.this,"已经是最新版本了,无需更新");
 //                                        ToastUtils.show(SettingsActivity.this,"已经是最新版本了,无需更新");
                                     }
                                 }

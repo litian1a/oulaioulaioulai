@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kaola.sleep.permission;
+package com.sleep.kaola.permission;
 
 import android.content.Context;
 
 
-import com.kaola.sleep.R;
+import com.sleep.kaola.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;

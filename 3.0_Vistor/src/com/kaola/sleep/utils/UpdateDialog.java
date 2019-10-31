@@ -1,4 +1,4 @@
-package com.kaola.sleep.utils;
+package com.sleep.kaola.utils;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.kaola.sleep.R;
+import com.sleep.kaola.R;
 
 
 /**

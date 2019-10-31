@@ -1,15 +1,15 @@
-package com.kaola.sleep.activity;
+package com.sleep.kaola.activity;
 
 import android.os.Handler;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
 
-import com.kaola.sleep.R;
-import com.kaola.sleep.http.utils.Constans;
-import com.kaola.sleep.permission.Action;
-import com.kaola.sleep.permission.AndPermission;
-import com.kaola.sleep.permission.Permission;
+import com.sleep.kaola.R;
+import com.sleep.kaola.http.utils.Constans;
+import com.sleep.kaola.permission.Action;
+import com.sleep.kaola.permission.AndPermission;
+import com.sleep.kaola.permission.Permission;
 
 import java.util.List;
 

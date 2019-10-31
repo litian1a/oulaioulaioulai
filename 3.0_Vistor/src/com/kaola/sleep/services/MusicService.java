@@ -1,4 +1,4 @@
-package com.kaola.sleep.services;
+package com.sleep.kaola.services;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -17,13 +17,13 @@ import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.kaola.sleep.download.DownLoadCallback;
-import com.kaola.sleep.download.DownloadManager;
-import com.kaola.sleep.http.model.MusicListModel;
-import com.kaola.sleep.http.utils.Constans;
-import com.kaola.sleep.utils.ListUtils;
-import com.kaola.sleep.utils.SpUtils;
-import com.kaola.sleep.utils.TimeUtil;
+import com.sleep.kaola.download.DownLoadCallback;
+import com.sleep.kaola.download.DownloadManager;
+import com.sleep.kaola.http.model.MusicListModel;
+import com.sleep.kaola.http.utils.Constans;
+import com.sleep.kaola.utils.ListUtils;
+import com.sleep.kaola.utils.SpUtils;
+import com.sleep.kaola.utils.TimeUtil;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

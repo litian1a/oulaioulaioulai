@@ -1,4 +1,4 @@
-package com.kaola.sleep.permission.dialog;
+package com.sleep.kaola.permission.dialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -6,9 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.text.TextUtils;
 
-import com.kaola.sleep.R;
-import com.kaola.sleep.permission.AndPermission;
-import com.kaola.sleep.permission.Setting;
+import com.sleep.kaola.R;
+import com.sleep.kaola.permission.AndPermission;
+import com.sleep.kaola.permission.Setting;
 
 import java.util.List;
 

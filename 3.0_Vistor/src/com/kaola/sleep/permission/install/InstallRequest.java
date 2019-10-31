@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kaola.sleep.permission.install;
+package com.sleep.kaola.permission.install;
 
-import com.kaola.sleep.permission.Action;
-import com.kaola.sleep.permission.Rationale;
+import com.sleep.kaola.permission.Action;
+import com.sleep.kaola.permission.Rationale;
 
 import java.io.File;
 

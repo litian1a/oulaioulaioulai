@@ -1,4 +1,4 @@
-package com.kaola.sleep.activity;
+package com.sleep.kaola.activity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,18 +12,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.kaola.sleep.R;
-import com.kaola.sleep.loopview.LoopView;
-import com.kaola.sleep.loopview.OnItemSelectedListener;
-import com.kaola.sleep.utils.SpUtils;
-import com.kaola.sleep.utils.TimeUtil;
+import com.sleep.kaola.R;
+import com.sleep.kaola.loopview.LoopView;
+import com.sleep.kaola.loopview.OnItemSelectedListener;
+import com.sleep.kaola.utils.SpUtils;
+import com.sleep.kaola.utils.TimeUtil;
 
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.kaola.sleep.utils.SpUtils.KEY_COUNT_DOWN_TIME;
-import static com.kaola.sleep.utils.SpUtils.KEY_TAG_TIME1;
+import static com.sleep.kaola.utils.SpUtils.KEY_COUNT_DOWN_TIME;
+import static com.sleep.kaola.utils.SpUtils.KEY_TAG_TIME1;
 
 /**
  * 时间选择页面,第二种

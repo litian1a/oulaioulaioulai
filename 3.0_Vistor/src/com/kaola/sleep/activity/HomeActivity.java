@@ -1,4 +1,4 @@
-package com.kaola.sleep.activity;
+package com.sleep.kaola.activity;
 
 import android.animation.ObjectAnimator;
 import android.content.ComponentName;
@@ -23,18 +23,18 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 
-import com.kaola.sleep.R;
-import com.kaola.sleep.adapter.MusicListAdapter;
-import com.kaola.sleep.http.RetrofitManager;
-import com.kaola.sleep.http.model.MusicListModel;
-import com.kaola.sleep.http.model.TagListModel;
-import com.kaola.sleep.http.rxjava.TransformUtils;
-import com.kaola.sleep.http.utils.Constans;
-import com.kaola.sleep.services.Constant;
-import com.kaola.sleep.services.MusicNotification;
-import com.kaola.sleep.services.MusicService;
-import com.kaola.sleep.utils.ListUtils;
-import com.kaola.sleep.utils.SpUtils;
+import com.sleep.kaola.R;
+import com.sleep.kaola.adapter.MusicListAdapter;
+import com.sleep.kaola.http.RetrofitManager;
+import com.sleep.kaola.http.model.MusicListModel;
+import com.sleep.kaola.http.model.TagListModel;
+import com.sleep.kaola.http.rxjava.TransformUtils;
+import com.sleep.kaola.http.utils.Constans;
+import com.sleep.kaola.services.Constant;
+import com.sleep.kaola.services.MusicNotification;
+import com.sleep.kaola.services.MusicService;
+import com.sleep.kaola.utils.ListUtils;
+import com.sleep.kaola.utils.SpUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.io.Serializable;
@@ -50,7 +50,7 @@ import cn.com.ad4.quad.loader.QuadBannerAdLoader;
 import cn.com.ad4.quad.view.QuadBannerAd;
 import rx.Observer;
 
-import static com.kaola.sleep.services.Constant.MEDIA_PLAYER_SERVICE_MODEL_PLAYING;
+import static com.sleep.kaola.services.Constant.MEDIA_PLAYER_SERVICE_MODEL_PLAYING;
 
 
 public class HomeActivity extends BaseActivity implements View.OnClickListener {

@@ -1,4 +1,4 @@
-package com.kaola.sleep.http.model;
+package com.sleep.kaola.http.model;
 
 import java.util.List;
 
