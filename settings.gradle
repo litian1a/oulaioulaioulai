@@ -1,6 +1,6 @@
 
 //include ':NtalkerChatUI'
-include ':3.0_Vistor'
+include ':kaola'
 //include ':visitordemo'
 //include ':ntalkerWaiterUI'
 //include ':Waiter3.0'

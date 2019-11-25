@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:orientation="horizontal">
+    
+    <com.sleep.kaola.utils.MusicNameTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/music_name"
+        android:layout_marginLeft="32dp"
+        android:layout_centerVertical="true"
+        android:textSize="14sp"
+        android:text="测试"/>
+    <ImageView
+        android:layout_width="3dp"
+        android:layout_height="match_parent"
+        android:id="@+id/front"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:visibility="gone"
+        android:background="@drawable/front"/>
+
+    <ImageView
+        android:id="@+id/iv_palysmall"
+        android:layout_alignParentRight="true"
+        android:layout_width="10dp"
+        android:layout_height="11dp"
+        android:layout_marginRight="32dp"
+        android:background="@drawable/h_playsmall"
+        android:layout_centerVertical="true"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_playing"
+        android:layout_marginRight="20dp"
+        android:textColor="#933091"
+        android:visibility="gone"
+        android:layout_centerVertical="true"
+        android:textSize="14sp"
+        android:layout_alignParentRight="true"
+        android:text="正在播放"/>
+    <View
+        android:id="@+id/view2"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_alignParentBottom="true"
+        android:alpha="0.1"
+        android:background="#FFFFFF" />
+</RelativeLayout>
